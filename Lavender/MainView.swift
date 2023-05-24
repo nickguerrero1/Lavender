@@ -11,8 +11,11 @@ struct MainView: View {
     
     var body: some View {
         VStack{
-            Text("You are logged in!")
-                .padding(.bottom, 0)
+            Text("You are logged in")
+                .bold()
+                .frame(width: 300, height: 50)
+                .background(Color.purple.opacity(0.12))
+                .cornerRadius(50)
             Spacer()
             Image("Lavender")
                 .resizable()
