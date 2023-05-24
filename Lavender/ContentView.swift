@@ -12,7 +12,7 @@ struct ContentView: View {
     var body: some View {
         NavigationView{
             ZStack{
-                Color.blue
+                Color.black
                     .ignoresSafeArea()
                 Circle()
                     .scale(1.7)
@@ -42,7 +42,7 @@ struct ContentView: View {
                     }
                         .foregroundColor(.white)
                         .frame(width: 300, height: 50)
-                        .background(Color.blue)
+                        .background(Color.yellow)
                         .cornerRadius(10)
                     
                 }
