@@ -65,12 +65,19 @@ struct ContentView: View {
         }
     }
     
-    func login(){
+    func login() {
+        wrongPassword = 0
+        wrongEmail = 0
         Auth.auth().signIn(withEmail: email, password: password) { result, error in
-            if error != nil {
-                print(error!.localizedDescription)
-                wrongEmail = 2
-                wrongPassword = 2
+            if let error = error as NSError? {
+                switch error {
+                case AuthErrorCode.wrongPassword:
+                    wrongPassword = 2
+                case AuthErrorCode.invalidEmail:
+                    wrongEmail = 2
+                default:
+                    print("Login error: \(error.localizedDescription)")
+                }
             } else {
                 userIsLoggedIn.toggle()
             }
