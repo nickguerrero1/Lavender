@@ -1,18 +1,13 @@
-//
-//  ContentView.swift
-//  Lavender
-//
-//  Created by Nicholas Guerrero on 5/23/23.
-//
-
 import SwiftUI
 
 struct ContentView: View {
+    
+    @EnvironmentObject var router: TabRouter
+    
     @State private var username = ""
     @State private var password = ""
     @State private var wrongUsername = 0
     @State private var wrongPassword = 0
-    @State private var showingLoginScreen = false
     
     var body: some View {
         NavigationView{
@@ -50,23 +45,6 @@ struct ContentView: View {
                         .background(Color.blue)
                         .cornerRadius(10)
                     
-                    NavigationLink(destination:
-                        VStack{
-                            Text("You are logged in @\(username)")
-                                .padding(.bottom, 0)
-                            Spacer()
-                            Image("Lavender")
-                                .resizable()
-                                .frame(width: 250, height: 250)
-                                .cornerRadius(50)
-                                .padding(.bottom, 60)
-                            Text("Lavender")
-                                .font(.title)
-                            Spacer()
-                        }
-                        , isActive: $showingLoginScreen){
-                            EmptyView()
-                    }
                 }
             }
             .navigationBarHidden(true)
@@ -77,7 +55,7 @@ struct ContentView: View {
             wrongUsername = 0
             if password.lowercased() == "123" {
                 wrongPassword = 0
-                showingLoginScreen = true
+                router.change(to: .two)
             } else{
                 wrongPassword = 2
             }
@@ -90,5 +68,6 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+            .environmentObject(TabRouter())
     }
 }

@@ -11,6 +11,7 @@
 		D007BDCE2A1D4B5D00FE7D50 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D007BDCD2A1D4B5D00FE7D50 /* ContentView.swift */; };
 		D007BDD02A1D4B5E00FE7D50 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D007BDCF2A1D4B5E00FE7D50 /* Assets.xcassets */; };
 		D007BDD42A1D4B5E00FE7D50 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D007BDD32A1D4B5E00FE7D50 /* Preview Assets.xcassets */; };
+		D007BDDD2A1DAC4D00FE7D50 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D007BDDC2A1DAC4D00FE7D50 /* MainView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +21,7 @@
 		D007BDCF2A1D4B5E00FE7D50 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D007BDD12A1D4B5E00FE7D50 /* Lavender.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Lavender.entitlements; sourceTree = "<group>"; };
 		D007BDD32A1D4B5E00FE7D50 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		D007BDDC2A1DAC4D00FE7D50 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +56,7 @@
 			children = (
 				D007BDCB2A1D4B5D00FE7D50 /* LavenderApp.swift */,
 				D007BDCD2A1D4B5D00FE7D50 /* ContentView.swift */,
+				D007BDDC2A1DAC4D00FE7D50 /* MainView.swift */,
 				D007BDCF2A1D4B5E00FE7D50 /* Assets.xcassets */,
 				D007BDD12A1D4B5E00FE7D50 /* Lavender.entitlements */,
 				D007BDD22A1D4B5E00FE7D50 /* Preview Content */,
@@ -140,6 +143,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D007BDCE2A1D4B5D00FE7D50 /* ContentView.swift in Sources */,
+				D007BDDD2A1DAC4D00FE7D50 /* MainView.swift in Sources */,
 				D007BDCC2A1D4B5D00FE7D50 /* LavenderApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
