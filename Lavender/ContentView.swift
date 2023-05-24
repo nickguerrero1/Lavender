@@ -48,14 +48,17 @@ struct ContentView: View {
                     .background(.black.opacity(0.05))
                     .cornerRadius(10)
                     .border(.red, width: CGFloat(wrongPassword))
-                Button("Sign up"){
+                
+                Button(action: {
                     register()
+                }) {
+                    Text("Sign up")
+                        .foregroundColor(.white)
+                        .frame(width: 300, height: 45)
+                        .background(Color.blue)
+                        .cornerRadius(10)
+                        .padding(.top)
                 }
-                .foregroundColor(.white)
-                .frame(width: 300, height: 50)
-                .background(Color.blue)
-                .cornerRadius(10)
-                .padding(.top)
                 
                 Button {
                     login()
@@ -73,6 +76,18 @@ struct ContentView: View {
         wrongPassword = 0
         wrongEmail = 0
         errorMessage = ""
+        
+        guard !email.isEmpty else {
+            errorMessage = "Email address must be provided"
+            wrongEmail = 2
+            return
+        }
+        guard !password.isEmpty else {
+            errorMessage = "Password must be provided"
+            wrongPassword = 2
+            return
+        }
+        
         Auth.auth().signIn(withEmail: email, password: password) { result, error in
             if let error = error as NSError? {
                 switch error {
@@ -80,8 +95,12 @@ struct ContentView: View {
                     errorMessage = "Incorrect password"
                     wrongPassword = 2
                 case AuthErrorCode.invalidEmail:
-                    errorMessage = "Incorrect Email"
+                    errorMessage = "Invalid email format"
                     wrongEmail = 2
+                case AuthErrorCode.userNotFound:
+                    errorMessage = "No user found"
+                    wrongEmail = 2
+                    wrongPassword = 2
                 default:
                     print("Login error: \(error.localizedDescription)")
                 }
@@ -95,6 +114,18 @@ struct ContentView: View {
         wrongPassword = 0
         wrongEmail = 0
         errorMessage = ""
+        
+        guard !email.isEmpty else {
+            errorMessage = "Email address must be provided"
+            wrongEmail = 2
+            return
+        }
+        guard !password.isEmpty else {
+            errorMessage = "Password must be provided"
+            wrongPassword = 2
+            return
+        }
+        
         Auth.auth().createUser(withEmail: email, password: password) { result, error in
             if let error = error as NSError? {
                 switch error {
@@ -109,7 +140,6 @@ struct ContentView: View {
                     wrongPassword = 2
                 default:
                     print("Registration error: \(error.localizedDescription)")
-                    // Handle other registration errors
                 }
             } else {
                 userIsLoggedIn.toggle()
