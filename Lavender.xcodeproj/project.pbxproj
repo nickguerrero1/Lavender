@@ -12,6 +12,8 @@
 		D007BDD02A1D4B5E00FE7D50 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D007BDCF2A1D4B5E00FE7D50 /* Assets.xcassets */; };
 		D007BDD42A1D4B5E00FE7D50 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D007BDD32A1D4B5E00FE7D50 /* Preview Assets.xcassets */; };
 		D007BDDD2A1DAC4D00FE7D50 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D007BDDC2A1DAC4D00FE7D50 /* MainView.swift */; };
+		D007BDDF2A1E802E00FE7D50 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D007BDDE2A1E802E00FE7D50 /* GoogleService-Info.plist */; };
+		D007BDE32A1E80D300FE7D50 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = D007BDE22A1E80D300FE7D50 /* FirebaseAuth */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +24,8 @@
 		D007BDD12A1D4B5E00FE7D50 /* Lavender.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Lavender.entitlements; sourceTree = "<group>"; };
 		D007BDD32A1D4B5E00FE7D50 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		D007BDDC2A1DAC4D00FE7D50 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		D007BDDE2A1E802E00FE7D50 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		D007BDE02A1E804B00FE7D50 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,6 +33,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D007BDE32A1E80D300FE7D50 /* FirebaseAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,6 +64,7 @@
 				D007BDDC2A1DAC4D00FE7D50 /* MainView.swift */,
 				D007BDCF2A1D4B5E00FE7D50 /* Assets.xcassets */,
 				D007BDD12A1D4B5E00FE7D50 /* Lavender.entitlements */,
+				D007BDE02A1E804B00FE7D50 /* GoogleService-Info.plist */,
 				D007BDD22A1D4B5E00FE7D50 /* Preview Content */,
 			);
 			path = Lavender;
@@ -67,6 +73,7 @@
 		D007BDD22A1D4B5E00FE7D50 /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
+				D007BDDE2A1E802E00FE7D50 /* GoogleService-Info.plist */,
 				D007BDD32A1D4B5E00FE7D50 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
@@ -88,6 +95,9 @@
 			dependencies = (
 			);
 			name = Lavender;
+			packageProductDependencies = (
+				D007BDE22A1E80D300FE7D50 /* FirebaseAuth */,
+			);
 			productName = Lavender;
 			productReference = D007BDC82A1D4B5D00FE7D50 /* Lavender.app */;
 			productType = "com.apple.product-type.application";
@@ -116,6 +126,9 @@
 				Base,
 			);
 			mainGroup = D007BDBF2A1D4B5D00FE7D50;
+			packageReferences = (
+				D007BDE12A1E80D300FE7D50 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			productRefGroup = D007BDC92A1D4B5D00FE7D50 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -132,6 +145,7 @@
 			files = (
 				D007BDD42A1D4B5E00FE7D50 /* Preview Assets.xcassets in Resources */,
 				D007BDD02A1D4B5E00FE7D50 /* Assets.xcassets in Resources */,
+				D007BDDF2A1E802E00FE7D50 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -358,6 +372,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D007BDE12A1E80D300FE7D50 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D007BDE22A1E80D300FE7D50 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D007BDE12A1E80D300FE7D50 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D007BDC02A1D4B5D00FE7D50 /* Project object */;
 }

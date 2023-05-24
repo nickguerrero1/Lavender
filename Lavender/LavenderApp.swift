@@ -1,31 +1,16 @@
 import SwiftUI
-
-enum Screen{
-    case one
-    case two
-}
-
-final class TabRouter: ObservableObject {
-    @Published var screen: Screen = .one
-    func change(to screen: Screen){
-        self.screen = screen
-    }
-}
+import Firebase
 
 @main
 struct LavenderApp: App {
     
-    @StateObject var router = TabRouter()
+    init(){
+        FirebaseApp.configure()
+    }
     
     var body: some Scene {
         WindowGroup {
-            TabView(selection: $router.screen){
-                ContentView()
-                    .tag(Screen.one)
-                    .environmentObject(router)
-                MainView()
-                    .tag(Screen.two)
-            }
+            ContentView()
         }
     }
 }
