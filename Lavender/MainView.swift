@@ -21,21 +21,17 @@ struct TabBarView: View {
     @Binding var currentTab: Int
     var tabBarOptions: [String] = ["Pet", "Calendar"]
     var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 20) {
-                ForEach(Array(zip(self.tabBarOptions.indices, self.tabBarOptions)),
-                    id: \.0,
-                    content: {
-                    index, name in
-                    TabBarItem(currentTab: self.$currentTab, tabBarItemName: name, tab: index)
-                    }
-                )
-            }
-            .padding(.horizontal)
+        HStack(spacing: 20) {
+            ForEach(Array(zip(self.tabBarOptions.indices, self.tabBarOptions)),
+                id: \.0,
+                content: {
+                index, name in
+                TabBarItem(currentTab: self.$currentTab, tabBarItemName: name, tab: index)
+                }
+            )
         }
-        .background(Color.purple.opacity(0.12))
-        .frame(height: 0)
-        .edgesIgnoringSafeArea(.all)
+            .padding(.horizontal)
+            .frame(alignment: .center)
     }
 }
 
@@ -52,12 +48,14 @@ struct TabBarItem: View {
         } label: {
             VStack{
                 Spacer()
-                Text(tabBarItemName)
-                    .font(.custom("Arial", size: 22))
-                if currentTab == tab {
-                    Color.black
-                        .frame(height: 2)
-                        .matchedGeometryEffect(id: "underline", in: namespace, properties: .frame)
+                ZStack{
+                    Text(tabBarItemName)
+                        .font(.custom("Arial", size: 22))
+                    if currentTab == tab {
+                        Color.purple.opacity(0.20)
+                            .frame(height: 35)
+                            .matchedGeometryEffect(id: "underline", in: namespace, properties: .frame)
+                    }
                 }
             }
         }
