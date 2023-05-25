@@ -15,6 +15,7 @@
 		D007BDDF2A1E802E00FE7D50 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D007BDDE2A1E802E00FE7D50 /* GoogleService-Info.plist */; };
 		D007BDE32A1E80D300FE7D50 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = D007BDE22A1E80D300FE7D50 /* FirebaseAuth */; };
 		D048DEF02A1FC32A0042A445 /* PetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D048DEEF2A1FC32A0042A445 /* PetView.swift */; };
+		D048DEF22A1FD7FD0042A445 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D048DEF12A1FD7FD0042A445 /* CalendarView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		D007BDDE2A1E802E00FE7D50 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D007BDE02A1E804B00FE7D50 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D048DEEF2A1FC32A0042A445 /* PetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetView.swift; sourceTree = "<group>"; };
+		D048DEF12A1FD7FD0042A445 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +67,7 @@
 				D007BDCD2A1D4B5D00FE7D50 /* ContentView.swift */,
 				D007BDDC2A1DAC4D00FE7D50 /* MainView.swift */,
 				D048DEEF2A1FC32A0042A445 /* PetView.swift */,
+				D048DEF12A1FD7FD0042A445 /* CalendarView.swift */,
 				D007BDCF2A1D4B5E00FE7D50 /* Assets.xcassets */,
 				D007BDD12A1D4B5E00FE7D50 /* Lavender.entitlements */,
 				D007BDE02A1E804B00FE7D50 /* GoogleService-Info.plist */,
@@ -159,6 +162,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D048DEF22A1FD7FD0042A445 /* CalendarView.swift in Sources */,
 				D007BDCE2A1D4B5D00FE7D50 /* ContentView.swift in Sources */,
 				D007BDDD2A1DAC4D00FE7D50 /* MainView.swift in Sources */,
 				D007BDCC2A1D4B5D00FE7D50 /* LavenderApp.swift in Sources */,
