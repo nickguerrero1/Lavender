@@ -2,18 +2,19 @@ import SwiftUI
 
 struct MainView: View {
     
-    @State private var startDate = Date()
+    @State private var selectedDate = Date()
     
     var body: some View {
         
-            VStack{
-                Text("Select Anniversary Date")
-                    .font(.custom("Arial", size: 25))
-                
-                DatePicker("Anniversary", selection: $startDate, in: ...Date(), displayedComponents: .date)
-                    .datePickerStyle(GraphicalDatePickerStyle())
-                    .padding(.top, 15)
-            }
+        VStack{
+            Text("Select Anniversary Date")
+                .font(.custom("Arial", size: 25))
+            Spacer()
+                .frame(height: 30)
+            DatePicker("Anniversary", selection: $selectedDate, in: ...Date(), displayedComponents: .date)
+                .datePickerStyle(GraphicalDatePickerStyle())
+                .padding(.top, 15)
+        }
     }
 }
 
