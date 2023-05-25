@@ -9,7 +9,7 @@ struct Square: View {
     init(width: CGFloat, height: CGFloat) {
         self.width = width
         self.height = height
-        let initialX = 0.0 - width/2
+        let initialX = UIScreen.main.bounds.width/2
         let initialY = UIScreen.main.bounds.height/2-height/2
         position = CGPoint(x: initialX, y: initialY)
     }
@@ -34,7 +34,7 @@ struct Square: View {
 
 struct PetView: View {
     var body: some View {
-        Square(width: 100, height: 100)
+        Square(width: 50, height: 50)
     }
 }
 

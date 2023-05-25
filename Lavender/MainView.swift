@@ -8,7 +8,8 @@ struct MainView: View {
         ZStack(alignment: .bottom){
             TabView(selection: self.$currentTab) {
                 PetView().tag(0)
-                CalendarView().tag(1)
+                FlowerView().tag(1)
+                CalendarView().tag(2)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
             
@@ -19,7 +20,7 @@ struct MainView: View {
 
 struct TabBarView: View {
     @Binding var currentTab: Int
-    var tabBarOptions: [String] = ["Pet", "Calendar"]
+    var tabBarOptions: [String] = ["Pet", "Flower", "Calendar"]
     var body: some View {
         HStack(spacing: 20) {
             ForEach(Array(zip(self.tabBarOptions.indices, self.tabBarOptions)),
