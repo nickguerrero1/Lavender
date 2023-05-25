@@ -2,35 +2,18 @@ import SwiftUI
 
 struct MainView: View {
     
+    @State private var startDate = Date()
+    
     var body: some View {
-        ScrollView(.vertical, showsIndicators: false, content:{
+        
             VStack{
-                Image("Lavender")
-                    .resizable()
-                    .frame(width: 250, height: 250)
-                    .cornerRadius(50)
-                    .padding(.bottom, 60)
-                Text("Lavender")
-                    .font(.title)
-                Spacer()
-                Image("Lavender")
-                    .resizable()
-                    .frame(width: 250, height: 250)
-                    .cornerRadius(50)
-                    .padding(.bottom, 60)
-                Text("Lavender")
-                    .font(.title)
-                Spacer()
-                Image("Lavender")
-                    .resizable()
-                    .frame(width: 250, height: 250)
-                    .cornerRadius(50)
-                    .padding(.bottom, 60)
-                Text("Lavender")
-                    .font(.title)
-                Spacer()
+                Text("Select Anniversary Date")
+                    .font(.custom("Arial", size: 25))
+                
+                DatePicker("Anniversary", selection: $startDate, in: ...Date(), displayedComponents: .date)
+                    .datePickerStyle(GraphicalDatePickerStyle())
+                    .padding(.top, 15)
             }
-        })
     }
 }
 
