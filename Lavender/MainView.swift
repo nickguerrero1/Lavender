@@ -51,6 +51,7 @@ struct TabBarItem: View {
                 ZStack{
                     Text(tabBarItemName)
                         .font(.custom("Arial", size: 22))
+                        .fontWeight(currentTab == tab ? .bold : .regular)
                     if currentTab == tab {
                         Color.purple.opacity(0.20)
                             .frame(height: 35)
