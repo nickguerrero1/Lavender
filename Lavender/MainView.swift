@@ -53,7 +53,8 @@ struct TabBarItem: View {
                         .font(.custom("Arial", size: 22))
                         .fontWeight(currentTab == tab ? .bold : .regular)
                     if currentTab == tab {
-                        Color.purple.opacity(0.20)
+                        Color.purple.opacity(0.15)
+                            .cornerRadius(20)
                             .frame(height: 35)
                             .matchedGeometryEffect(id: "underline", in: namespace, properties: .frame)
                     }
