@@ -16,6 +16,7 @@ struct Square: View {
 
     var body: some View {
         Rectangle()
+            .foregroundColor(.purple.opacity(0.50))
             .frame(width: width, height: height)
             .position(position)
             .onAppear(perform: startMoving)

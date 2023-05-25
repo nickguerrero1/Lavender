@@ -10,20 +10,21 @@ import SwiftUI
 struct FlowerView: View {
     var body: some View {
         VStack{
-            Spacer().frame(height: 600)
+            Spacer()
             ZStack{
                 Circle()
-                    .frame(width: 150, height: 150)
+                    .frame(height: 0.2 * UIScreen.main.bounds.width)
                     .foregroundColor(.purple.opacity(0.15))
                 Button {
                     
                 } label: {
                     Image("Lavender")
                         .resizable()
-                        .frame(width: 100, height: 100)
+                        .frame(width: 0.15 * UIScreen.main.bounds.width, height: 0.15 * UIScreen.main.bounds.width)
                 }
                 .buttonStyle(.plain)
             }
+            .padding(.bottom, 80)
         }
     }
 }
