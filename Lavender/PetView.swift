@@ -69,23 +69,25 @@ struct Square: View {
                     }
                     .position(petal.position)
                 }
-                Button(action: {
-                    tickled = true
-                    petColor = .red
-                }) {
-                    Rectangle()
-                        .foregroundColor(petColor)
-                        .frame(width: width, height: height)
-                        .position(position)
-                        .zIndex(1)
-                        .onAppear {
-                            if !hasStartedMoving {
-                                    startMoving()
-                                hasStartedMoving = true
+                Rectangle()
+                    .foregroundColor(petColor)
+                    .frame(width: width, height: height)
+                    .position(position)
+                    .zIndex(1)
+                    .gesture(
+                        TapGesture()
+                            .onEnded { _ in
+                                tickled = true
+                                petColor = .red
                             }
-                            loadPetalCount()
+                    )
+                    .onAppear {
+                        if !hasStartedMoving {
+                            startMoving()
+                            hasStartedMoving = true
                         }
-                }
+                        loadPetalCount()
+                    }
             }
         }
         .onChange(of: tickled) { _ in
