@@ -1,10 +1,3 @@
-//
-//  FlowerView.swift
-//  Lavender
-//
-//  Created by Nicholas Guerrero on 5/25/23.
-//
-
 import SwiftUI
 
 struct FlowerView: View {
@@ -16,7 +9,7 @@ struct FlowerView: View {
                     .frame(height: 0.2 * UIScreen.main.bounds.width)
                     .foregroundColor(.purple.opacity(0.15))
                 Button {
-                    
+                    //do something
                 } label: {
                     Image("Lavender")
                         .resizable()

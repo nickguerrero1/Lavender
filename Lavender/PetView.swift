@@ -2,9 +2,18 @@ import SwiftUI
 
 struct Square: View {
     
+    @State private var hasStartedMoving = false
+    
     @State private var position: CGPoint
     let width: CGFloat
     let height: CGFloat
+    
+    struct Petal: Identifiable {
+        let id = UUID()
+        let position: CGPoint
+    }
+    
+    @State private var petals: [Petal] = []
     
     init(width: CGFloat, height: CGFloat) {
         self.width = width
@@ -19,17 +28,37 @@ struct Square: View {
             .foregroundColor(.purple.opacity(0.50))
             .frame(width: width, height: height)
             .position(position)
-            .onAppear(perform: startMoving)
+            .overlay(
+                ForEach(petals, id: \.id) { petal in
+                    Circle()
+                        .foregroundColor(.purple.opacity(0.5))
+                        .frame(width: 20, height: 20)
+                        .position(petal.position)
+                }
+            )
+            .onAppear {
+                if !hasStartedMoving {
+                    startMoving()
+                    hasStartedMoving = true
+                }
+            }
     }
 
     func startMoving() {
-        Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { _ in
+        Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { _ in
             let newX = CGFloat.random(in: width/2...UIScreen.main.bounds.width-width/2)
             let newY = CGFloat.random(in: 0...UIScreen.main.bounds.height-height)
-            withAnimation(.easeInOut(duration: 10)) {
+            withAnimation(.easeInOut(duration: 5)) {
                 position = CGPoint(x: newX, y: newY)
             }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                shed()
+            }
         }
+    }
+    
+    func shed() {
+        petals.append(Petal(position: position))
     }
 }
 
