@@ -11,9 +11,9 @@ struct Square: View {
     @State private var position: CGPoint
     @State private var petals: [Petal] = []
     @State private var petalCounter: Int = 0
-    @State private var timerSpeed: Double = 5.0
+    @State private var tickled = false
     @State private var petColor: Color = .purple.opacity(0.50)
-
+    @State private var timer: Timer?
     
     struct Petal: Identifiable {
         let id = UUID()
@@ -42,7 +42,7 @@ struct Square: View {
                 Spacer()
             }
             Button(action: {
-                timerSpeed = 2
+                tickled = true
                 petColor = .red.opacity(0.50)
             }) {
                 Rectangle()
@@ -52,12 +52,15 @@ struct Square: View {
                     .zIndex(1)
                     .onAppear {
                         if !hasStartedMoving {
-                            startMoving()
+                                startMoving()
                             hasStartedMoving = true
                         }
                         loadPetalCount()
                     }
             }
+        }
+        .onChange(of: tickled) { _ in
+            startMoving()
         }
         .overlay(
             ZStack {
@@ -93,7 +96,12 @@ struct Square: View {
     }
 
     func startMoving() {
-        Timer.scheduledTimer(withTimeInterval: timerSpeed, repeats: true) { _ in
+        
+        timer?.invalidate() //invalidate timer if startMoving() called again
+        
+        let speed: Double = tickled ? 2.0 : 5.0
+        
+        timer = Timer.scheduledTimer(withTimeInterval: speed, repeats: true) { _ in
             let newX = CGFloat.random(in: width/2...UIScreen.main.bounds.width-width/2)
             let newY = CGFloat.random(in: 0...UIScreen.main.bounds.height-height*3.5)
             
@@ -101,11 +109,11 @@ struct Square: View {
                 petals.removeFirst()
             }
             let randomNumber = Int.random(in: 1...100)
-            if randomNumber <= 100 {
+            if randomNumber <= 33 {
                 shed()
             }
             
-            withAnimation(.easeInOut(duration: timerSpeed)) {
+            withAnimation(.easeInOut(duration: speed)) {
                 position = CGPoint(x: newX, y: newY)
             }
         }
