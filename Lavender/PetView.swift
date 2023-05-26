@@ -75,6 +75,9 @@ struct Square: View {
                 position = CGPoint(x: newX, y: newY)
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                if petals.count >= 20 {
+                    petals.removeFirst()
+                }
                 shed()
             }
         }
