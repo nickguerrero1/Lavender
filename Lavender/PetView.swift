@@ -19,37 +19,50 @@ struct Square: View {
         self.width = width
         self.height = height
         let initialX = UIScreen.main.bounds.width/2
-        let initialY = UIScreen.main.bounds.height/2-height/2
+        let initialY = UIScreen.main.bounds.height/2-height*1.5
         position = CGPoint(x: initialX, y: initialY)
     }
 
     var body: some View {
-        Rectangle()
-            .foregroundColor(.purple.opacity(0.50))
-            .frame(width: width, height: height)
-            .position(position)
-            .overlay(
-                ForEach(petals, id: \.id) { petal in
-                    Button(action: {
-                                        // Handle button tap
-                    }) {
-                        Circle()
-                            .foregroundColor(.purple.opacity(0.5))
-                            .frame(width: 30, height: 30)
-                            .overlay(
-                               Image(systemName: "leaf.fill") // Customize the button content
-                                    .foregroundColor(.white)
-                        )
-                    }
-                    .position(petal.position)
+        VStack{
+            HStack{
+                ZStack{
+                    Rectangle()
+                        .frame(width: 100, height: 30)
+                        .foregroundColor(.yellow)
+                        .cornerRadius(30)
+                    Text("Petals: 0")
                 }
-            )
-            .onAppear {
-                if !hasStartedMoving {
-                    startMoving()
-                    hasStartedMoving = true
-                }
+                .padding(.leading)
+                Spacer()
             }
+            Rectangle()
+                .foregroundColor(.purple.opacity(0.50))
+                .frame(width: width, height: height)
+                .position(position)
+                .overlay(
+                    ForEach(petals, id: \.id) { petal in
+                        Button(action: {
+                            // Handle button tap
+                        }) {
+                            Circle()
+                                .foregroundColor(.green.opacity(0.8))
+                                .frame(width: 30, height: 30)
+                                .overlay(
+                                    Image(systemName: "leaf.fill") // Customize the button content
+                                        .foregroundColor(.white)
+                                )
+                        }
+                        .position(petal.position)
+                    }
+                )
+                .onAppear {
+                    if !hasStartedMoving {
+                        startMoving()
+                        hasStartedMoving = true
+                    }
+                }
+        }
     }
 
     func startMoving() {
