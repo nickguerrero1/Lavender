@@ -39,47 +39,54 @@ struct Square: View {
                 .padding(.leading)
                 Spacer()
             }
-            Rectangle()
-                .foregroundColor(.purple.opacity(0.50))
-                .frame(width: width, height: height)
-                .position(position)
-                .overlay(
-                    ForEach(petals, id: \.id) { petal in
-                        Button(action: {
-                            petals.removeAll { $0.id == petal.id }
-                            petalCounter += 1
-                            
-                            let db = Firestore.firestore()
-                            let userID = Auth.auth().currentUser?.uid
-                            let userRef = db.collection("users").document(userID!)
-                            
-                            userRef.setData(["petalCount": petalCounter], merge: true) { error in
-                                if let error = error {
-                                    print("Error updating petal count: \(error)")
-                                } else {
-                                    print("Petal count updated in Firestore")
-                                }
-                            }
-                        }) {
-                            Circle()
-                                .foregroundColor(.green.opacity(0.8))
-                                .frame(width: 30, height: 30)
-                                .overlay(
-                                    Image(systemName: "leaf.fill") // Customize the button content
-                                        .foregroundColor(.white)
-                                )
+            Button(action: {
+                //tickle pet
+            }) {
+                Rectangle()
+                    .foregroundColor(.purple.opacity(0.50))
+                    .frame(width: width, height: height)
+                    .position(position)
+                    .zIndex(1)
+                    .onAppear {
+                        if !hasStartedMoving {
+                            startMoving()
+                            hasStartedMoving = true
                         }
-                        .position(petal.position)
+                        loadPetalCount()
                     }
-                )
-                .onAppear {
-                    if !hasStartedMoving {
-                        startMoving()
-                        hasStartedMoving = true
-                    }
-                    loadPetalCount()
-                }
+            }
         }
+        .overlay(
+            ZStack {
+                ForEach(petals, id: \.id) { petal in
+                    Button(action: {
+                        petals.removeAll { $0.id == petal.id }
+                        petalCounter += 1
+                        
+                        let db = Firestore.firestore()
+                        let userID = Auth.auth().currentUser?.uid
+                        let userRef = db.collection("users").document(userID!)
+                        
+                        userRef.setData(["petalCount": petalCounter], merge: true) { error in
+                            if let error = error {
+                                print("Error updating petal count: \(error)")
+                            } else {
+                                print("Petal count updated in Firestore")
+                            }
+                        }
+                    }) {
+                        Circle()
+                            .foregroundColor(.green.opacity(0.8))
+                            .frame(width: 30, height: 30)
+                            .overlay(
+                                Image(systemName: "leaf.fill") // Customize the button content
+                                    .foregroundColor(.white)
+                            )
+                    }
+                    .position(CGPoint(x: petal.position.x, y: petal.position.y + height/2 + 5))
+                }
+            }
+        )
     }
 
     func startMoving() {
@@ -94,7 +101,7 @@ struct Square: View {
                     petals.removeFirst()
                 }
                 let randomNumber = Int.random(in: 1...100)
-                if randomNumber <= 33 {
+                if randomNumber <= 100 {
                     shed()
                 }
             }
