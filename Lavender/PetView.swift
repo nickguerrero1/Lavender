@@ -77,6 +77,7 @@ struct Square: View {
                         startMoving()
                         hasStartedMoving = true
                     }
+                    loadPetalCount()
                 }
         }
     }
@@ -102,6 +103,22 @@ struct Square: View {
     
     func shed() {
         petals.append(Petal(position: position))
+    }
+    
+    func loadPetalCount() {
+        let db = Firestore.firestore()
+        let userID = Auth.auth().currentUser?.uid
+        let userRef = db.collection("users").document(userID!)
+
+        userRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                if let petalCount = document.data()?["petalCount"] as? Int {
+                    petalCounter = petalCount
+                }
+            } else {
+                print("Document does not exist")
+            }
+        }
     }
 }
 
