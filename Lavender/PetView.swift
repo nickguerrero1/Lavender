@@ -14,6 +14,7 @@ struct Square: View {
     }
     
     @State private var petals: [Petal] = []
+    @State private var petalCounter: Int = 0
     
     init(width: CGFloat, height: CGFloat) {
         self.width = width
@@ -31,7 +32,7 @@ struct Square: View {
                         .frame(width: 100, height: 30)
                         .foregroundColor(.yellow)
                         .cornerRadius(30)
-                    Text("Petals: 0")
+                    Text("Petals: \(petalCounter)")
                 }
                 .padding(.leading)
                 Spacer()
@@ -43,7 +44,8 @@ struct Square: View {
                 .overlay(
                     ForEach(petals, id: \.id) { petal in
                         Button(action: {
-                            // Handle button tap
+                            petals.removeAll { $0.id == petal.id }
+                            petalCounter += 1
                         }) {
                             Circle()
                                 .foregroundColor(.green.opacity(0.8))
