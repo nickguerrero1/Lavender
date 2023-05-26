@@ -12,7 +12,7 @@ struct Square: View {
     @State private var petals: [Petal] = []
     @State private var petalCounter: Int = 0
     @State private var tickled = false
-    @State private var petColor: Color = .purple.opacity(0.50)
+    @State private var petColor: Color = .purple
     @State private var timer: Timer?
     
     struct Petal: Identifiable {
@@ -41,28 +41,6 @@ struct Square: View {
                 .padding(.leading)
                 Spacer()
             }
-            Button(action: {
-                tickled = true
-                petColor = .red.opacity(0.50)
-            }) {
-                Rectangle()
-                    .foregroundColor(petColor)
-                    .frame(width: width, height: height)
-                    .position(position)
-                    .zIndex(1)
-                    .onAppear {
-                        if !hasStartedMoving {
-                                startMoving()
-                            hasStartedMoving = true
-                        }
-                        loadPetalCount()
-                    }
-            }
-        }
-        .onChange(of: tickled) { _ in
-            startMoving()
-        }
-        .overlay(
             ZStack {
                 ForEach(petals, id: \.id) { petal in
                     Button(action: {
@@ -89,10 +67,30 @@ struct Square: View {
                                     .foregroundColor(.white)
                             )
                     }
-                    .position(CGPoint(x: petal.position.x, y: petal.position.y + height/2 + 5))
+                    .position(petal.position)
+                }
+                Button(action: {
+                    tickled = true
+                    petColor = .red
+                }) {
+                    Rectangle()
+                        .foregroundColor(petColor)
+                        .frame(width: width, height: height)
+                        .position(position)
+                        .zIndex(1)
+                        .onAppear {
+                            if !hasStartedMoving {
+                                    startMoving()
+                                hasStartedMoving = true
+                            }
+                            loadPetalCount()
+                        }
                 }
             }
-        )
+        }
+        .onChange(of: tickled) { _ in
+            startMoving()
+        }
     }
 
     func startMoving() {
