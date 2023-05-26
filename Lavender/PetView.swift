@@ -12,6 +12,7 @@ struct Square: View {
     @State private var petals: [Petal] = []
     @State private var petalCounter: Int = 0
     @State private var tickled = false
+    @State private var tickleCount = 0 //removes tickle effect after 5 pet position changes
     @State private var petColor: Color = .purple
     @State private var timer: Timer?
     
@@ -99,7 +100,7 @@ struct Square: View {
         
         timer?.invalidate() //invalidate timer if startMoving() called again
         
-        let speed: Double = tickled ? 2.0 : 5.0
+        let speed: Double = tickled ? 1.0 : 5.0
         
         timer = Timer.scheduledTimer(withTimeInterval: speed, repeats: true) { _ in
             let newX = CGFloat.random(in: width/2...UIScreen.main.bounds.width-width/2)
@@ -111,6 +112,16 @@ struct Square: View {
             let randomNumber = Int.random(in: 1...100)
             if randomNumber <= 33 {
                 shed()
+            }
+            
+            tickleCount += 1
+            if tickleCount > 5 {
+                tickled = false
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    petColor = .purple
+                }
+                tickleCount = 0
+                print(tickleCount)
             }
             
             withAnimation(.easeInOut(duration: speed)) {
