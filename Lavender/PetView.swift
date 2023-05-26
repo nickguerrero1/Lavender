@@ -4,19 +4,21 @@ import FirebaseFirestore
 
 struct Square: View {
     
-    @State private var hasStartedMoving = false
-    
-    @State private var position: CGPoint
     let width: CGFloat
     let height: CGFloat
+    
+    @State private var hasStartedMoving = false
+    @State private var position: CGPoint
+    @State private var petals: [Petal] = []
+    @State private var petalCounter: Int = 0
+    @State private var timerSpeed: Double = 5.0
+    @State private var petColor: Color = .purple.opacity(0.50)
+
     
     struct Petal: Identifiable {
         let id = UUID()
         let position: CGPoint
     }
-    
-    @State private var petals: [Petal] = []
-    @State private var petalCounter: Int = 0
     
     init(width: CGFloat, height: CGFloat) {
         self.width = width
@@ -40,10 +42,11 @@ struct Square: View {
                 Spacer()
             }
             Button(action: {
-                //tickle pet
+                timerSpeed = 2
+                petColor = .red.opacity(0.50)
             }) {
                 Rectangle()
-                    .foregroundColor(.purple.opacity(0.50))
+                    .foregroundColor(petColor)
                     .frame(width: width, height: height)
                     .position(position)
                     .zIndex(1)
@@ -76,10 +79,10 @@ struct Square: View {
                         }
                     }) {
                         Circle()
-                            .foregroundColor(.green.opacity(0.8))
+                            .foregroundColor(.green)
                             .frame(width: 30, height: 30)
                             .overlay(
-                                Image(systemName: "leaf.fill") // Customize the button content
+                                Image(systemName: "leaf.fill")
                                     .foregroundColor(.white)
                             )
                     }
@@ -90,20 +93,20 @@ struct Square: View {
     }
 
     func startMoving() {
-        Timer.scheduledTimer(withTimeInterval: 8, repeats: true) { _ in
+        Timer.scheduledTimer(withTimeInterval: timerSpeed, repeats: true) { _ in
             let newX = CGFloat.random(in: width/2...UIScreen.main.bounds.width-width/2)
             let newY = CGFloat.random(in: 0...UIScreen.main.bounds.height-height*3.5)
-            withAnimation(.easeInOut(duration: 5)) {
-                position = CGPoint(x: newX, y: newY)
+            
+            if petals.count >= 20 {
+                petals.removeFirst()
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-                if petals.count >= 20 {
-                    petals.removeFirst()
-                }
-                let randomNumber = Int.random(in: 1...100)
-                if randomNumber <= 100 {
-                    shed()
-                }
+            let randomNumber = Int.random(in: 1...100)
+            if randomNumber <= 100 {
+                shed()
+            }
+            
+            withAnimation(.easeInOut(duration: timerSpeed)) {
+                position = CGPoint(x: newX, y: newY)
             }
         }
     }
