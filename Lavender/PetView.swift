@@ -19,7 +19,8 @@ struct Square: View {
         self.width = width
         self.height = height
         let initialX = UIScreen.main.bounds.width/2
-        let initialY = UIScreen.main.bounds.height/2-height/2
+        //let initialY = UIScreen.main.bounds.height/2-height/2
+        let initialY = UIScreen.main.bounds.height-height*3.5
         position = CGPoint(x: initialX, y: initialY)
     }
 
@@ -45,9 +46,9 @@ struct Square: View {
     }
 
     func startMoving() {
-        Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { _ in
+        Timer.scheduledTimer(withTimeInterval: 8, repeats: true) { _ in
             let newX = CGFloat.random(in: width/2...UIScreen.main.bounds.width-width/2)
-            let newY = CGFloat.random(in: 0...UIScreen.main.bounds.height-height)
+            let newY = CGFloat.random(in: 0...UIScreen.main.bounds.height-height*3.5)
             withAnimation(.easeInOut(duration: 5)) {
                 position = CGPoint(x: newX, y: newY)
             }
