@@ -19,8 +19,7 @@ struct Square: View {
         self.width = width
         self.height = height
         let initialX = UIScreen.main.bounds.width/2
-        //let initialY = UIScreen.main.bounds.height/2-height/2
-        let initialY = UIScreen.main.bounds.height-height*3.5
+        let initialY = UIScreen.main.bounds.height/2-height/2
         position = CGPoint(x: initialX, y: initialY)
     }
 
