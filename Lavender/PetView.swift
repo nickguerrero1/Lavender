@@ -30,10 +30,18 @@ struct Square: View {
             .position(position)
             .overlay(
                 ForEach(petals, id: \.id) { petal in
-                    Circle()
-                        .foregroundColor(.purple.opacity(0.5))
-                        .frame(width: 20, height: 20)
-                        .position(petal.position)
+                    Button(action: {
+                                        // Handle button tap
+                    }) {
+                        Circle()
+                            .foregroundColor(.purple.opacity(0.5))
+                            .frame(width: 30, height: 30)
+                            .overlay(
+                               Image(systemName: "leaf.fill") // Customize the button content
+                                    .foregroundColor(.white)
+                        )
+                    }
+                    .position(petal.position)
                 }
             )
             .onAppear {
@@ -64,7 +72,7 @@ struct Square: View {
 
 struct PetView: View {
     var body: some View {
-        Square(width: 50, height: 50)
+        Square(width: 75, height: 75)
     }
 }
 
