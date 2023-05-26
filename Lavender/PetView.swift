@@ -106,18 +106,21 @@ struct Square: View {
     }
     
     func loadPetalCount() {
-        let db = Firestore.firestore()
-        let userID = Auth.auth().currentUser?.uid
-        let userRef = db.collection("users").document(userID!)
-
-        userRef.getDocument { (document, error) in
-            if let document = document, document.exists {
-                if let petalCount = document.data()?["petalCount"] as? Int {
-                    petalCounter = petalCount
+        if let userID = Auth.auth().currentUser?.uid {
+            let db = Firestore.firestore()
+            let userRef = db.collection("users").document(userID)
+            
+            userRef.getDocument { (document, error) in
+                if let document = document, document.exists {
+                    if let petalCount = document.data()?["petalCount"] as? Int {
+                        petalCounter = petalCount
+                    }
+                } else {
+                    print("Document does not exist")
                 }
-            } else {
-                print("Document does not exist")
             }
+        } else {
+            petalCounter = 0
         }
     }
 }
