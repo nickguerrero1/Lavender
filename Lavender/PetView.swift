@@ -1,4 +1,6 @@
 import SwiftUI
+import Firebase
+import FirebaseFirestore
 
 struct Square: View {
     
@@ -46,6 +48,18 @@ struct Square: View {
                         Button(action: {
                             petals.removeAll { $0.id == petal.id }
                             petalCounter += 1
+                            
+                            let db = Firestore.firestore()
+                            let userID = Auth.auth().currentUser?.uid
+                            let userRef = db.collection("users").document(userID!)
+                            
+                            userRef.setData(["petalCount": petalCounter], merge: true) { error in
+                                if let error = error {
+                                    print("Error updating petal count: \(error)")
+                                } else {
+                                    print("Petal count updated in Firestore")
+                                }
+                            }
                         }) {
                             Circle()
                                 .foregroundColor(.green.opacity(0.8))
@@ -78,7 +92,10 @@ struct Square: View {
                 if petals.count >= 20 {
                     petals.removeFirst()
                 }
-                shed()
+                let randomNumber = Int.random(in: 1...100)
+                if randomNumber <= 33 {
+                    shed()
+                }
             }
         }
     }

@@ -17,6 +17,7 @@
 		D048DEF02A1FC32A0042A445 /* PetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D048DEEF2A1FC32A0042A445 /* PetView.swift */; };
 		D048DEF22A1FD7FD0042A445 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D048DEF12A1FD7FD0042A445 /* CalendarView.swift */; };
 		D048DEF42A1FFB740042A445 /* FlowerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D048DEF32A1FFB740042A445 /* FlowerView.swift */; };
+		D048DEF72A2065EC0042A445 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = D048DEF62A2065EC0042A445 /* FirebaseFirestore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D007BDE32A1E80D300FE7D50 /* FirebaseAuth in Frameworks */,
+				D048DEF72A2065EC0042A445 /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -51,6 +53,7 @@
 			children = (
 				D007BDCA2A1D4B5D00FE7D50 /* Lavender */,
 				D007BDC92A1D4B5D00FE7D50 /* Products */,
+				D048DEF52A2065EC0042A445 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -88,6 +91,13 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		D048DEF52A2065EC0042A445 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -106,6 +116,7 @@
 			name = Lavender;
 			packageProductDependencies = (
 				D007BDE22A1E80D300FE7D50 /* FirebaseAuth */,
+				D048DEF62A2065EC0042A445 /* FirebaseFirestore */,
 			);
 			productName = Lavender;
 			productReference = D007BDC82A1D4B5D00FE7D50 /* Lavender.app */;
@@ -401,6 +412,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D007BDE12A1E80D300FE7D50 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAuth;
+		};
+		D048DEF62A2065EC0042A445 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D007BDE12A1E80D300FE7D50 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
