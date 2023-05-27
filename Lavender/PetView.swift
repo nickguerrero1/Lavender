@@ -14,13 +14,13 @@ struct Square: View {
     @State private var tickled = false
     @State private var tickleCount = 0 //removes tickle effect after 5 pet position changes
     @State private var timer: Timer?
-    
     @State private var petImage: Image = Image("Left")
     
     
     struct Petal: Identifiable {
         let id = UUID()
         let position: CGPoint
+        let leafType: Image
     }
     
     init(width: CGFloat, height: CGFloat) {
@@ -39,7 +39,7 @@ struct Square: View {
                     ZStack{
                         Rectangle()
                             .frame(width: 100, height: 30)
-                            .foregroundColor(.white)
+                            .foregroundColor(.yellow.opacity(0.15))
                             .cornerRadius(30)
                         Text("Petals: \(petalCounter)")
                             .bold()
@@ -49,7 +49,7 @@ struct Square: View {
                 }
                 ZStack {
                     ForEach(petals, id: \.id) { petal in
-                        Image("Leaf2")
+                        petal.leafType
                             .resizable()
                             .frame(width: 50, height: 50)
                             .gesture(TapGesture()
@@ -141,7 +141,9 @@ struct Square: View {
     }
     
     func shed() {
-        petals.append(Petal(position: position))
+        let randomNumber = Int.random(in: 1...3)
+        let leafType = (randomNumber == 1) ? Image("Leaf") : Image("Leaf2")
+        petals.append(Petal(position: position, leafType: leafType))
     }
     
     func loadPetalCount() {
