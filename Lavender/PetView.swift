@@ -12,15 +12,18 @@ struct Square: View {
     @State private var petals: [Petal] = []
     @State private var rarity1: Int = 0 // Petal counts
     @State private var rarity2: Int = 0
+    @State private var rarity3: Int = 0
     @State private var tickled = false
     @State private var tickleCount = 0 //removes tickle effect after 5 pet position changes
     @State private var timer: Timer?
     @State private var petImage: Image = Image("Left")
+    @State private var petalImage: Image?
     
     struct Petal: Identifiable {
         let id = UUID()
         let position: CGPoint
         let rarity: Int
+        let image: Image
     }
     
     init(width: CGFloat, height: CGFloat) {
@@ -53,30 +56,39 @@ struct Square: View {
                         Text("rar2: \(rarity2)")
                             .bold()
                     }
+                    ZStack{
+                        Rectangle()
+                            .frame(width: 100, height: 30)
+                            .foregroundColor(.red.opacity(0.15))
+                            .cornerRadius(30)
+                        Text("rar3: \(rarity3)")
+                            .bold()
+                    }
                     Spacer()
                 }
                 ZStack {
                     ForEach(petals, id: \.id) { petal in
-                        let petalImage = petal.rarity == 1 ? Image("Leaf1") : Image("Leaf2")
-                        
-                        petalImage
+                        let frameSize: CGFloat = petal.rarity == 3 ? 70 : 50
+                        petal.image
                             .resizable()
-                            .frame(width: 50, height: 50)
+                            .frame(width: frameSize, height: frameSize)
                             .gesture(TapGesture()
                                 .onEnded { _ in
                                     petals.removeAll { $0.id == petal.id }
                                     
                                     if petal.rarity == 1 {
                                         rarity1 += 1
-                                    }   else {
+                                    }   else if petal.rarity == 2 {
                                         rarity2 += 1
+                                    }   else {
+                                        rarity3 += 1
                                     }
                                     
                                     let db = Firestore.firestore()
                                     let userID = Auth.auth().currentUser?.uid
                                     let userRef = db.collection("users").document(userID!)
                                     
-                                    userRef.setData(["rarity1": rarity1, "rarity2": rarity2], merge: true) { error in
+                                    userRef.setData(["rarity1": rarity1, "rarity2": rarity2, "rarity3": rarity3], merge: true) { error in
                                         if let error = error {
                                             print("Error updating petal count: \(error)")
                                         } else {
@@ -156,8 +168,14 @@ struct Square: View {
     }
     
     func shed() {
-        let randomRarity = Int.random(in: 1...2)
-        petals.append(Petal(position: position, rarity: randomRarity))
+        let randomValue = Int.random(in: 1...100)
+        if randomValue <= 70 {
+            petals.append(Petal(position: position, rarity: 1, image: Image("Leaf1")))
+        } else if randomValue <= 90 {
+            petals.append(Petal(position: position, rarity: 2, image: Image("Leaf2")))
+        } else {
+            petals.append(Petal(position: position, rarity: 3, image: Image("Leaf3")))
+        }
     }
     
     func loadPetalCount() {
@@ -173,6 +191,9 @@ struct Square: View {
                     if let rarity2Count = document.data()?["rarity2"] as? Int {
                         rarity2 = rarity2Count
                     }
+                    if let rarity3Count = document.data()?["rarity3"] as? Int {
+                        rarity3 = rarity3Count
+                    }
                 } else {
                     print("Document does not exist")
                 }
@@ -180,6 +201,7 @@ struct Square: View {
         } else {
             rarity1 = 0
             rarity2 = 0
+            rarity3 = 0
         }
     }
 }
