@@ -10,9 +10,12 @@ struct Square: View {
     @State private var hasStartedMoving = false
     @State private var position: CGPoint
     @State private var petals: [Petal] = []
+    
     @State private var rarity1: Int = 0 // Petal counts
     @State private var rarity2: Int = 0
     @State private var rarity3: Int = 0
+    @State private var rarity4: Int = 0
+    
     @State private var tickled = false
     @State private var tickleCount = 0 //removes tickle effect after 5 pet position changes
     @State private var timer: Timer?
@@ -24,6 +27,7 @@ struct Square: View {
         let position: CGPoint
         let rarity: Int
         let image: Image
+        let frameSize: Int
     }
     
     init(width: CGFloat, height: CGFloat) {
@@ -41,37 +45,44 @@ struct Square: View {
                 HStack{
                     ZStack{
                         Rectangle()
-                            .frame(width: 100, height: 30)
+                            .frame(width: 50, height: 30)
                             .foregroundColor(.yellow.opacity(0.15))
                             .cornerRadius(30)
-                        Text("rar1: \(rarity1)")
+                        Text("1: \(rarity1)")
                             .bold()
                     }
                     .padding(.leading)
                     ZStack{
                         Rectangle()
-                            .frame(width: 100, height: 30)
+                            .frame(width: 50, height: 30)
                             .foregroundColor(.blue.opacity(0.15))
                             .cornerRadius(30)
-                        Text("rar2: \(rarity2)")
+                        Text("2: \(rarity2)")
                             .bold()
                     }
                     ZStack{
                         Rectangle()
-                            .frame(width: 100, height: 30)
+                            .frame(width: 50, height: 30)
                             .foregroundColor(.red.opacity(0.15))
                             .cornerRadius(30)
-                        Text("rar3: \(rarity3)")
+                        Text("3: \(rarity3)")
+                            .bold()
+                    }
+                    ZStack{
+                        Rectangle()
+                            .frame(width: 50, height: 30)
+                            .foregroundColor(.purple.opacity(0.15))
+                            .cornerRadius(30)
+                        Text("4: \(rarity4)")
                             .bold()
                     }
                     Spacer()
                 }
                 ZStack {
                     ForEach(petals, id: \.id) { petal in
-                        let frameSize: CGFloat = petal.rarity == 3 ? 70 : 50
                         petal.image
                             .resizable()
-                            .frame(width: frameSize, height: frameSize)
+                            .frame(width: CGFloat(petal.frameSize), height: CGFloat(petal.frameSize))
                             .gesture(TapGesture()
                                 .onEnded { _ in
                                     petals.removeAll { $0.id == petal.id }
@@ -80,15 +91,17 @@ struct Square: View {
                                         rarity1 += 1
                                     }   else if petal.rarity == 2 {
                                         rarity2 += 1
-                                    }   else {
+                                    }   else if petal.rarity == 3 {
                                         rarity3 += 1
+                                    }   else {
+                                        rarity4 += 1
                                     }
                                     
                                     let db = Firestore.firestore()
                                     let userID = Auth.auth().currentUser?.uid
                                     let userRef = db.collection("users").document(userID!)
                                     
-                                    userRef.setData(["rarity1": rarity1, "rarity2": rarity2, "rarity3": rarity3], merge: true) { error in
+                                    userRef.setData(["rarity1": rarity1, "rarity2": rarity2, "rarity3": rarity3, "rarity4": rarity4], merge: true) { error in
                                         if let error = error {
                                             print("Error updating petal count: \(error)")
                                         } else {
@@ -169,12 +182,14 @@ struct Square: View {
     
     func shed() {
         let randomValue = Int.random(in: 1...100)
-        if randomValue <= 70 {
-            petals.append(Petal(position: position, rarity: 1, image: Image("Leaf1")))
-        } else if randomValue <= 90 {
-            petals.append(Petal(position: position, rarity: 2, image: Image("Leaf2")))
-        } else {
-            petals.append(Petal(position: position, rarity: 3, image: Image("Leaf3")))
+        if randomValue <= 65 {
+            petals.append(Petal(position: position, rarity: 1, image: Image("Leaf1"), frameSize: 50))
+        } else if randomValue <= 85 {
+            petals.append(Petal(position: position, rarity: 2, image: Image("Leaf2"), frameSize: 50))
+        } else if randomValue <= 95{
+            petals.append(Petal(position: position, rarity: 3, image: Image("Leaf3"), frameSize: 60))
+        }   else {
+            petals.append(Petal(position: position, rarity: 4, image: Image("Leaf4"), frameSize: 70))
         }
     }
     
@@ -194,6 +209,9 @@ struct Square: View {
                     if let rarity3Count = document.data()?["rarity3"] as? Int {
                         rarity3 = rarity3Count
                     }
+                    if let rarity4Count = document.data()?["rarity4"] as? Int {
+                        rarity4 = rarity4Count
+                    }
                 } else {
                     print("Document does not exist")
                 }
@@ -202,6 +220,7 @@ struct Square: View {
             rarity1 = 0
             rarity2 = 0
             rarity3 = 0
+            rarity4 = 0
         }
     }
 }
