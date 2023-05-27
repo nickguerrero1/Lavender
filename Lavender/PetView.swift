@@ -13,8 +13,10 @@ struct Square: View {
     @State private var petalCounter: Int = 0
     @State private var tickled = false
     @State private var tickleCount = 0 //removes tickle effect after 5 pet position changes
-    @State private var petColor: Color = .purple
     @State private var timer: Timer?
+    
+    @State private var petImage: Image = Image("Left")
+    
     
     struct Petal: Identifiable {
         let id = UUID()
@@ -70,17 +72,13 @@ struct Square: View {
                     }
                     .position(petal.position)
                 }
-                Rectangle()
-                    .foregroundColor(petColor)
-                    .frame(width: width, height: height)
+                petImage
                     .position(position)
-                    .zIndex(1)
-                    .gesture(
-                        TapGesture()
-                            .onEnded { _ in
-                                tickled = true
-                                petColor = .red
-                            }
+                    .gesture(TapGesture()
+                        .onEnded { _ in
+                            tickled = true
+                            petImage = Image("Tickle")
+                        }
                     )
                     .onAppear {
                         if !hasStartedMoving {
@@ -117,11 +115,8 @@ struct Square: View {
             tickleCount += 1
             if tickleCount > 5 {
                 tickled = false
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    petColor = .purple
-                }
                 tickleCount = 0
-                print(tickleCount)
+                petImage = Image("Left")
             }
             
             withAnimation(.easeInOut(duration: speed)) {
