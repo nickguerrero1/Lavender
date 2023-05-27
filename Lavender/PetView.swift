@@ -73,11 +73,13 @@ struct Square: View {
                     .position(petal.position)
                 }
                 petImage
+                    .resizable()
+                    .frame(width: 200, height: 200)
                     .position(position)
                     .gesture(TapGesture()
                         .onEnded { _ in
                             tickled = true
-                            petImage = Image("Tickle")
+                            petImage = Image("TickleLeft")
                         }
                     )
                     .onAppear {
@@ -116,6 +118,12 @@ struct Square: View {
             if tickleCount > 5 {
                 tickled = false
                 tickleCount = 0
+                petImage = Image("Left")
+            }
+            
+            if newX > position.x {
+                petImage = Image("Right")
+            }   else {
                 petImage = Image("Left")
             }
             
