@@ -32,66 +32,67 @@ struct Square: View {
     }
 
     var body: some View {
-        VStack{
-            HStack{
-                ZStack{
-                    Rectangle()
-                        .frame(width: 100, height: 30)
-                        .foregroundColor(.yellow)
-                        .cornerRadius(30)
-                    Text("Petals: \(petalCounter)")
+        ZStack{
+            //Add background rectangle here if needed
+            VStack{
+                HStack{
+                    ZStack{
+                        Rectangle()
+                            .frame(width: 100, height: 30)
+                            .foregroundColor(.white)
+                            .cornerRadius(30)
+                        Text("Petals: \(petalCounter)")
+                            .bold()
+                    }
+                    .padding(.leading)
+                    Spacer()
                 }
-                .padding(.leading)
-                Spacer()
-            }
-            ZStack {
-                ForEach(petals, id: \.id) { petal in
-                    Button(action: {
-                        petals.removeAll { $0.id == petal.id }
-                        petalCounter += 1
-                        
-                        let db = Firestore.firestore()
-                        let userID = Auth.auth().currentUser?.uid
-                        let userRef = db.collection("users").document(userID!)
-                        
-                        userRef.setData(["petalCount": petalCounter], merge: true) { error in
-                            if let error = error {
-                                print("Error updating petal count: \(error)")
-                            } else {
-                                print("Petal count updated in Firestore")
-                            }
-                        }
-                    }) {
-                        Circle()
-                            .foregroundColor(.green)
-                            .frame(width: 30, height: 30)
-                            .overlay(
-                                Image(systemName: "leaf.fill")
-                                    .foregroundColor(.white)
+                ZStack {
+                    ForEach(petals, id: \.id) { petal in
+                        Image("Leaf2")
+                            .resizable()
+                            .frame(width: 50, height: 50)
+                            .gesture(TapGesture()
+                                .onEnded { _ in
+                                    petals.removeAll { $0.id == petal.id }
+                                    petalCounter += 1
+                                    
+                                    let db = Firestore.firestore()
+                                    let userID = Auth.auth().currentUser?.uid
+                                    let userRef = db.collection("users").document(userID!)
+                                    
+                                    userRef.setData(["petalCount": petalCounter], merge: true) { error in
+                                        if let error = error {
+                                            print("Error updating petal count: \(error)")
+                                        } else {
+                                            print("Petal count updated in Firestore")
+                                        }
+                                    }
+                                }
                             )
+                            .position(petal.position)
                     }
-                    .position(petal.position)
+                    petImage
+                        .resizable()
+                        .frame(width: 200, height: 200)
+                        .position(position)
+                        .gesture(TapGesture()
+                            .onEnded { _ in
+                                tickled = true
+                            }
+                        )
+                        .onAppear {
+                            if !hasStartedMoving {
+                                startMoving()
+                                hasStartedMoving = true
+                            }
+                            loadPetalCount()
+                        }
                 }
-                petImage
-                    .resizable()
-                    .frame(width: 200, height: 200)
-                    .position(position)
-                    .gesture(TapGesture()
-                        .onEnded { _ in
-                            tickled = true
-                        }
-                    )
-                    .onAppear {
-                        if !hasStartedMoving {
-                            startMoving()
-                            hasStartedMoving = true
-                        }
-                        loadPetalCount()
-                    }
             }
-        }
-        .onChange(of: tickled) { _ in
-            startMoving()
+            .onChange(of: tickled) { _ in
+                startMoving()
+            }
         }
     }
 
@@ -103,7 +104,7 @@ struct Square: View {
         
         timer = Timer.scheduledTimer(withTimeInterval: speed, repeats: true) { _ in
             let newX = CGFloat.random(in: width/2...UIScreen.main.bounds.width-width/2)
-            let newY = CGFloat.random(in: 0...UIScreen.main.bounds.height-height*3.5)
+            let newY = CGFloat.random(in: height*0.5...UIScreen.main.bounds.height-height*3.5)
             
             if petals.count >= 20 {
                 petals.removeFirst()
