@@ -79,7 +79,6 @@ struct Square: View {
                     .gesture(TapGesture()
                         .onEnded { _ in
                             tickled = true
-                            petImage = Image("TickleLeft")
                         }
                     )
                     .onAppear {
@@ -118,13 +117,20 @@ struct Square: View {
             if tickleCount > 5 {
                 tickled = false
                 tickleCount = 0
-                petImage = Image("Left")
             }
             
-            if newX > position.x {
-                petImage = Image("Right")
-            }   else {
-                petImage = Image("Left")
+            if !tickled {
+                if newX > position.x {
+                    petImage = Image("Right")
+                }   else {
+                    petImage = Image("Left")
+                }
+            } else {
+                if newX > position.x {
+                    petImage = Image("TickleRight")
+                }   else {
+                    petImage = Image("TickleLeft")
+                }
             }
             
             withAnimation(.easeInOut(duration: speed)) {
