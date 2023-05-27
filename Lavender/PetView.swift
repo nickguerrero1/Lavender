@@ -16,6 +16,8 @@ struct Square: View {
     @State private var rarity3: Int = 0
     @State private var rarity4: Int = 0
     @State private var rarity5: Int = 0
+    @State private var rarity6: Int = 0
+    @State private var rarity7: Int = 0
     
     @State private var tickled = false
     @State private var tickleCount = 0 //removes tickle effect after 5 pet position changes
@@ -46,46 +48,67 @@ struct Square: View {
                 HStack{
                     ZStack{
                         Rectangle()
-                            .frame(width: 50, height: 30)
+                            .frame(width: 45, height: 20)
                             .foregroundColor(.yellow.opacity(0.15))
                             .cornerRadius(30)
                         Text("1: \(rarity1)")
                             .bold()
+                            .font(.system(size: 15))
                     }
-                    .padding(.leading)
                     ZStack{
                         Rectangle()
-                            .frame(width: 50, height: 30)
+                            .frame(width: 45, height: 20)
                             .foregroundColor(.blue.opacity(0.15))
                             .cornerRadius(30)
                         Text("2: \(rarity2)")
                             .bold()
+                            .font(.system(size: 15))
                     }
                     ZStack{
                         Rectangle()
-                            .frame(width: 50, height: 30)
-                            .foregroundColor(.red.opacity(0.15))
+                            .frame(width: 45, height: 20)
+                            .foregroundColor(.pink.opacity(0.15))
                             .cornerRadius(30)
                         Text("3: \(rarity3)")
                             .bold()
+                            .font(.system(size: 15))
                     }
                     ZStack{
                         Rectangle()
-                            .frame(width: 50, height: 30)
+                            .frame(width: 45, height: 20)
                             .foregroundColor(.purple.opacity(0.15))
                             .cornerRadius(30)
                         Text("4: \(rarity4)")
                             .bold()
+                            .font(.system(size: 15))
                     }
                     ZStack{
                         Rectangle()
-                            .frame(width: 50, height: 30)
-                            .foregroundColor(.black.opacity(0.15))
+                            .frame(width: 45, height: 20)
+                            .foregroundColor(.green.opacity(0.15))
                             .cornerRadius(30)
                         Text("5: \(rarity5)")
                             .bold()
+                            .font(.system(size: 15))
                     }
-                    Spacer()
+                    ZStack{
+                        Rectangle()
+                            .frame(width: 45, height: 20)
+                            .foregroundColor(.brown.opacity(0.15))
+                            .cornerRadius(30)
+                        Text("6: \(rarity6)")
+                            .bold()
+                            .font(.system(size: 15))
+                    }
+                    ZStack{
+                        Rectangle()
+                            .frame(width: 45, height: 20)
+                            .foregroundColor(.black.opacity(0.15))
+                            .cornerRadius(30)
+                        Text("7: \(rarity7)")
+                            .bold()
+                            .font(.system(size: 15))
+                    }
                 }
                 ZStack {
                     ForEach(petals, id: \.id) { petal in
@@ -104,15 +127,19 @@ struct Square: View {
                                         rarity3 += 1
                                     }   else if petal.rarity == 4 {
                                         rarity4 += 1
-                                    }   else {
+                                    }   else if petal.rarity == 5 {
                                         rarity5 += 1
+                                    }   else if petal.rarity == 6 {
+                                        rarity6 += 1
+                                    }   else {
+                                        rarity7 += 1
                                     }
                                     
                                     let db = Firestore.firestore()
                                     let userID = Auth.auth().currentUser?.uid
                                     let userRef = db.collection("users").document(userID!)
                                     
-                                    userRef.setData(["rarity1": rarity1, "rarity2": rarity2, "rarity3": rarity3, "rarity4": rarity4, "rarity5": rarity5], merge: true) { error in
+                                    userRef.setData(["rarity1": rarity1, "rarity2": rarity2, "rarity3": rarity3, "rarity4": rarity4, "rarity5": rarity5, "rarity6": rarity6, "rarity7": rarity7], merge: true) { error in
                                         if let error = error {
                                             print("Error updating petal count: \(error)")
                                         } else {
@@ -190,19 +217,23 @@ struct Square: View {
     }
     
     func shed() {
-        let randomValue = Int.random(in: 1...1000)
-        if randomValue >= 405 {
+        let randomValue = Int.random(in: 1...384)
+        if randomValue >= 128 {
             //no petal sheds
-        }   else if randomValue >= 135 {
+        }   else if randomValue >= 64 {
             petals.append(Petal(position: position, rarity: 1, image: Image("Leaf1"), frameSize: 50))
-        }   else if randomValue >= 45 {
+        }   else if randomValue >= 32 {
             petals.append(Petal(position: position, rarity: 2, image: Image("Leaf2"), frameSize: 50))
-        }   else if randomValue >= 15 {
-            petals.append(Petal(position: position, rarity: 3, image: Image("Leaf3"), frameSize: 60))
-        }   else if randomValue >= 5{
-            petals.append(Petal(position: position, rarity: 4, image: Image("Leaf4"), frameSize: 60))
+        }   else if randomValue >= 16 {
+            petals.append(Petal(position: position, rarity: 3, image: Image("Leaf3"), frameSize: 70))
+        }   else if randomValue >= 8 {
+            petals.append(Petal(position: position, rarity: 4, image: Image("Leaf4"), frameSize: 70))
+        }   else if randomValue >= 4 {
+            petals.append(Petal(position: position, rarity: 5, image: Image("Leaf5"), frameSize: 60))
+        }   else if randomValue >= 2 {
+            petals.append(Petal(position: position, rarity: 6, image: Image("Leaf6"), frameSize: 60))
         }   else {
-            petals.append(Petal(position: position, rarity: 5, image: Image("Leaf5"), frameSize: 70))
+            petals.append(Petal(position: position, rarity: 7, image: Image("Leaf7"), frameSize: 70))
         }
     }
     
@@ -228,6 +259,12 @@ struct Square: View {
                     if let rarity5Count = document.data()?["rarity5"] as? Int {
                         rarity5 = rarity5Count
                     }
+                    if let rarity6Count = document.data()?["rarity6"] as? Int {
+                        rarity6 = rarity6Count
+                    }
+                    if let rarity7Count = document.data()?["rarity7"] as? Int {
+                        rarity7 = rarity7Count
+                    }
                 } else {
                     print("Document does not exist")
                 }
@@ -238,6 +275,8 @@ struct Square: View {
             rarity3 = 0
             rarity4 = 0
             rarity5 = 0
+            rarity6 = 0
+            rarity7 = 0
         }
     }
 }
