@@ -183,29 +183,11 @@ struct Square: View {
             
             userRef.getDocument { (document, error) in
                 if let document = document, document.exists {
-                    if let rarity1Count = document.data()?["rarity1"] as? Int {
-                        rarity[0] = rarity1Count
-                    }
-                    if let rarity2Count = document.data()?["rarity2"] as? Int {
-                        rarity[1] = rarity2Count
-                    }
-                    if let rarity3Count = document.data()?["rarity3"] as? Int {
-                        rarity[2] = rarity3Count
-                    }
-                    if let rarity4Count = document.data()?["rarity4"] as? Int {
-                        rarity[3] = rarity4Count
-                    }
-                    if let rarity5Count = document.data()?["rarity5"] as? Int {
-                        rarity[4] = rarity5Count
-                    }
-                    if let rarity6Count = document.data()?["rarity6"] as? Int {
-                        rarity[5] = rarity6Count
-                    }
-                    if let rarity7Count = document.data()?["rarity7"] as? Int {
-                        rarity[6] = rarity7Count
-                    }
-                    if let rarity8Count = document.data()?["rarity8"] as? Int {
-                        rarity[7] = rarity8Count
+                    let firebaseRar = ["rarity1","rarity2","rarity3","rarity4","rarity5","rarity6","rarity7","rarity8"]
+                    for index in 0...7 {
+                        if let rarityCount = document.data()?[firebaseRar[index]] as? Int {
+                            rarity[index] = rarityCount
+                        }
                     }
                 } else {
                     print("Document does not exist")
