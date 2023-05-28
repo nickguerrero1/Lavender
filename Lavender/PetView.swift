@@ -11,13 +11,7 @@ struct Square: View {
     @State private var position: CGPoint
     @State private var petals: [Petal] = []
     
-    @State private var rarity1: Int = 0 // Petal counts
-    @State private var rarity2: Int = 0
-    @State private var rarity3: Int = 0
-    @State private var rarity4: Int = 0
-    @State private var rarity5: Int = 0
-    @State private var rarity6: Int = 0
-    @State private var rarity7: Int = 0
+    @State private var rarity: [Int] = [0, 0, 0, 0, 0, 0, 0, 0]
     
     @State private var tickled = false
     @State private var tickleCount = 0 //removes tickle effect after 5 pet position changes
@@ -48,64 +42,73 @@ struct Square: View {
                 HStack{
                     ZStack{
                         Rectangle()
-                            .frame(width: 45, height: 20)
-                            .foregroundColor(.yellow.opacity(0.15))
-                            .cornerRadius(30)
-                        Text("1: \(rarity1)")
-                            .bold()
-                            .font(.system(size: 15))
-                    }
-                    ZStack{
-                        Rectangle()
-                            .frame(width: 45, height: 20)
-                            .foregroundColor(.blue.opacity(0.15))
-                            .cornerRadius(30)
-                        Text("2: \(rarity2)")
-                            .bold()
-                            .font(.system(size: 15))
-                    }
-                    ZStack{
-                        Rectangle()
-                            .frame(width: 45, height: 20)
-                            .foregroundColor(.pink.opacity(0.15))
-                            .cornerRadius(30)
-                        Text("3: \(rarity3)")
-                            .bold()
-                            .font(.system(size: 15))
-                    }
-                    ZStack{
-                        Rectangle()
-                            .frame(width: 45, height: 20)
-                            .foregroundColor(.purple.opacity(0.15))
-                            .cornerRadius(30)
-                        Text("4: \(rarity4)")
-                            .bold()
-                            .font(.system(size: 15))
-                    }
-                    ZStack{
-                        Rectangle()
-                            .frame(width: 45, height: 20)
+                            .frame(width: 30, height: 20)
                             .foregroundColor(.green.opacity(0.15))
                             .cornerRadius(30)
-                        Text("5: \(rarity5)")
+                        Text("\(rarity[0])")
                             .bold()
                             .font(.system(size: 15))
                     }
                     ZStack{
                         Rectangle()
-                            .frame(width: 45, height: 20)
-                            .foregroundColor(.brown.opacity(0.15))
+                            .frame(width: 30, height: 20)
+                            .foregroundColor(.green.opacity(0.15))
                             .cornerRadius(30)
-                        Text("6: \(rarity6)")
+                        Text("\(rarity[1])")
                             .bold()
                             .font(.system(size: 15))
                     }
                     ZStack{
                         Rectangle()
-                            .frame(width: 45, height: 20)
-                            .foregroundColor(.black.opacity(0.15))
+                            .frame(width: 30, height: 20)
+                            .foregroundColor(.green.opacity(0.15))
                             .cornerRadius(30)
-                        Text("7: \(rarity7)")
+                        Text("\(rarity[2])")
+                            .bold()
+                            .font(.system(size: 15))
+                    }
+                    ZStack{
+                        Rectangle()
+                            .frame(width: 30, height: 20)
+                            .foregroundColor(.green.opacity(0.15))
+                            .cornerRadius(30)
+                        Text("\(rarity[3])")
+                            .bold()
+                            .font(.system(size: 15))
+                    }
+                    ZStack{
+                        Rectangle()
+                            .frame(width: 30, height: 20)
+                            .foregroundColor(.green.opacity(0.15))
+                            .cornerRadius(30)
+                        Text("\(rarity[4])")
+                            .bold()
+                            .font(.system(size: 15))
+                    }
+                    ZStack{
+                        Rectangle()
+                            .frame(width: 30, height: 20)
+                            .foregroundColor(.green.opacity(0.15))
+                            .cornerRadius(30)
+                        Text("\(rarity[5])")
+                            .bold()
+                            .font(.system(size: 15))
+                    }
+                    ZStack{
+                        Rectangle()
+                            .frame(width: 30, height: 20)
+                            .foregroundColor(.green.opacity(0.15))
+                            .cornerRadius(30)
+                        Text("\(rarity[6])")
+                            .bold()
+                            .font(.system(size: 15))
+                    }
+                    ZStack{
+                        Rectangle()
+                            .frame(width: 30, height: 20)
+                            .foregroundColor(.green.opacity(0.15))
+                            .cornerRadius(30)
+                        Text("\(rarity[7])")
                             .bold()
                             .font(.system(size: 15))
                     }
@@ -119,27 +122,17 @@ struct Square: View {
                                 .onEnded { _ in
                                     petals.removeAll { $0.id == petal.id }
                                     
-                                    if petal.rarity == 1 {
-                                        rarity1 += 1
-                                    }   else if petal.rarity == 2 {
-                                        rarity2 += 1
-                                    }   else if petal.rarity == 3 {
-                                        rarity3 += 1
-                                    }   else if petal.rarity == 4 {
-                                        rarity4 += 1
-                                    }   else if petal.rarity == 5 {
-                                        rarity5 += 1
-                                    }   else if petal.rarity == 6 {
-                                        rarity6 += 1
-                                    }   else {
-                                        rarity7 += 1
+                                    for index in 0...7 {
+                                        if petal.rarity == index + 1 {
+                                            rarity[index] += 1
+                                        }
                                     }
                                     
                                     let db = Firestore.firestore()
                                     let userID = Auth.auth().currentUser?.uid
                                     let userRef = db.collection("users").document(userID!)
                                     
-                                    userRef.setData(["rarity1": rarity1, "rarity2": rarity2, "rarity3": rarity3, "rarity4": rarity4, "rarity5": rarity5, "rarity6": rarity6, "rarity7": rarity7], merge: true) { error in
+                                    userRef.setData(["rarity1": rarity[0], "rarity2": rarity[1], "rarity3": rarity[2], "rarity4": rarity[3], "rarity5": rarity[4], "rarity6": rarity[5], "rarity7": rarity[6], "rarity8": rarity[7]], merge: true) { error in
                                         if let error = error {
                                             print("Error updating petal count: \(error)")
                                         } else {
@@ -217,23 +210,25 @@ struct Square: View {
     }
     
     func shed() {
-        let randomValue = Int.random(in: 1...384)
-        if randomValue >= 128 {
+        let randomValue = Int.random(in: 1...768)
+        if randomValue >= 256 {
             //no petal sheds
-        }   else if randomValue >= 64 {
+        }   else if randomValue >= 128 {
             petals.append(Petal(position: position, rarity: 1, image: Image("Leaf1"), frameSize: 50))
+        }   else if randomValue >= 64 {
+            petals.append(Petal(position: position, rarity: 2, image: Image("Leaf2"), frameSize: 40))
         }   else if randomValue >= 32 {
-            petals.append(Petal(position: position, rarity: 2, image: Image("Leaf2"), frameSize: 50))
+            petals.append(Petal(position: position, rarity: 3, image: Image("Leaf3"), frameSize: 50))
         }   else if randomValue >= 16 {
-            petals.append(Petal(position: position, rarity: 3, image: Image("Leaf3"), frameSize: 70))
+            petals.append(Petal(position: position, rarity: 4, image: Image("Leaf4"), frameSize: 60))
         }   else if randomValue >= 8 {
-            petals.append(Petal(position: position, rarity: 4, image: Image("Leaf4"), frameSize: 70))
-        }   else if randomValue >= 4 {
             petals.append(Petal(position: position, rarity: 5, image: Image("Leaf5"), frameSize: 60))
-        }   else if randomValue >= 2 {
+        }   else if randomValue >= 4 {
             petals.append(Petal(position: position, rarity: 6, image: Image("Leaf6"), frameSize: 60))
+        }   else if randomValue >= 2 {
+            petals.append(Petal(position: position, rarity: 7, image: Image("Leaf7"), frameSize: 60))
         }   else {
-            petals.append(Petal(position: position, rarity: 7, image: Image("Leaf7"), frameSize: 70))
+            petals.append(Petal(position: position, rarity: 8, image: Image("Leaf8"), frameSize: 70))
         }
     }
     
@@ -245,38 +240,37 @@ struct Square: View {
             userRef.getDocument { (document, error) in
                 if let document = document, document.exists {
                     if let rarity1Count = document.data()?["rarity1"] as? Int {
-                        rarity1 = rarity1Count
+                        rarity[0] = rarity1Count
                     }
                     if let rarity2Count = document.data()?["rarity2"] as? Int {
-                        rarity2 = rarity2Count
+                        rarity[1] = rarity2Count
                     }
                     if let rarity3Count = document.data()?["rarity3"] as? Int {
-                        rarity3 = rarity3Count
+                        rarity[2] = rarity3Count
                     }
                     if let rarity4Count = document.data()?["rarity4"] as? Int {
-                        rarity4 = rarity4Count
+                        rarity[3] = rarity4Count
                     }
                     if let rarity5Count = document.data()?["rarity5"] as? Int {
-                        rarity5 = rarity5Count
+                        rarity[4] = rarity5Count
                     }
                     if let rarity6Count = document.data()?["rarity6"] as? Int {
-                        rarity6 = rarity6Count
+                        rarity[5] = rarity6Count
                     }
                     if let rarity7Count = document.data()?["rarity7"] as? Int {
-                        rarity7 = rarity7Count
+                        rarity[6] = rarity7Count
+                    }
+                    if let rarity8Count = document.data()?["rarity8"] as? Int {
+                        rarity[7] = rarity8Count
                     }
                 } else {
                     print("Document does not exist")
                 }
             }
         } else {
-            rarity1 = 0
-            rarity2 = 0
-            rarity3 = 0
-            rarity4 = 0
-            rarity5 = 0
-            rarity6 = 0
-            rarity7 = 0
+            for index in 0...7 {
+                rarity[index] = 0
+            }
         }
     }
 }
