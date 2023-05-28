@@ -41,13 +41,13 @@ struct ContentView: View {
                     .padding()
                     .frame(width: 300, height: 50)
                     .background(.black.opacity(0.05))
-                    .cornerRadius(10)
+                    .cornerRadius(20)
                     .border(.red, width: CGFloat(wrongEmail))
                 SecureField("Password", text: $password)
                     .padding()
                     .frame(width: 300, height: 50)
                     .background(.black.opacity(0.05))
-                    .cornerRadius(10)
+                    .cornerRadius(20)
                     .border(.red, width: CGFloat(wrongPassword))
                 
                 Button(action: {
