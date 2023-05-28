@@ -149,25 +149,30 @@ struct Square: View {
     }
     
     func shed() {
+        
+        let numRarities = 8
         let randomValue = Int.random(in: 1...768)
+        
+        let frameSizes = [50, 40, 50, 60, 60, 60, 70, 70]
+        let images = [Image("Leaf1"), Image("Leaf2"), Image("Leaf3"), Image("Leaf4"), Image("Leaf5"), Image("Leaf6"), Image("Leaf7"), Image("Leaf8")]
+        var shedChances = Array(repeating: 256, count: numRarities)
+        
+        for x in 1...numRarities-1 {
+            for y in x...numRarities-1 {
+                shedChances[y] = shedChances[y] / 2
+            }
+        }
+        
         if randomValue >= 256 {
             //no petal sheds
-        }   else if randomValue >= 128 {
-            petals.append(Petal(position: position, rarity: 1, image: Image("Leaf1"), frameSize: 50)) //50%
-        }   else if randomValue >= 64 {
-            petals.append(Petal(position: position, rarity: 2, image: Image("Leaf2"), frameSize: 40)) //25%
-        }   else if randomValue >= 32 {
-            petals.append(Petal(position: position, rarity: 3, image: Image("Leaf3"), frameSize: 50)) //12.5%
-        }   else if randomValue >= 16 {
-            petals.append(Petal(position: position, rarity: 4, image: Image("Leaf4"), frameSize: 60)) //6.25%
-        }   else if randomValue >= 8 {
-            petals.append(Petal(position: position, rarity: 5, image: Image("Leaf5"), frameSize: 60)) //3.13%
-        }   else if randomValue >= 4 {
-            petals.append(Petal(position: position, rarity: 6, image: Image("Leaf6"), frameSize: 60)) //1.56%
-        }   else if randomValue >= 2 {
-            petals.append(Petal(position: position, rarity: 7, image: Image("Leaf7"), frameSize: 60)) //0.78%
         }   else {
-            petals.append(Petal(position: position, rarity: 8, image: Image("Leaf8"), frameSize: 70)) //0.39%
+            var chooseRarity: Int?
+            for index in 1...numRarities {
+                if randomValue < shedChances[index - 1] {
+                    chooseRarity = index
+                }
+            }
+            petals.append(Petal(position: position, rarity: chooseRarity!, image: images[chooseRarity!-1], frameSize: frameSizes[chooseRarity!-1]))
         }
     }
     
