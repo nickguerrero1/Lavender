@@ -7,7 +7,7 @@ struct FlowerView: View {
             ZStack{
                 Circle()
                     .frame(height: 0.2 * UIScreen.main.bounds.width)
-                    .foregroundColor(.purple.opacity(0.15))
+                    .foregroundColor(.green.opacity(0.15))
                 Button {
                     //do something
                 } label: {

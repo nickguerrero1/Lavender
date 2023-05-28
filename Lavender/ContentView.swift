@@ -20,22 +20,23 @@ struct ContentView: View {
     
     var content: some View {
         ZStack{
-            Color.black
+            Color.green
                 .ignoresSafeArea()
             Circle()
-                .scale(1.7)
+                .scale(2.0)
                 .foregroundColor(.white.opacity(0.15))
             Circle()
-                .scale(1.35)
+                .scale(1.8)
                 .foregroundColor(.white)
             VStack{
-                Text("Welcome")
+                Image("Lavender")
+                    .resizable()
+                    .frame(width: 100, height: 100)
+                Text("Lavender")
                     .font(.largeTitle)
-                    .bold()
-                    .padding()
+                    .padding(.bottom)
                 Text(errorMessage)
                     .foregroundColor(.red)
-                    .padding(.bottom)
                 TextField("Email" , text: $email)
                     .padding()
                     .frame(width: 300, height: 50)
@@ -50,22 +51,24 @@ struct ContentView: View {
                     .border(.red, width: CGFloat(wrongPassword))
                 
                 Button(action: {
-                    register()
+                    login()
                 }) {
-                    Text("Sign up")
+                    Text("LOGIN")
                         .foregroundColor(.white)
                         .frame(width: 300, height: 45)
                         .background(Color.blue)
-                        .cornerRadius(10)
+                        .cornerRadius(50)
                         .padding(.top)
                 }
                 
                 Button {
-                    login()
+                    register()
                 } label: {
-                    Text("Already have an account? Login")
-                        .bold()
+                    Text("Don't have an account? ")
                         .foregroundColor(.blue)
+                    +
+                    Text("Sign up")
+                        .bold()
                 }
                     .padding(.top)
             }

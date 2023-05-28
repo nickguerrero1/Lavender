@@ -17,7 +17,7 @@ struct CalendarView: View {
         VStack{
             ZStack{
                 Rectangle()
-                    .foregroundColor(.purple.opacity(0.12))
+                    .foregroundColor(.green.opacity(0.12))
                     .frame(height: 60)
                 DatePicker("Anniversary", selection: $selectedDate, in: ...Date(), displayedComponents: .date)
                     .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
