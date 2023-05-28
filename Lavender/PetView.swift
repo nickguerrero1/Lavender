@@ -2,6 +2,8 @@ import SwiftUI
 import Firebase
 import FirebaseFirestore
 
+let numRarities = 8
+
 struct Square: View {
     
     let width: CGFloat
@@ -11,7 +13,7 @@ struct Square: View {
     @State private var position: CGPoint
     @State private var petals: [Petal] = []
     
-    @State private var rarity: [Int] = [0, 0, 0, 0, 0, 0, 0, 0]
+    @State private var rarity: [Int] = Array(repeating: 0, count: numRarities)
     
     @State private var tickled = false
     @State private var tickleCount = 0 //removes tickle effect after 5 pet position changes
@@ -107,7 +109,6 @@ struct Square: View {
     }
 
     func startMoving() {
-        
         timer?.invalidate() //invalidate timer if startMoving() called again
         
         let speed: Double = tickled ? 1.0 : 5.0
@@ -149,9 +150,7 @@ struct Square: View {
     }
     
     func shed() {
-        
-        let numRarities = 8
-        let randomValue = Int.random(in: 1...768)
+        let randomValue = Int.random(in: 1...768) //random value
         
         let frameSizes = [50, 40, 50, 60, 60, 60, 70, 70]
         let images = [Image("Leaf1"), Image("Leaf2"), Image("Leaf3"), Image("Leaf4"), Image("Leaf5"), Image("Leaf6"), Image("Leaf7"), Image("Leaf8")]
