@@ -40,77 +40,16 @@ struct Square: View {
             //Add background rectangle here if needed
             VStack{
                 HStack{
-                    ZStack{
-                        Rectangle()
-                            .frame(width: 30, height: 20)
-                            .foregroundColor(.green.opacity(0.15))
-                            .cornerRadius(30)
-                        Text("\(rarity[0])")
-                            .bold()
-                            .font(.system(size: 15))
-                    }
-                    ZStack{
-                        Rectangle()
-                            .frame(width: 30, height: 20)
-                            .foregroundColor(.green.opacity(0.15))
-                            .cornerRadius(30)
-                        Text("\(rarity[1])")
-                            .bold()
-                            .font(.system(size: 15))
-                    }
-                    ZStack{
-                        Rectangle()
-                            .frame(width: 30, height: 20)
-                            .foregroundColor(.green.opacity(0.15))
-                            .cornerRadius(30)
-                        Text("\(rarity[2])")
-                            .bold()
-                            .font(.system(size: 15))
-                    }
-                    ZStack{
-                        Rectangle()
-                            .frame(width: 30, height: 20)
-                            .foregroundColor(.green.opacity(0.15))
-                            .cornerRadius(30)
-                        Text("\(rarity[3])")
-                            .bold()
-                            .font(.system(size: 15))
-                    }
-                    ZStack{
-                        Rectangle()
-                            .frame(width: 30, height: 20)
-                            .foregroundColor(.green.opacity(0.15))
-                            .cornerRadius(30)
-                        Text("\(rarity[4])")
-                            .bold()
-                            .font(.system(size: 15))
-                    }
-                    ZStack{
-                        Rectangle()
-                            .frame(width: 30, height: 20)
-                            .foregroundColor(.green.opacity(0.15))
-                            .cornerRadius(30)
-                        Text("\(rarity[5])")
-                            .bold()
-                            .font(.system(size: 15))
-                    }
-                    ZStack{
-                        Rectangle()
-                            .frame(width: 30, height: 20)
-                            .foregroundColor(.green.opacity(0.15))
-                            .cornerRadius(30)
-                        Text("\(rarity[6])")
-                            .bold()
-                            .font(.system(size: 15))
-                    }
-                    ZStack{
-                        Rectangle()
-                            .frame(width: 30, height: 20)
-                            .foregroundColor(.green.opacity(0.15))
-                            .cornerRadius(30)
-                        Text("\(rarity[7])")
-                            .bold()
-                            .font(.system(size: 15))
+                    ForEach(0..<8) { index in
+                        ZStack {
+                            Rectangle()
+                                .frame(width: 30, height: 20)
+                                .foregroundColor(.green.opacity(0.20 + Double(index) * 0.10))
+                                .cornerRadius(30)
+                            Text("\(rarity[index])")
+                                .bold()
+                                .font(.system(size: 15))
+                        }
                     }
                 }
                 ZStack {
@@ -214,21 +153,21 @@ struct Square: View {
         if randomValue >= 256 {
             //no petal sheds
         }   else if randomValue >= 128 {
-            petals.append(Petal(position: position, rarity: 1, image: Image("Leaf1"), frameSize: 50))
+            petals.append(Petal(position: position, rarity: 1, image: Image("Leaf1"), frameSize: 50)) //50%
         }   else if randomValue >= 64 {
-            petals.append(Petal(position: position, rarity: 2, image: Image("Leaf2"), frameSize: 40))
+            petals.append(Petal(position: position, rarity: 2, image: Image("Leaf2"), frameSize: 40)) //25%
         }   else if randomValue >= 32 {
-            petals.append(Petal(position: position, rarity: 3, image: Image("Leaf3"), frameSize: 50))
+            petals.append(Petal(position: position, rarity: 3, image: Image("Leaf3"), frameSize: 50)) //12.5%
         }   else if randomValue >= 16 {
-            petals.append(Petal(position: position, rarity: 4, image: Image("Leaf4"), frameSize: 60))
+            petals.append(Petal(position: position, rarity: 4, image: Image("Leaf4"), frameSize: 60)) //6.25%
         }   else if randomValue >= 8 {
-            petals.append(Petal(position: position, rarity: 5, image: Image("Leaf5"), frameSize: 60))
+            petals.append(Petal(position: position, rarity: 5, image: Image("Leaf5"), frameSize: 60)) //3.13%
         }   else if randomValue >= 4 {
-            petals.append(Petal(position: position, rarity: 6, image: Image("Leaf6"), frameSize: 60))
+            petals.append(Petal(position: position, rarity: 6, image: Image("Leaf6"), frameSize: 60)) //1.56%
         }   else if randomValue >= 2 {
-            petals.append(Petal(position: position, rarity: 7, image: Image("Leaf7"), frameSize: 60))
+            petals.append(Petal(position: position, rarity: 7, image: Image("Leaf7"), frameSize: 60)) //0.78%
         }   else {
-            petals.append(Petal(position: position, rarity: 8, image: Image("Leaf8"), frameSize: 70))
+            petals.append(Petal(position: position, rarity: 8, image: Image("Leaf8"), frameSize: 70)) //0.39%
         }
     }
     
