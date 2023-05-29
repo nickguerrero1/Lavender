@@ -2,7 +2,7 @@ import SwiftUI
 
 let images = [Image("Leaf1"), Image("Leaf2"), Image("Leaf3"), Image("Leaf4"), Image("Leaf5"), Image("Leaf6"), Image("Leaf7"), Image("Leaf8")]
 
-let recipes = [[(1,10),(2,7),(3,4)], [(1,60),(3,10),(4,3)],[(2,50),(4,12),(5,8)],[(3,30),(5,20),(6,10)],[(1,500),(2,250),(6,3)],[(3,50),(4,30),(6,10)],[(5,30),(6,20),(7,10)],[(4,120),(7,12),(8,8)],[(5,160),(7,40),(8,20)],[(3,3500),(7,200),(8,100)]]
+let recipes = [[(1,5),(2,2),(3,1)], [(1,20),(2,10),(3,3)],[(2,20),(3,5),(4,2)],[(2,40),(4,3),(5,1)],[(1,160),(5, 2),(6,1)],[(3,30),(4,12),(6,3)],[(5,30),(6,20),(7,10)],[(4,120),(7,12),(8,8)],[(5,160),(7,40),(8,20)],[(3,3500),(7,200),(8,100)]]
 
 let recipeCount = 10
 
@@ -34,42 +34,53 @@ struct FlowerView: View {
                                 }
                             }
                         }
+                        Spacer()
+                        ForEach(0..<10) { index in
+                            ZStack {
+                                Rectangle()
+                                    .frame(width: 70, height: 25)
+                                    .foregroundColor(.purple.opacity(0.20 + Double(index) * 0.10))
+                                    .cornerRadius(30)
+                                HStack{
+                                    Text("\(flowerInv[index])")
+                                        .bold()
+                                        .font(.system(size: 15))
+                                }
+                            }
+                        }
+                        Spacer().frame(height: UIScreen.main.bounds.height * 0.06)
                     }
-                    .padding(.leading)
+                    .padding(.leading, 30)
                     Spacer()
                 }
                 Spacer()
             }
             ScrollView(showsIndicators: false) {
                 HStack{
+                    Spacer()
                     VStack {
                         ForEach(Array(0..<recipeCount), id: \.self) { index in
                             Button {
-//                                for index2 in 0..<recipes[index].count {
-//                                    let petalType = recipes[index][index2].0
-//                                    let petalCount = recipes[index][index2].1
-//                                    if rarity[petalType-1] < petalCount {
-//                                        canAssemble = false
-//                                    }
-//                                }
-//                                if canAssemble {
-//                                    print("Can Assemble")
-//                                }   else {
-//                                    notEnough[index] = 2
-//                                }
+                                if checkAssembly(rarity: rarity)[index] {
+                                    flowerInv[index] += 1
+                                    rarity = subtractPetals(recipe: recipes[index], rarity: rarity)
+                                }
                             } label: {
                                 ZStack{
-                                    Rectangle()
-                                        .frame(width: 250, height: 120)
-                                        .foregroundColor(checkAssembly(rarity: rarity)[index] ? .green.opacity(0.25) : .red.opacity(0.25))
-                                        .cornerRadius(15)
                                     HStack{
+                                        Spacer().frame(width: 120)
+                                        Rectangle()
+                                            .frame(width: 250, height: 120)
+                                            .foregroundColor(checkAssembly(rarity: rarity)[index] ? .green.opacity(0.25) : .red.opacity(0.25))
+                                            .cornerRadius(15)
+                                    }
+                                    HStack{
+                                        Spacer().frame(width: 150)
                                         VStack(alignment: .leading){
                                             Text("\(recipeNames[index])")
                                             RecipeTextView(recipe: recipes[index])
                                                 .font(.system(size: 13))
                                         }
-                                        .padding(.leading, 70)
                                         Spacer()
                                     }
                                 }
@@ -79,7 +90,7 @@ struct FlowerView: View {
                         }
                         Spacer().frame(height: UIScreen.main.bounds.height * 0.07)
                     }
-                    .padding(.leading, 80)
+                    .padding(.trailing, 30)
                 }
             }
         }
@@ -89,6 +100,16 @@ struct FlowerView: View {
             }
         }
     }
+}
+
+func subtractPetals(recipe: [(Int, Int)], rarity: [Int]) -> [Int]{
+    var newRar = rarity
+    for index in 0..<recipe.count {
+        let petalType = recipe[index].0
+        let petalCount = recipe[index].1
+        newRar[petalType-1] -= petalCount
+    }
+    return newRar
 }
 
 func checkAssembly(rarity: [Int]) -> [Bool] {
