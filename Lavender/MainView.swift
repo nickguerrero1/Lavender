@@ -9,7 +9,8 @@ struct MainView: View {
             TabView(selection: self.$currentTab) {
                 PetView().tag(0)
                 FlowerView().tag(1)
-                CalendarView().tag(2)
+                CollectionView().tag(2)
+                CalendarView().tag(3)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
             
@@ -23,12 +24,12 @@ struct MainView: View {
 
 struct TabBarView: View {
     @Binding var currentTab: Int
-    var tabBarOptions: [String] = ["Pet", "Flower", "Calendar"]
+    var tabBarOptions: [Image] = [Image(systemName: "pawprint.fill"), Image(systemName: "hammer.fill"), Image(systemName: "folder.fill"), Image(systemName: "clock.fill")]
     var body: some View {
         HStack(spacing: 20) {
             ForEach(Array(zip(self.tabBarOptions.indices, self.tabBarOptions)), id: \.0, content: {
                 index, name in
-                TabBarItem(currentTab: self.$currentTab, tabBarItemName: name, tab: index)
+                TabBarItem(currentTab: self.$currentTab, tabLogo: name, tab: index)
                 }
             )
         }
@@ -39,9 +40,8 @@ struct TabBarView: View {
 
 struct TabBarItem: View {
     @Binding var currentTab: Int
-    @Namespace var namespace
     
-    var tabBarItemName: String
+    var tabLogo: Image
     var tab: Int
     
     var body: some View {
@@ -51,15 +51,18 @@ struct TabBarItem: View {
             VStack{
                 Spacer()
                 ZStack{
-                    Text(tabBarItemName)
-                        .font(.custom("Arial", size: 22))
-                        .fontWeight(currentTab == tab ? .bold : .regular)
                     if currentTab == tab {
                         Color.green.opacity(0.15)
                             .cornerRadius(20)
-                            .frame(height: 35)
-                            .matchedGeometryEffect(id: "underline", in: namespace, properties: .frame)
+                            .frame(width: 100, height: 35)
+                    }   else{
+                        Color.white
+                            .cornerRadius(20)
+                            .frame(width: 50, height: 35)
                     }
+                    tabLogo
+                        .resizable()
+                        .frame(width: 20, height: 20)
                 }
             }
         }

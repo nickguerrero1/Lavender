@@ -8,7 +8,7 @@ struct FlowerView: View {
     
     let recipeCount = 10
     let recipeNames = ["Revolting Ragweed","Small Twig","Mediocre Shrub","Delicate Daisy", "Elegant Lily of the Valley", "Enchanting Orchid","Cupid's Rose","Cosmic Blossom","Flower of Royalty","Legendary Iris"]
-    let recipes = [[(1,15),(2,5),(3,1)], [(1,60),(3,10),(4,3)],[(2,30),(4,10)],[(3,30),(5,1)],[(1,500),(2,250),(6,3)],[(3,50),(4,30),(5,10)],[(5,30)],[(4,50),(6,15),(7,1)],[(5,30),(8,5)],[(8,100)]]
+    let recipes = [[(1,10),(2,7),(3,4)], [(1,60),(3,10),(4,3)],[(2,50),(4,12)],[(3,30),(5,1)],[(1,500),(2,250),(6,3)],[(3,50),(4,30),(5,10)],[(5,30)],[(4,50),(6,15),(7,1)],[(5,30),(8,5)],[(8,100)]]
     
     var body: some View {
         ZStack{

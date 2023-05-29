@@ -19,6 +19,7 @@
 		D048DEF42A1FFB740042A445 /* FlowerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D048DEF32A1FFB740042A445 /* FlowerView.swift */; };
 		D048DEF72A2065EC0042A445 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = D048DEF62A2065EC0042A445 /* FirebaseFirestore */; };
 		D048DEFB2A24171C0042A445 /* DataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = D048DEFA2A24171C0042A445 /* DataFetcher.swift */; };
+		D048DEFD2A250C380042A445 /* CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D048DEFC2A250C380042A445 /* CollectionView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +36,7 @@
 		D048DEF12A1FD7FD0042A445 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		D048DEF32A1FFB740042A445 /* FlowerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowerView.swift; sourceTree = "<group>"; };
 		D048DEFA2A24171C0042A445 /* DataFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataFetcher.swift; sourceTree = "<group>"; };
+		D048DEFC2A250C380042A445 /* CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +78,7 @@
 				D007BDDC2A1DAC4D00FE7D50 /* MainView.swift */,
 				D048DEEF2A1FC32A0042A445 /* PetView.swift */,
 				D048DEF32A1FFB740042A445 /* FlowerView.swift */,
+				D048DEFC2A250C380042A445 /* CollectionView.swift */,
 				D048DEF12A1FD7FD0042A445 /* CalendarView.swift */,
 				D007BDCF2A1D4B5E00FE7D50 /* Assets.xcassets */,
 				D007BDD12A1D4B5E00FE7D50 /* Lavender.entitlements */,
@@ -185,6 +188,7 @@
 				D007BDCE2A1D4B5D00FE7D50 /* ContentView.swift in Sources */,
 				D007BDDD2A1DAC4D00FE7D50 /* MainView.swift in Sources */,
 				D007BDCC2A1D4B5D00FE7D50 /* LavenderApp.swift in Sources */,
+				D048DEFD2A250C380042A445 /* CollectionView.swift in Sources */,
 				D048DEF02A1FC32A0042A445 /* PetView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
