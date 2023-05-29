@@ -32,15 +32,18 @@ struct FlowerView: View {
                 }
                 Spacer()
             }
-            ScrollView {
+            ScrollView(showsIndicators: false) {
                 HStack{
                     VStack{
-                        Rectangle()
-                            .frame(width: 250, height: 60)
-                        Rectangle()
-                            .frame(width: 250, height: 60)
-                        Rectangle()
-                            .frame(width: 250, height: 60)
+                        ForEach(0..<16) { index in
+                            Button {
+                                
+                            } label: {
+                                Rectangle()
+                                    .frame(width: 250, height: 60)
+                                    .foregroundColor(.green.opacity(0.20 + Double(index) * 0.05))
+                            }
+                        }
                     }
                     .padding(.leading, 80)
                 }

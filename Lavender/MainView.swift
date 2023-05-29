@@ -13,6 +13,9 @@ struct MainView: View {
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
             
+            Rectangle()
+                .foregroundColor(.white)
+                .frame(height: 45)
             TabBarView(currentTab: self.$currentTab)
         }
     }
@@ -23,16 +26,14 @@ struct TabBarView: View {
     var tabBarOptions: [String] = ["Pet", "Flower", "Calendar"]
     var body: some View {
         HStack(spacing: 20) {
-            ForEach(Array(zip(self.tabBarOptions.indices, self.tabBarOptions)),
-                id: \.0,
-                content: {
+            ForEach(Array(zip(self.tabBarOptions.indices, self.tabBarOptions)), id: \.0, content: {
                 index, name in
                 TabBarItem(currentTab: self.$currentTab, tabBarItemName: name, tab: index)
                 }
             )
         }
-            .padding(.horizontal)
-            .frame(alignment: .center)
+        .padding(.horizontal)
+        .frame(alignment: .center)
     }
 }
 
