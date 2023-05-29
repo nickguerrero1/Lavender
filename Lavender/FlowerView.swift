@@ -1,23 +1,40 @@
 import SwiftUI
 
 struct FlowerView: View {
+    
+    @State private var rarity: [Int] = Array(repeating: 0, count: numRarities)
+    let images = [Image("Leaf1"), Image("Leaf2"), Image("Leaf3"), Image("Leaf4"), Image("Leaf5"), Image("Leaf6"), Image("Leaf7"), Image("Leaf8")]
+    
     var body: some View {
         VStack{
-            Spacer()
-            ZStack{
-                Circle()
-                    .frame(height: 0.2 * UIScreen.main.bounds.width)
-                    .foregroundColor(.green.opacity(0.15))
-                Button {
-                    //do something
-                } label: {
-                    Image("Lavender")
-                        .resizable()
-                        .frame(width: 0.15 * UIScreen.main.bounds.width, height: 0.15 * UIScreen.main.bounds.width)
+            HStack{
+                VStack{
+                    ForEach(0..<8) { index in
+                        ZStack {
+                            Rectangle()
+                                .frame(width: 70, height: 25)
+                                .foregroundColor(.green.opacity(0.20 + Double(index) * 0.10))
+                                .cornerRadius(30)
+                            HStack{
+                                images[index]
+                                    .resizable()
+                                    .frame(width: 20, height: 20)
+                                Text("\(rarity[index])")
+                                    .bold()
+                                    .font(.system(size: 15))
+                            }
+                        }
+                    }
                 }
-                .buttonStyle(.plain)
+                .padding(.leading)
+                Spacer()
             }
-            .padding(.bottom, 80)
+            Spacer()
+        }
+        .onAppear {
+            DataFetcher.loadPetalCount { fetchedRarity in
+                self.rarity = fetchedRarity
+            }
         }
     }
 }
