@@ -1,12 +1,13 @@
 import SwiftUI
 
+let images = [Image("Leaf1"), Image("Leaf2"), Image("Leaf3"), Image("Leaf4"), Image("Leaf5"), Image("Leaf6"), Image("Leaf7"), Image("Leaf8")]
+
 struct FlowerView: View {
     
     @State private var rarity: [Int] = Array(repeating: 0, count: numRarities)
-    let images = [Image("Leaf1"), Image("Leaf2"), Image("Leaf3"), Image("Leaf4"), Image("Leaf5"), Image("Leaf6"), Image("Leaf7"), Image("Leaf8")]
     
     let recipeCount = 10
-    let recipeNames = ["Recipe1","Recipe2","Recipe3","Recipe4","Recipe5","Recipe6","Recipe7","Recipe8","Recipe9","Recipe10"]
+    let recipeNames = ["Revolting Ragweed","Small Twig","Mediocre Shrub","Delicate Daisy", "Elegant Lily of the Valley", "Enchanting Orchid","Cupid's Rose","Cosmic Blossom","Flower of Royalty","Legendary Iris"]
     let recipes = [[(1,15),(2,5),(3,1)], [(1,60),(3,10),(4,3)],[(2,30),(4,10)],[(3,30),(5,1)],[(1,500),(2,250),(6,3)],[(3,50),(4,30),(5,10)],[(5,30)],[(4,50),(6,15),(7,1)],[(5,30),(8,5)],[(8,100)]]
     
     var body: some View {
@@ -45,12 +46,12 @@ struct FlowerView: View {
                             } label: {
                                 ZStack{
                                     Rectangle()
-                                        .frame(width: 250, height: 60)
+                                        .frame(width: 250, height: 130)
                                         .foregroundColor(.green.opacity(0.20 + Double(index) * 0.05))
+                                        .cornerRadius(15)
                                     HStack{
                                         VStack(alignment: .leading){
                                             Text("\(recipeNames[index])")
-                                                .bold()
                                             RecipeTextView(recipe: recipes[index])
                                                 .font(.system(size: 13))
                                         }
@@ -76,14 +77,23 @@ struct FlowerView: View {
 
 struct RecipeTextView: View {
     let recipe: [(Int, Int)]
-    @State private var recipeText = ""
 
     var body: some View {
-        HStack{
-            Text(recipeText)
-                .onAppear {
-                    recipeText = recipe.map {"\($0.1)x \($0.0)"}.joined(separator: ", ")
+        VStack{
+            ForEach(0..<recipe.count, id: \.self) { index in
+                let petalType = recipe[index].0
+                let petalCount = recipe[index].1
+                let image = images[petalType-1]
+                
+                HStack{
+                    image
+                        .resizable()
+                        .frame(width: 20, height: 20)
+                    Text("\(petalCount)")
+                        .bold()
                 }
+                .padding(.bottom,-5)
+            }
         }
     }
 }
