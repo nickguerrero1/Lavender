@@ -45,7 +45,7 @@ struct Square: View {
                     ForEach(0..<8) { index in
                         ZStack {
                             Rectangle()
-                                .frame(width: measureTextWidth(text: "\(rarity[index])", fontSize: 15) + 10, height: 20)
+                                .frame(width: measureTextWidth(text: "\(rarity[index])", fontSize: 15) + 12, height: 20)
                                 .foregroundColor(.green.opacity(0.20 + Double(index) * 0.10))
                                 .cornerRadius(30)
                             Text("\(rarity[index])")

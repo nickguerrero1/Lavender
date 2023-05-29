@@ -5,6 +5,8 @@ let images = [Image("Leaf1"), Image("Leaf2"), Image("Leaf3"), Image("Leaf4"), Im
 struct FlowerView: View {
     
     @State private var rarity: [Int] = Array(repeating: 0, count: numRarities)
+    @State private var flowerInv: [Int] = Array(repeating: 0, count: 10)
+    @State private var notEnough: [Int] = Array(repeating: 0, count: 10)
     
     let recipeCount = 10
     let recipeNames = ["Revolting Ragweed","Small Twig","Mediocre Shrub","Delicate Daisy", "Elegant Lily of the Valley", "Enchanting Orchid","Cupid's Rose","Cosmic Blossom","Flower of Royalty","Legendary Iris"]
@@ -42,13 +44,30 @@ struct FlowerView: View {
                     VStack {
                         ForEach(Array(0..<recipeCount), id: \.self) { index in
                             Button {
-                                //assemble flower
+                                var canAssemble = true
+                                notEnough = Array(repeating: 0, count: 10)
+                                for index2 in 0..<recipes[index].count {
+                                    let petalType = recipes[index][index2].0
+                                    let petalCount = recipes[index][index2].1
+                                    if rarity[petalType-1] < petalCount {
+                                        canAssemble = false
+                                    }
+                                }
+                                if canAssemble {
+                                    print("Can Assemble")
+                                }   else {
+                                    notEnough[index] = 2
+                                }
                             } label: {
                                 ZStack{
                                     Rectangle()
                                         .frame(width: 250, height: 120)
                                         .foregroundColor(.green.opacity(0.20 + Double(index) * 0.08))
                                         .cornerRadius(15)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 15)
+                                                .stroke(Color.red, lineWidth: CGFloat(notEnough[index]))
+                                        )
                                     HStack{
                                         VStack(alignment: .leading){
                                             Text("\(recipeNames[index])")
@@ -60,6 +79,7 @@ struct FlowerView: View {
                                     }
                                 }
                             }
+                            .padding(.bottom, 5)
                             .buttonStyle(.plain)
                         }
                         Spacer().frame(height: UIScreen.main.bounds.height * 0.07)
