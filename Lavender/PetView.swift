@@ -154,7 +154,7 @@ struct Square: View {
     func shed() {
         let randomValue = Int.random(in: 1...768) //random value
         
-        let frameSizes = [50, 40, 50, 60, 60, 60, 70, 70]
+        let frameSizes = [50, 40, 50, 60, 60, 70, 70, 70]
         let images = [Image("Leaf1"), Image("Leaf2"), Image("Leaf3"), Image("Leaf4"), Image("Leaf5"), Image("Leaf6"), Image("Leaf7"), Image("Leaf8")]
         var shedChances = Array(repeating: 256, count: numRarities)
         
