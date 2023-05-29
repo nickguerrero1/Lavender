@@ -8,7 +8,7 @@ struct FlowerView: View {
     
     let recipeCount = 10
     let recipeNames = ["Revolting Ragweed","Small Twig","Mediocre Shrub","Delicate Daisy", "Elegant Lily of the Valley", "Enchanting Orchid","Cupid's Rose","Cosmic Blossom","Flower of Royalty","Legendary Iris"]
-    let recipes = [[(1,10),(2,7),(3,4)], [(1,60),(3,10),(4,3)],[(2,50),(4,12)],[(3,30),(5,1)],[(1,500),(2,250),(6,3)],[(3,50),(4,30),(5,10)],[(5,30)],[(4,50),(6,15),(7,1)],[(5,30),(8,5)],[(8,100)]]
+    let recipes = [[(1,10),(2,7),(3,4)], [(1,60),(3,10),(4,3)],[(2,50),(4,12),(5,8)],[(3,30),(5,20),(6,10)],[(1,500),(2,250),(6,3)],[(3,50),(4,30),(6,10)],[(5,30),(6,20),(7,10)],[(4,120),(7,12),(8,8)],[(5,160),(7,40),(8,20)],[(3,3500),(7,200),(8,100)]]
     
     var body: some View {
         ZStack{
@@ -46,8 +46,8 @@ struct FlowerView: View {
                             } label: {
                                 ZStack{
                                     Rectangle()
-                                        .frame(width: 250, height: 130)
-                                        .foregroundColor(.green.opacity(0.20 + Double(index) * 0.05))
+                                        .frame(width: 250, height: 120)
+                                        .foregroundColor(.green.opacity(0.20 + Double(index) * 0.08))
                                         .cornerRadius(15)
                                     HStack{
                                         VStack(alignment: .leading){
@@ -62,6 +62,7 @@ struct FlowerView: View {
                             }
                             .buttonStyle(.plain)
                         }
+                        Spacer().frame(height: UIScreen.main.bounds.height * 0.07)
                     }
                     .padding(.leading, 80)
                 }

@@ -45,7 +45,7 @@ struct Square: View {
                     ForEach(0..<8) { index in
                         ZStack {
                             Rectangle()
-                                .frame(width: 30, height: 20)
+                                .frame(width: measureTextWidth(text: "\(rarity[index])", fontSize: 15) + 10, height: 20)
                                 .foregroundColor(.green.opacity(0.20 + Double(index) * 0.10))
                                 .cornerRadius(30)
                             Text("\(rarity[index])")
@@ -117,7 +117,7 @@ struct Square: View {
         
         timer = Timer.scheduledTimer(withTimeInterval: speed, repeats: true) { _ in
             let newX = CGFloat.random(in: width/2...UIScreen.main.bounds.width-width/2)
-            let newY = CGFloat.random(in: height*0.5...UIScreen.main.bounds.height-height*3.5)
+            let newY = CGFloat.random(in: UIScreen.main.bounds.height * 0.04...UIScreen.main.bounds.height * 0.77)
             
             if petals.count >= 20 {
                 petals.removeFirst()
@@ -175,6 +175,14 @@ struct Square: View {
             }
             petals.append(Petal(position: position, rarity: chooseRarity!, image: images[chooseRarity!-1], frameSize: frameSizes[chooseRarity!-1]))
         }
+    }
+    
+    func measureTextWidth(text: String, fontSize: CGFloat) -> CGFloat {
+        let font = UIFont.systemFont(ofSize: fontSize)
+        let attributes = [NSAttributedString.Key.font: font]
+        let attributedString = NSAttributedString(string: text, attributes: attributes)
+        let size = attributedString.size()
+        return size.width
     }
 }
 
