@@ -6,7 +6,11 @@ let leafImages = [Image("Leaf1"),Image("Leaf2"),Image("Leaf3"), Image("Leaf4"),I
 let flowerImages = [Image("Flower1"),Image("Flower2"),Image("Flower3"),Image("Flower4"),Image("Flower5"),Image("Flower6"),Image("Flower7"),Image("Flower8"),Image("Flower9"),Image("Flower10")]
 let recipeNames = [["Revolting","Ragweed"],["Small Twig"],["Mediocre","Shrub"],["Delicate","Daisy"],["Lily of","the Valley"], ["Enchanting","Orchid"],["Cupid's Rose"],["Cosmic","Blossom"],["Flower","of Royalty"],["Legendary","Iris"]]
 let recipeFrames = [160,145,160,160,160,160,145,160,160,160]
-let recipes = [[(1,5),(2,2),(3,1)], [(1,20),(2,10),(3,3)],[(2,20),(3,5),(4,2)],[(2,40),(4,3),(5,1)],[(1,160),(5, 2),(6,1)],[(3,30),(4,12),(6,3)],[(5,30),(6,20),(7,10)],[(4,120),(7,12),(8,8)],[(5,160),(7,40),(8,20)],[(3,3500),(7,200),(8,100)]]
+let recipes = [[(1,5),(2,2),(3,1)], [(1,15),(2,8),(3,3)],
+               [(2,15),(3,5),(4,2)],[(2,20),(4,3),(5,1)],
+               [(1,40),(5,2),(6,1)],[(3,25),(4,12),(6,3)],
+               [(3,45),(6,5),(7,2)],[(4,25),(7,3),(8,1)],
+               [(3,100),(5,25),(8,3)],[(6,30),(7,15),(8,10)]]
 let recipeCount = 10
 
 struct FlowerView: View {
