@@ -73,7 +73,7 @@ struct Square: View {
                                     let userID = Auth.auth().currentUser?.uid
                                     let userRef = db.collection("users").document(userID!)
                                     
-                                    userRef.setData(["rarity1": rarity[0], "rarity2": rarity[1], "rarity3": rarity[2], "rarity4": rarity[3], "rarity5": rarity[4], "rarity6": rarity[5], "rarity7": rarity[6], "rarity8": rarity[7]], merge: true) { error in
+                                    userRef.setData(["rarity": rarity], merge: true) { error in
                                         if let error = error {
                                             print("Error updating petal count: \(error)")
                                         } else {
