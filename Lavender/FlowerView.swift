@@ -4,7 +4,7 @@ import FirebaseFirestore
 
 let leafImages = [Image("Leaf1"),Image("Leaf2"),Image("Leaf3"), Image("Leaf4"),Image("Leaf5"),Image("Leaf6"),Image("Leaf7"),Image("Leaf8")]
 let flowerImages = [Image("Flower1"),Image("Flower2"),Image("Flower3"),Image("Flower4"),Image("Flower5"),Image("Flower6"),Image("Flower7"),Image("Flower8"),Image("Flower9"),Image("Flower10")]
-let recipeNames = [["Revolting","Ragweed"],["Delicate","Daisy"],["Bluebell","Tulip"],["Hypnotic","Ember"],["Lily of","the Valley"], ["Enchanting","Orchid"],["Cupid's Rose"],["Cosmic","Blossom"],["Flower","of Royalty"],["Legendary","Iris"]]
+let recipeNames = [["Revolting","Ragweed"],["Delicate","Daisy"],["Bluebell","Tulip"],["Hypnotic","Ember"],["Lily of","the Valley"], ["Enchanting","Orchid"],["Cosmic","Blossom"],["Cupid's Rose"],["Flower","of Royalty"],["Legendary","Iris"]]
 let recipeFrames = [160,160,160,160,160,160,145,160,160,160]
 let recipes = [[(1,5),(2,2),(3,1)], [(1,15),(2,8),(3,3)],
                [(2,15),(3,5),(4,2)],[(2,20),(4,3),(5,1)],
