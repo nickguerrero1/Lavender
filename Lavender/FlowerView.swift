@@ -2,7 +2,9 @@ import SwiftUI
 import Firebase
 import FirebaseFirestore
 
-let images = [Image("Leaf1"), Image("Leaf2"), Image("Leaf3"), Image("Leaf4"), Image("Leaf5"), Image("Leaf6"), Image("Leaf7"), Image("Leaf8")]
+let leafImages = [Image("Leaf1"),Image("Leaf2"),Image("Leaf3"), Image("Leaf4"),Image("Leaf5"),Image("Leaf6"),Image("Leaf7"),Image("Leaf8")]
+let flowerImages = [Image("Flower1"),Image("Flower2"),Image("Flower3"),Image("Flower4"),Image("Flower5"),Image("Flower6"),Image("Flower7"),Image("Flower8"),Image("Flower8"),Image("Flower8")]
+let recipeFrames = [145,125,145,145,140,140,125,140,140,140]
 
 let recipes = [[(1,5),(2,2),(3,1)], [(1,20),(2,10),(3,3)],[(2,20),(3,5),(4,2)],[(2,40),(4,3),(5,1)],[(1,160),(5, 2),(6,1)],[(3,30),(4,12),(6,3)],[(5,30),(6,20),(7,10)],[(4,120),(7,12),(8,8)],[(5,160),(7,40),(8,20)],[(3,3500),(7,200),(8,100)]]
 
@@ -27,7 +29,7 @@ struct FlowerView: View {
                                     .foregroundColor(.green.opacity(0.20 + Double(index) * 0.10))
                                     .cornerRadius(30)
                                 HStack{
-                                    images[index]
+                                    leafImages[index]
                                         .resizable()
                                         .frame(width: 20, height: 20)
                                     Text("\(rarity[index])")
@@ -41,9 +43,12 @@ struct FlowerView: View {
                             ZStack {
                                 Rectangle()
                                     .frame(width: 70, height: 25)
-                                    .foregroundColor(.purple.opacity(0.20 + Double(index) * 0.10))
+                                    .foregroundColor(.purple.opacity(0.1 + Double(index) * 0.05))
                                     .cornerRadius(30)
                                 HStack{
+                                    flowerImages[index]
+                                        .resizable()
+                                        .frame(width: 18, height: 18)
                                     Text("\(flowerInv[index])")
                                         .bold()
                                         .font(.system(size: 15))
@@ -80,30 +85,29 @@ struct FlowerView: View {
                                 }
                             } label: {
                                 ZStack{
+                                    Rectangle()
+                                        .frame(width: 250, height: CGFloat(recipeFrames[index]))
+                                        .foregroundColor(checkAssembly(rarity: rarity)[index] ? .green.opacity(0.25) : .red.opacity(0.25))
+                                        .cornerRadius(15)
                                     HStack{
-                                        Spacer().frame(width: 120)
-                                        Rectangle()
-                                            .frame(width: 250, height: 120)
-                                            .foregroundColor(checkAssembly(rarity: rarity)[index] ? .green.opacity(0.25) : .red.opacity(0.25))
-                                            .cornerRadius(15)
-                                    }
-                                    HStack{
-                                        Spacer().frame(width: 150)
                                         VStack(alignment: .leading){
                                             Text("\(recipeNames[index])")
                                             RecipeTextView(recipe: recipes[index])
                                                 .font(.system(size: 13))
                                         }
                                         Spacer()
+                                        flowerImages[index]
+                                            .resizable()
+                                            .frame(width: 90, height: 90)
                                     }
+                                    .padding(.horizontal, 70)
                                 }
                             }
                             .padding(.bottom, 5)
                             .buttonStyle(.plain)
                         }
-                        Spacer().frame(height: UIScreen.main.bounds.height * 0.07)
                     }
-                    .padding(.trailing, 30)
+                    .padding(.leading, 80)
                 }
             }
         }
@@ -150,7 +154,7 @@ struct RecipeTextView: View {
             ForEach(0..<recipe.count, id: \.self) { index in
                 let petalType = recipe[index].0
                 let petalCount = recipe[index].1
-                let image = images[petalType-1]
+                let image = leafImages[petalType-1]
                 
                 HStack{
                     image
