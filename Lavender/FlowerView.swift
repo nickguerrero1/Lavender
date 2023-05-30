@@ -1,4 +1,6 @@
 import SwiftUI
+import Firebase
+import FirebaseFirestore
 
 let images = [Image("Leaf1"), Image("Leaf2"), Image("Leaf3"), Image("Leaf4"), Image("Leaf5"), Image("Leaf6"), Image("Leaf7"), Image("Leaf8")]
 
@@ -64,6 +66,17 @@ struct FlowerView: View {
                                 if checkAssembly(rarity: rarity)[index] {
                                     flowerInv[index] += 1
                                     rarity = subtractPetals(recipe: recipes[index], rarity: rarity)
+                                    let db = Firestore.firestore()
+                                    let userID = Auth.auth().currentUser?.uid
+                                    let userRef = db.collection("users").document(userID!)
+                                    
+                                    userRef.setData(["rarity": rarity, "flowerInv": flowerInv], merge: true) { error in
+                                        if let error = error {
+                                            print("Error updating FlowerView: \(error)")
+                                        } else {
+                                            print("FlowerView updated in Firestore")
+                                        }
+                                    }
                                 }
                             } label: {
                                 ZStack{
@@ -97,6 +110,9 @@ struct FlowerView: View {
         .onAppear {
             DataFetcher.loadPetalCount { fetchedRarity in
                 self.rarity = fetchedRarity
+            }
+            DataFetcher.loadFlowerInv { fetchedFlowerInv in
+                self.flowerInv = fetchedFlowerInv
             }
         }
     }

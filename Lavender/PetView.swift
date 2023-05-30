@@ -75,9 +75,9 @@ struct Square: View {
                                     
                                     userRef.setData(["rarity": rarity], merge: true) { error in
                                         if let error = error {
-                                            print("Error updating petal count: \(error)")
+                                            print("Error updating PetView: \(error)")
                                         } else {
-                                            print("Petal count updated in Firestore")
+                                            print("PetView updated in Firestore")
                                         }
                                     }
                                 }
