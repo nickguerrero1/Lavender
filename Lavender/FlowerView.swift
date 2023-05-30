@@ -109,6 +109,7 @@ struct FlowerView: View {
                             .padding(.bottom, 4)
                             .buttonStyle(.plain)
                         }
+                        Spacer().frame(height: UIScreen.main.bounds.width * 0.12)
                     }
                 }
             }
