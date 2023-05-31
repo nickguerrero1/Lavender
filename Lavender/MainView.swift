@@ -2,6 +2,8 @@ import SwiftUI
 
 struct MainView: View {
     
+    let userEmail: String
+    
     @State var currentTab: Int = 0
     
     var body: some View {
@@ -9,7 +11,7 @@ struct MainView: View {
             TabView(selection: self.$currentTab) {
                 PetView().tag(0)
                 FlowerView().tag(1)
-                CollectionView().tag(2)
+                FriendView(userEmail: userEmail).tag(2)
                 CalendarView().tag(3)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
@@ -72,6 +74,6 @@ struct TabBarItem: View {
 
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
-        MainView()
+        MainView(userEmail: "example@example.com")
     }
 }
