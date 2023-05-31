@@ -1,5 +1,6 @@
 import SwiftUI
 import Firebase
+import FirebaseFirestore
 
 struct ContentView: View {
     
@@ -151,6 +152,20 @@ struct ContentView: View {
                     print("Registration error: \(error.localizedDescription)")
                 }
             } else {
+                
+                if let currentUser = Auth.auth().currentUser {
+                    let userID = currentUser.uid
+                    let db = Firestore.firestore()
+                    let userRef = db.collection("users").document(userID)
+                    
+                    userRef.setData(["email": self.email]) { error in
+                        if let error = error {
+                            print("Error storing email in Firestore: \(error)")
+                        }   else {
+                            print("email updated in Firestore")
+                        }
+                    }
+                }
                 userIsLoggedIn.toggle()
             }
         }

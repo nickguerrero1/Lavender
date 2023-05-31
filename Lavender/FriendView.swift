@@ -7,34 +7,56 @@ struct FriendView: View {
     let userEmail: String
     @State private var friendRequests: [User] = []
     
+    @State private var searchEmail = ""
+    @State private var searchResults: [DataFetcher.User] = []
+    
     var body: some View {
-        
         VStack{
-            List(friendRequests, id: \.id) { user in
-                Text(user.email)
-            }
-            Button {
-                sendFriendRequest()
-            } label: {
-                ZStack{
-                    Rectangle()
-                        .foregroundColor(.blue.opacity(0.15))
-                        .frame(width: 200, height: 50)
-                        .cornerRadius(20)
-                    Text("Connect")
-                        .bold()
+            Spacer()
+            Text("Discovery")
+                .bold()
+            TextField("Search by email", text: $searchEmail)
+                .padding()
+                .background(Color.gray.opacity(0.2))
+                .cornerRadius(10)
+                .padding(.horizontal)
+                .autocapitalization(.none)
+            VStack{
+                ForEach(searchResults.prefix(5), id: \.id) { result in
+                    Button {
+                        //send friend request
+                    } label: {
+                        HStack{
+                            Spacer().frame(width: UIScreen.main.bounds.width * 0.05)
+                            Text(result.email)
+                            Spacer().frame(width: UIScreen.main.bounds.width * 0.05)
+                            ZStack{
+                                RoundedRectangle(cornerRadius: 10)
+                                    .foregroundColor(.blue.opacity(0.50))
+                                    .frame(width: 200, height: 40)
+                                Text("Send Friend Request")
+                            }
+                            Spacer().frame(width: UIScreen.main.bounds.width * 0.05)
+                        }
+                    }
+                    .buttonStyle(.plain)
                 }
             }
-                .buttonStyle(.plain)
+            .padding(.top)
             Spacer()
+        }
+        .onChange(of: searchEmail) { newValue in
+            DataFetcher.searchUsers(searchEmail: newValue) { fetchedResults in
+                searchResults = fetchedResults
+            }
         }
     }
     
     func sendFriendRequest() {
         let userID = Auth.auth().currentUser!.uid
         
-        let sender = User(id: userID, email: userEmail)
-        let receiver = User(id: userID, email: "friend's email")
+        let sender = DataFetcher.User(id: userID, email: userEmail)
+        let receiver = DataFetcher.User(id: userID, email: "friend's email")
         
         let friendRequest = FriendRequest(sender: sender, receiver: receiver)
             
@@ -58,12 +80,7 @@ struct FriendView_Previews: PreviewProvider {
     }
 }
 
-struct User {
-    let id: String
-    let email: String
-}
-
 struct FriendRequest {
-    let sender: User
-    let receiver: User
+    let sender: DataFetcher.User
+    let receiver: DataFetcher.User
 }

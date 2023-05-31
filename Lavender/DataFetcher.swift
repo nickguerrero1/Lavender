@@ -20,6 +20,8 @@ class DataFetcher {
                 }
                 completion(rarity)
             }
+        }   else {
+            completion(rarity)
         }
     }
     
@@ -40,6 +42,65 @@ class DataFetcher {
                     print("Document does not exist")
                 }
                 completion(flowerInv)
+            }
+        }   else {
+            completion(flowerInv)
+        }
+    }
+    
+    struct ReceiverData {
+        let receiverUserID: String
+        let email: String
+    }
+    
+    static func loadReceiverData(receiverUserID: String, completion: @escaping (ReceiverData) -> Void) {
+        var email: String = "noEmail"
+
+        let db = Firestore.firestore()
+        let userRef = db.collection("users").document(receiverUserID)
+        
+        userRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                if let emailData = document.data()?["email"] as? String {
+                    email = emailData
+                }
+            } else {
+                print("Document does not exist")
+            }
+            completion(ReceiverData(receiverUserID: receiverUserID, email: email))
+        }
+    }
+    
+    struct User {
+        let id: String
+        let email: String
+    }
+    
+    static func searchUsers(searchEmail: String, completion: @escaping ([User]) -> Void) {
+        let db = Firestore.firestore()
+        let usersCollection = db.collection("users")
+        
+        usersCollection.getDocuments { (snapshot, error) in
+            if let error = error {
+                print("Error fetching documents: \(error)")
+                completion([])
+            }   else{
+                if let snapshot = snapshot {
+                    var searchResults: [User] = []
+                    
+                    for document in snapshot.documents {
+                        if let email = document.data()["email"] as? String {
+                            if email.contains(searchEmail.lowercased()) {
+                                let user = User(id: document.documentID, email: email)
+                                searchResults.append(user)
+                            }
+                        }
+                    }
+                    completion(searchResults)
+                }   else{
+                    print("snapshot is nil")
+                    completion([])
+                }
             }
         }
     }
