@@ -28,17 +28,17 @@ struct FriendView: View {
                     Button {
                         sendFriendRequest(friendID: result.id, friendEmail: result.email)
                     } label: {
-                        HStack{
-                            Spacer().frame(width: UIScreen.main.bounds.width * 0.05)
+                        HStack(alignment: .center, spacing: 16){
+                            Spacer()
                             Text(result.email)
-                            Spacer().frame(width: UIScreen.main.bounds.width * 0.05)
+                            Spacer()
                             ZStack{
                                 RoundedRectangle(cornerRadius: 20)
                                     .foregroundColor(.blue.opacity(0.50))
                                     .frame(width: 200, height: 40)
                                 Text("Send Friend Request")
                             }
-                            Spacer().frame(width: UIScreen.main.bounds.width * 0.05)
+                            Spacer()
                         }
                     }
                     .buttonStyle(.plain)
