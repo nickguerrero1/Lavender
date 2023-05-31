@@ -26,7 +26,8 @@ struct FriendView: View {
             VStack{
                 ForEach(searchResults.prefix(5), id: \.id) { result in
                     Button {
-                        //send friend request
+                        sendFriendRequest(friendID: result.id, friendEmail: result.email)
+                        print("friend request sent")
                     } label: {
                         HStack{
                             Spacer().frame(width: UIScreen.main.bounds.width * 0.05)
@@ -54,11 +55,11 @@ struct FriendView: View {
         }
     }
     
-    func sendFriendRequest() {
+    func sendFriendRequest(friendID: String, friendEmail: String) {
         let userID = Auth.auth().currentUser!.uid
         
         let sender = DataFetcher.User(id: userID, email: userEmail)
-        let receiver = DataFetcher.User(id: userID, email: "friend's email")
+        let receiver = DataFetcher.User(id: friendID, email: friendEmail)
         
         let friendRequest = FriendRequest(sender: sender, receiver: receiver)
             
