@@ -27,7 +27,6 @@ struct FriendView: View {
                 ForEach(searchResults.prefix(5), id: \.id) { result in
                     Button {
                         sendFriendRequest(friendID: result.id, friendEmail: result.email)
-                        print("friend request sent")
                     } label: {
                         HStack{
                             Spacer().frame(width: UIScreen.main.bounds.width * 0.05)
@@ -58,22 +57,41 @@ struct FriendView: View {
     func sendFriendRequest(friendID: String, friendEmail: String) {
         let userID = Auth.auth().currentUser!.uid
         
+        let db = Firestore.firestore()
+        let friendRequestsCollection = db.collection("friendRequests")
+        
         let sender = DataFetcher.User(id: userID, email: userEmail)
         let receiver = DataFetcher.User(id: friendID, email: friendEmail)
         
         let friendRequest = FriendRequest(sender: sender, receiver: receiver)
-            
-        let db = Firestore.firestore()
-        db.collection("friendRequests").document().setData([
-            "sender": [
-                "id": friendRequest.sender.id,
-                "name": friendRequest.sender.email
-            ],
-            "receiver": [
-                "id": friendRequest.receiver.id,
-                "name": friendRequest.receiver.email
-            ]
-        ])
+        
+        friendRequestsCollection
+            .whereField("sender.id", isEqualTo: userID)
+            .whereField("receiver.id", isEqualTo: friendID)
+            .getDocuments { snapshot, error in
+                if let error = error {
+                    print("Error checking friend request: \(error)")
+                } else if let documents = snapshot?.documents, !documents.isEmpty {
+                    print("Friend request already sent to this user")
+                } else {
+                    friendRequestsCollection.document().setData([
+                        "sender": [
+                            "id": friendRequest.sender.id,
+                            "name": friendRequest.sender.email
+                        ],
+                        "receiver": [
+                            "id": friendRequest.receiver.id,
+                            "name": friendRequest.receiver.email
+                        ]
+                    ]) { error in
+                        if let error = error {
+                            print("Error sending friend request: \(error)")
+                        } else {
+                            print("Friend request sent")
+                        }
+                    }
+                }
+            }
     }
 }
 
