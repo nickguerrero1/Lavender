@@ -7,19 +7,21 @@ struct MainView: View {
     @State var currentTab: Int = 0
     
     var body: some View {
-        ZStack(alignment: .bottom){
+        ZStack{
             TabView(selection: self.$currentTab) {
                 PetView().tag(0)
                 FlowerView().tag(1)
-                FriendView(userEmail: userEmail).tag(2)
+                FriendView(userEmail: userEmail, currentTab: $currentTab).tag(2)
                 CalendarView().tag(3)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
-            
-            Rectangle()
-                .foregroundColor(.white)
-                .frame(height: 45)
-            TabBarView(currentTab: self.$currentTab)
+            ZStack(alignment: .bottom){
+                Rectangle()
+                    .foregroundColor(.white)
+                    .frame(height: 55)
+                TabBarView(currentTab: self.$currentTab)
+                    .padding(.bottom, 10)
+            }
         }
     }
 }

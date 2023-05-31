@@ -55,7 +55,7 @@ struct FlowerView: View {
                             }
                         }
                     }
-                    Spacer().frame(height: UIScreen.main.bounds.height * 0.06)
+                    Spacer().frame(height: UIScreen.main.bounds.height * 0.07)
             }
             ScrollView(showsIndicators: false) {
                 HStack{
@@ -113,7 +113,7 @@ struct FlowerView: View {
                             .padding(.bottom, 4)
                             .buttonStyle(.plain)
                         }
-                        Spacer().frame(height: UIScreen.main.bounds.width * 0.12)
+                        Spacer().frame(height: UIScreen.main.bounds.width * 0.14)
                     }
                 }
             }

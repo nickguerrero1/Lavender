@@ -10,6 +10,8 @@ struct FriendView: View {
     @State private var searchEmail = ""
     @State private var searchResults: [DataFetcher.User] = []
     
+    var currentTab: Binding<Int>
+    
     var body: some View {
         VStack{
             Spacer()
@@ -19,7 +21,7 @@ struct FriendView: View {
                 .padding()
                 .background(Color.gray.opacity(0.2))
                 .cornerRadius(30)
-                .padding(.horizontal)
+                .padding(.horizontal, 30)
                 .autocapitalization(.none)
             VStack{
                 ForEach(searchResults.prefix(5), id: \.id) { result in
@@ -76,7 +78,7 @@ struct FriendView: View {
 
 struct FriendView_Previews: PreviewProvider {
     static var previews: some View {
-        FriendView(userEmail: "example@example.com")
+        FriendView(userEmail: "example@example.com", currentTab: .constant(2))
     }
 }
 

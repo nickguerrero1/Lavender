@@ -117,7 +117,7 @@ struct Square: View {
         
         timer = Timer.scheduledTimer(withTimeInterval: speed, repeats: true) { _ in
             let newX = CGFloat.random(in: width/2...UIScreen.main.bounds.width-width/2)
-            let newY = CGFloat.random(in: UIScreen.main.bounds.height * 0.04...UIScreen.main.bounds.height * 0.77)
+            let newY = CGFloat.random(in: UIScreen.main.bounds.height * 0.04...UIScreen.main.bounds.height * 0.76)
             
             if petals.count >= 20 {
                 petals.removeFirst()
