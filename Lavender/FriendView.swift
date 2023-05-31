@@ -18,7 +18,7 @@ struct FriendView: View {
             TextField("Search by email", text: $searchEmail)
                 .padding()
                 .background(Color.gray.opacity(0.2))
-                .cornerRadius(10)
+                .cornerRadius(30)
                 .padding(.horizontal)
                 .autocapitalization(.none)
             VStack{
@@ -31,7 +31,7 @@ struct FriendView: View {
                             Text(result.email)
                             Spacer().frame(width: UIScreen.main.bounds.width * 0.05)
                             ZStack{
-                                RoundedRectangle(cornerRadius: 10)
+                                RoundedRectangle(cornerRadius: 20)
                                     .foregroundColor(.blue.opacity(0.50))
                                     .frame(width: 200, height: 40)
                                 Text("Send Friend Request")
