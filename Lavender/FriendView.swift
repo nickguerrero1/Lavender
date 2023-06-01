@@ -1,107 +1,90 @@
+//
+//  FriendView.swift
+//  Lavender
+//
+//  Created by Nicholas Guerrero on 5/31/23.
+//
+
 import SwiftUI
-import Firebase
-import FirebaseFirestore
 
 struct FriendView: View {
     
     let userEmail: String
-    @State private var friendRequests: [User] = []
-    
-    @State private var searchEmail = ""
-    @State private var searchResults: [DataFetcher.User] = []
-    
-    var currentTab: Binding<Int>
+    @State var currentTab: Int = 0
     
     var body: some View {
-        VStack{
-            Spacer()
-            Text("Discovery")
-                .bold()
-            TextField("Search by email", text: $searchEmail)
-                .padding()
-                .background(Color.gray.opacity(0.2))
-                .cornerRadius(30)
-                .padding(.horizontal, 30)
-                .autocapitalization(.none)
-            VStack{
-                ForEach(searchResults.prefix(5), id: \.id) { result in
-                    Button {
-                        sendFriendRequest(friendID: result.id, friendEmail: result.email)
-                    } label: {
-                        HStack(alignment: .center, spacing: 16){
-                            Spacer()
-                            Text(result.email)
-                            Spacer()
-                            ZStack{
-                                RoundedRectangle(cornerRadius: 20)
-                                    .foregroundColor(.blue.opacity(0.50))
-                                    .frame(width: 200, height: 40)
-                                Text("Send Friend Request")
-                            }
-                            Spacer()
-                        }
-                    }
-                    .buttonStyle(.plain)
-                }
+        ZStack{
+            if currentTab == 0 {
+                ConnectView(userEmail: userEmail)
+            } else if currentTab == 1 {
+                IncomingView()
+            } else if currentTab == 2 {
+                OutgoingView()
             }
-            .padding(.top)
-            Spacer()
-        }
-        .onChange(of: searchEmail) { newValue in
-            DataFetcher.searchUsers(searchEmail: newValue) { fetchedResults in
-                searchResults = fetchedResults
+            VStack{
+                ZStack(alignment: .top){
+                    Rectangle()
+                        .foregroundColor(.white)
+                        .frame(height: 55)
+                    FriendTabBarView(currentTab: self.$currentTab)
+                        .padding(.bottom, 10)
+                }
+                Spacer().frame(height: UIScreen.main.bounds.height * 0.842)
             }
         }
     }
+}
+
+struct FriendTabBarView: View {
+    @Binding var currentTab: Int
+    var tabBarOptions: [Image] = [Image(systemName: "magnifyingglass"), Image(systemName: "bell"), Image(systemName: "paperplane")]
+    var body: some View {
+        HStack(spacing: 20) {
+            ForEach(Array(zip(self.tabBarOptions.indices, self.tabBarOptions)), id: \.0, content: {
+                index, name in
+                FriendTabBarItem(currentTab: self.$currentTab, tabLogo: name, tab: index)
+                }
+            )
+        }
+        .padding(.horizontal)
+        .frame(alignment: .center)
+    }
+}
+
+struct FriendTabBarItem: View {
+    @Binding var currentTab: Int
     
-    func sendFriendRequest(friendID: String, friendEmail: String) {
-        let userID = Auth.auth().currentUser!.uid
-        
-        let db = Firestore.firestore()
-        let friendRequestsCollection = db.collection("friendRequests")
-        
-        let sender = DataFetcher.User(id: userID, email: userEmail)
-        let receiver = DataFetcher.User(id: friendID, email: friendEmail)
-        
-        let friendRequest = FriendRequest(sender: sender, receiver: receiver)
-        
-        friendRequestsCollection
-            .whereField("sender.id", isEqualTo: userID)
-            .whereField("receiver.id", isEqualTo: friendID)
-            .getDocuments { snapshot, error in
-                if let error = error {
-                    print("Error checking friend request: \(error)")
-                } else if let documents = snapshot?.documents, !documents.isEmpty {
-                    print("Friend request already sent to this user")
-                } else {
-                    friendRequestsCollection.document().setData([
-                        "sender": [
-                            "id": friendRequest.sender.id,
-                            "name": friendRequest.sender.email
-                        ],
-                        "receiver": [
-                            "id": friendRequest.receiver.id,
-                            "name": friendRequest.receiver.email
-                        ]
-                    ]) { error in
-                        if let error = error {
-                            print("Error sending friend request: \(error)")
-                        } else {
-                            print("Friend request sent")
-                        }
+    var tabLogo: Image
+    var tab: Int
+    
+    var body: some View {
+        Button {
+            self.currentTab = tab
+        } label: {
+            VStack{
+                Spacer()
+                ZStack{
+                    if currentTab == tab {
+                        Color.purple.opacity(0.15)
+                            .cornerRadius(20)
+                            .frame(width: 100, height: 35)
+                    }   else{
+                        Color.white
+                            .cornerRadius(20)
+                            .frame(width: 50, height: 35)
                     }
+                    tabLogo
+                        .resizable()
+                        .frame(width: 20, height: 20)
                 }
             }
+        }
+        .buttonStyle(.plain)
     }
 }
 
 struct FriendView_Previews: PreviewProvider {
     static var previews: some View {
-        FriendView(userEmail: "example@example.com", currentTab: .constant(2))
+        FriendView(userEmail: "example@example.com")
     }
-}
-
-struct FriendRequest {
-    let sender: DataFetcher.User
-    let receiver: DataFetcher.User
 }
