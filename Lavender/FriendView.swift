@@ -37,7 +37,7 @@ struct FriendView: View {
 
 struct FriendTabBarView: View {
     @Binding var currentTab: Int
-    var tabBarOptions: [Image] = [Image(systemName: "magnifyingglass"), Image(systemName: "bell"), Image(systemName: "paperplane")]
+    var tabBarOptions: [Image] = [Image(systemName: "magnifyingglass"), Image(systemName: "bell.fill"), Image(systemName: "paperplane.fill")]
     var body: some View {
         HStack(spacing: 20) {
             ForEach(Array(zip(self.tabBarOptions.indices, self.tabBarOptions)), id: \.0, content: {
