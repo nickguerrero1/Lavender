@@ -1,15 +1,27 @@
-//
-//  OutgoingView.swift
-//  Lavender
-//
-//  Created by Nicholas Guerrero on 5/31/23.
-//
-
 import SwiftUI
 
 struct OutgoingView: View {
+    
+    @State private var outgoingEmails: [String] = []
+    
     var body: some View {
-        Text("Outgoing Friend Requests")
+        VStack{
+            Text("Outgoing Friend Requests")
+                .bold()
+                .padding(.top, 60)
+            ScrollView(showsIndicators: false) {
+                VStack{
+                    ForEach(Array(0..<outgoingEmails.count), id: \.self) { index in
+                        Text(outgoingEmails[index])
+                    }
+                }
+            }
+        }
+        .onAppear {
+            DataFetcher.loadOutgoing { fetchedOutgoing in
+                outgoingEmails = fetchedOutgoing
+            }
+        }
     }
 }
 
