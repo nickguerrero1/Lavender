@@ -48,26 +48,26 @@ class DataFetcher {
         }
     }
     
-    struct ReceiverData {
-        let receiverUserID: String
-        let email: String
-    }
-    
-    static func loadReceiverData(receiverUserID: String, completion: @escaping (ReceiverData) -> Void) {
-        var email: String = "noEmail"
+    static func loadUnlocked(completion: @escaping ([Bool]) -> Void) {
+        var unlocked: [Bool] = [true] + Array(repeating: false, count: recipeCount - 1)
 
-        let db = Firestore.firestore()
-        let userRef = db.collection("users").document(receiverUserID)
-        
-        userRef.getDocument { (document, error) in
-            if let document = document, document.exists {
-                if let emailData = document.data()?["email"] as? String {
-                    email = emailData
+        if let currentUser = Auth.auth().currentUser {
+            let userID = currentUser.uid
+            let db = Firestore.firestore()
+            let userRef = db.collection("users").document(userID)
+            
+            userRef.getDocument { (document, error) in
+                if let document = document, document.exists {
+                    if let unlockedData = document.data()?["unlocked"] as? [Bool] {
+                        unlocked = unlockedData
+                    }
+                } else {
+                    print("Document does not exist")
                 }
-            } else {
-                print("Document does not exist")
+                completion(unlocked)
             }
-            completion(ReceiverData(receiverUserID: receiverUserID, email: email))
+        }   else {
+            completion(unlocked)
         }
     }
     

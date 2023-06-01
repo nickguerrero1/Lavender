@@ -74,7 +74,7 @@ struct FlowerView: View {
                                     let userID = Auth.auth().currentUser?.uid
                                     let userRef = db.collection("users").document(userID!)
                                     
-                                    userRef.setData(["rarity": rarity, "flowerInv": flowerInv], merge: true) { error in
+                                    userRef.setData(["rarity": rarity, "flowerInv": flowerInv, "unlocked": unlocked], merge: true) { error in
                                         if let error = error {
                                             print("Error updating FlowerView: \(error)")
                                         } else {
@@ -129,6 +129,9 @@ struct FlowerView: View {
             }
             DataFetcher.loadFlowerInv { fetchedFlowerInv in
                 self.flowerInv = fetchedFlowerInv
+            }
+            DataFetcher.loadUnlocked { fetchedUnlocked in
+                self.unlocked = fetchedUnlocked
             }
         }
     }
