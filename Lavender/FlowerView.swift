@@ -17,6 +17,7 @@ struct FlowerView: View {
     
     @State private var rarity: [Int] = Array(repeating: 0, count: numRarities)
     @State private var flowerInv: [Int] = Array(repeating: 0, count: recipeCount)
+    @State private var unlocked: [Bool] = [true] + Array(repeating: false, count: recipeCount - 1)
     
     var body: some View {
         HStack{
@@ -63,8 +64,11 @@ struct FlowerView: View {
                     VStack {
                         ForEach(Array(0..<recipeCount), id: \.self) { index in
                             Button {
-                                if checkAssembly(rarity: rarity)[index] {
+                                if checkAssembly(rarity: rarity)[index] && unlocked[index] {
                                     flowerInv[index] += 1
+                                    if index != recipeCount-1 {
+                                        unlocked[index+1] = true
+                                    }
                                     rarity = subtractPetals(recipe: recipes[index], rarity: rarity)
                                     let db = Firestore.firestore()
                                     let userID = Auth.auth().currentUser?.uid
@@ -82,7 +86,7 @@ struct FlowerView: View {
                                 ZStack{
                                     Rectangle()
                                         .frame(width: UIScreen.main.bounds.width * 0.62, height: CGFloat(recipeFrames[index]))
-                                        .foregroundColor(checkAssembly(rarity: rarity)[index] ? .green.opacity(0.5) : .red.opacity(0.5))
+                                        .foregroundColor(unlocked[index] ? (checkAssembly(rarity: rarity)[index] ? .green.opacity(0.5) : .red.opacity(0.5)) : .gray.opacity(0.5))
                                         .cornerRadius(15)
                                     HStack{
                                         ZStack{

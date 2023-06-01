@@ -1,10 +1,3 @@
-//
-//  FriendView.swift
-//  Lavender
-//
-//  Created by Nicholas Guerrero on 5/31/23.
-//
-
 import SwiftUI
 
 struct FriendView: View {
