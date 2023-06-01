@@ -6,13 +6,47 @@ struct IncomingView: View {
     
     var body: some View {
         VStack{
-            Text("Incoming Friend Requests")
-                .bold()
-                .padding(.top, 60)
+            HStack{
+                Text("Friend Requests \(incomingEmails.count)")
+                    .bold()
+                    .padding(.top, UIScreen.main.bounds.height*0.06)
+                    .padding(.leading)
+                Spacer()
+            }
             ScrollView(showsIndicators: false) {
                 VStack{
                     ForEach(Array(0..<incomingEmails.count), id: \.self) { index in
-                        Text(incomingEmails[index])
+                        VStack{
+                            Text(incomingEmails[index])
+                            HStack{
+                                Button {
+                                    //confirm
+                                } label: {
+                                    ZStack{
+                                        RoundedRectangle(cornerRadius: 30)
+                                            .foregroundColor(.blue)
+                                            .frame(width: 100, height: 30)
+                                        Text("Confirm")
+                                            .foregroundColor(.white)
+                                            .bold()
+                                    }
+                                }
+                                .buttonStyle(.plain)
+                                Button {
+                                    //delete
+                                } label: {
+                                    ZStack{
+                                        RoundedRectangle(cornerRadius: 30)
+                                            .foregroundColor(.gray.opacity(0.20))
+                                            .frame(width: 100, height: 30)
+                                        Text("Delete")
+                                            .bold()
+                                    }
+                                }
+                                .buttonStyle(.plain)
+                            }
+                        }
+                        .padding(15)
                     }
                 }
             }
@@ -20,6 +54,7 @@ struct IncomingView: View {
         .onAppear {
             DataFetcher.loadIncoming { fetchedIncoming in
                 incomingEmails = fetchedIncoming
+                incomingEmails = ["nicholasmeap@gmail.com","poopy@gmail.com","eggypop@yahoo.com"]
             }
         }
     }
