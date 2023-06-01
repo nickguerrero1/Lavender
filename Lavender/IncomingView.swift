@@ -1,15 +1,27 @@
-//
-//  IncomingRequestView.swift
-//  Lavender
-//
-//  Created by Nicholas Guerrero on 5/31/23.
-//
-
 import SwiftUI
 
 struct IncomingView: View {
+    
+    @State private var incomingEmails: [String] = []
+    
     var body: some View {
-        Text("Incoming Friend Requests")
+        VStack{
+            Text("Incoming Friend Requests")
+                .bold()
+                .padding(.top, 60)
+            ScrollView(showsIndicators: false) {
+                VStack{
+                    ForEach(Array(0..<incomingEmails.count), id: \.self) { index in
+                        Text(incomingEmails[index])
+                    }
+                }
+            }
+        }
+        .onAppear {
+            DataFetcher.loadIncoming { fetchedIncoming in
+                incomingEmails = fetchedIncoming
+            }
+        }
     }
 }
 

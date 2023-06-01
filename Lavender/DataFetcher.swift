@@ -115,12 +115,12 @@ class DataFetcher {
             
             friendRequestsRef.whereField("sender.id", isEqualTo: userID).getDocuments { (snapshot, error) in
                 if let error = error {
-                    print("Error loading incoming friend requests: \(error)")
+                    print("Error loading outgoing friend requests: \(error)")
                 }   else {
                     if let documents = snapshot?.documents {
                         for document in documents {
                             if let receiverData = document.data()["receiver"] as? [String: Any],
-                               let receiverEmail = receiverData["name"] as? String {
+                                let receiverEmail = receiverData["name"] as? String {
                                 outgoing.append(receiverEmail)
                             }
                         }
@@ -130,6 +130,34 @@ class DataFetcher {
             }
         }   else {
             completion(outgoing)
+        }
+    }
+    
+    static func loadIncoming(completion: @escaping ([String]) -> Void) {
+        var incoming: [String] = []
+
+        if let currentUser = Auth.auth().currentUser {
+            let userID = currentUser.uid
+            let db = Firestore.firestore()
+            let friendRequestsRef = db.collection("friendRequests")
+            
+            friendRequestsRef.whereField("receiver.id", isEqualTo: userID).getDocuments { (snapshot, error) in
+                if let error = error {
+                    print("Error loading incoming friend requests: \(error)")
+                }   else {
+                    if let documents = snapshot?.documents {
+                        for document in documents {
+                            if let senderData = document.data()["sender"] as? [String: Any],
+                                let senderEmail = senderData["name"] as? String {
+                                incoming.append(senderEmail)
+                            }
+                        }
+                    }
+                }
+                completion(incoming)
+            }
+        }   else {
+            completion(incoming)
         }
     }
 }
