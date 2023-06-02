@@ -59,16 +59,12 @@ struct ConnectView: View {
         }
     }
     
-    func sendFriendRequest(friendID: String, friendEmail: String) {
-        let userID = Auth.auth().currentUser!.uid
+    func allowRequest(friendID: String, friendEmail: String, completion: @escaping (Bool) -> Void) {
+        var allowReq = false
         
+        let userID = Auth.auth().currentUser!.uid
         let db = Firestore.firestore()
         let friendRequestsCollection = db.collection("friendRequests")
-        
-        let sender = DataFetcher.User(id: userID, email: userEmail)
-        let receiver = DataFetcher.User(id: friendID, email: friendEmail)
-        
-        let friendRequest = FriendRequest(sender: sender, receiver: receiver)
         
         friendRequestsCollection
             .whereField("sender.id", isEqualTo: userID)
@@ -88,26 +84,43 @@ struct ConnectView: View {
                             } else if let documents = snapshot?.documents, !documents.isEmpty {
                                 errorMessage = "\(friendEmail) has already sent a friend request to you"
                             } else {
-                                friendRequestsCollection.document().setData([
-                                    "sender": [
-                                        "id": friendRequest.sender.id,
-                                        "name": friendRequest.sender.email
-                                    ],
-                                    "receiver": [
-                                        "id": friendRequest.receiver.id,
-                                        "name": friendRequest.receiver.email
-                                    ]
-                                ]) { error in
-                                    if let error = error {
-                                        print("Error sending friend request: \(error)")
-                                    } else {
-                                        print("Friend request sent")
-                                    }
-                                }
+                                allowReq = true
+                                completion(allowReq)
                             }
                         }
                 }
             }
+    }
+    
+    func sendFriendRequest(friendID: String, friendEmail: String) {
+        let userID = Auth.auth().currentUser!.uid
+        let db = Firestore.firestore()
+        let friendRequestsCollection = db.collection("friendRequests")
+        
+        allowRequest(friendID: friendID, friendEmail: friendEmail) { allowed in
+            if allowed {
+                let sender = DataFetcher.User(id: userID, email: userEmail)
+                let receiver = DataFetcher.User(id: friendID, email: friendEmail)
+                let friendRequest = FriendRequest(sender: sender, receiver: receiver)
+                
+                friendRequestsCollection.document().setData([
+                    "sender": [
+                        "id": friendRequest.sender.id,
+                        "name": friendRequest.sender.email
+                    ],
+                    "receiver": [
+                        "id": friendRequest.receiver.id,
+                        "name": friendRequest.receiver.email
+                    ]
+                ]) { error in
+                    if let error = error {
+                        print("Error sending friend request: \(error)")
+                    } else {
+                        print("Friend request sent")
+                    }
+                }
+            }
+        }
     }
 }
 
