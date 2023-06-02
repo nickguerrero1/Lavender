@@ -9,12 +9,18 @@ struct ConnectView: View {
     
     @State private var searchEmail = ""
     @State private var searchResults: [DataFetcher.User] = []
+    @State private var errorMessage = ""
     
     var body: some View {
         VStack{
             Spacer()
             Text("Connect")
                 .bold()
+                .padding(.bottom)
+            Text(errorMessage)
+                .foregroundColor(.red)
+                .padding(.bottom)
+                .padding(.horizontal)
             TextField("Search by email", text: $searchEmail)
                 .padding()
                 .background(Color.gray.opacity(0.2))
@@ -25,6 +31,7 @@ struct ConnectView: View {
                 ForEach(searchResults.prefix(5), id: \.id) { result in
                     Button {
                         sendFriendRequest(friendID: result.id, friendEmail: result.email)
+                        errorMessage = ""
                     } label: {
                         HStack(alignment: .center, spacing: 16){
                             Spacer()
@@ -70,24 +77,35 @@ struct ConnectView: View {
                 if let error = error {
                     print("Error checking friend request: \(error)")
                 } else if let documents = snapshot?.documents, !documents.isEmpty {
-                    print("Friend request already sent to this user")
+                    errorMessage = "Friend request already sent to \(friendEmail)"
                 } else {
-                    friendRequestsCollection.document().setData([
-                        "sender": [
-                            "id": friendRequest.sender.id,
-                            "name": friendRequest.sender.email
-                        ],
-                        "receiver": [
-                            "id": friendRequest.receiver.id,
-                            "name": friendRequest.receiver.email
-                        ]
-                    ]) { error in
-                        if let error = error {
-                            print("Error sending friend request: \(error)")
-                        } else {
-                            print("Friend request sent")
+                    friendRequestsCollection
+                        .whereField("sender.id", isEqualTo: friendID)
+                        .whereField("receiver.id", isEqualTo: userID)
+                        .getDocuments { snapshot, error in
+                            if let error = error {
+                                print("Error checking friend request: \(error)")
+                            } else if let documents = snapshot?.documents, !documents.isEmpty {
+                                errorMessage = "\(friendEmail) has already sent a friend request to you"
+                            } else {
+                                friendRequestsCollection.document().setData([
+                                    "sender": [
+                                        "id": friendRequest.sender.id,
+                                        "name": friendRequest.sender.email
+                                    ],
+                                    "receiver": [
+                                        "id": friendRequest.receiver.id,
+                                        "name": friendRequest.receiver.email
+                                    ]
+                                ]) { error in
+                                    if let error = error {
+                                        print("Error sending friend request: \(error)")
+                                    } else {
+                                        print("Friend request sent")
+                                    }
+                                }
+                            }
                         }
-                    }
                 }
             }
     }

@@ -6,11 +6,20 @@ struct IncomingView: View {
     
     var body: some View {
         VStack{
+            Spacer()
             HStack{
-                Text("Friend Requests \(incomingEmails.count)")
+                Text("Friend Requests")
                     .bold()
                     .padding(.top, UIScreen.main.bounds.height*0.06)
                     .padding(.leading)
+                ZStack{
+                    Circle()
+                        .foregroundColor(.red.opacity(0.5))
+                        .frame(width: 30, height: 25)
+                    Text("\(incomingEmails.count)")
+                        .bold()
+                }
+                .padding(.top, UIScreen.main.bounds.height*0.06)
                 Spacer()
             }
             ScrollView(showsIndicators: false) {
@@ -54,7 +63,6 @@ struct IncomingView: View {
         .onAppear {
             DataFetcher.loadIncoming { fetchedIncoming in
                 incomingEmails = fetchedIncoming
-                incomingEmails = ["nicholasmeap@gmail.com","poopy@gmail.com","eggypop@yahoo.com"]
             }
         }
     }
