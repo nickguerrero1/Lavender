@@ -133,8 +133,8 @@ class DataFetcher {
         }
     }
     
-    static func loadIncoming(completion: @escaping ([String]) -> Void) {
-        var incoming: [String] = []
+    static func loadIncoming(completion: @escaping ([QueryDocumentSnapshot]) -> Void) {
+        var incoming: [QueryDocumentSnapshot] = []
 
         if let currentUser = Auth.auth().currentUser {
             let userID = currentUser.uid
@@ -147,10 +147,7 @@ class DataFetcher {
                 }   else {
                     if let documents = snapshot?.documents {
                         for document in documents {
-                            if let senderData = document.data()["sender"] as? [String: Any],
-                                let senderEmail = senderData["name"] as? String {
-                                incoming.append(senderEmail)
-                            }
+                            incoming.append(document)
                         }
                     }
                 }

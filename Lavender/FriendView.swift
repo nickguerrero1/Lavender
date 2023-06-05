@@ -10,7 +10,7 @@ struct FriendView: View {
             if currentTab == 0 {
                 ConnectView(userEmail: userEmail)
             } else if currentTab == 1 {
-                IncomingView()
+                IncomingView(userEmail: userEmail)
             } else if currentTab == 2 {
                 OutgoingView()
             }
