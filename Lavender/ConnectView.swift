@@ -19,7 +19,6 @@ struct ConnectView: View {
                 .padding(.bottom)
             Text(errorMessage)
                 .foregroundColor(.red)
-                .padding(.bottom)
                 .padding(.horizontal)
             TextField("Search by email", text: $searchEmail)
                 .padding()
@@ -29,24 +28,26 @@ struct ConnectView: View {
                 .autocapitalization(.none)
             VStack{
                 ForEach(searchResults.prefix(5), id: \.id) { result in
-                    Button {
-                        sendFriendRequest(friendID: result.id, friendEmail: result.email)
-                        errorMessage = ""
-                    } label: {
+                    if result.email != userEmail {
                         HStack(alignment: .center, spacing: 16){
                             Spacer()
                             Text(result.email)
                             Spacer()
-                            ZStack{
-                                RoundedRectangle(cornerRadius: 20)
-                                    .foregroundColor(.blue.opacity(0.50))
-                                    .frame(width: 200, height: 40)
-                                Text("Send Friend Request")
+                            Button {
+                                sendFriendRequest(friendID: result.id, friendEmail: result.email)
+                                errorMessage = ""
+                            } label: {
+                                ZStack{
+                                    RoundedRectangle(cornerRadius: 20)
+                                        .foregroundColor(.blue.opacity(0.50))
+                                        .frame(width: 200, height: 40)
+                                    Text("Send Friend Request")
+                                }
                             }
+                            .buttonStyle(.plain)
                             Spacer()
                         }
                     }
-                    .buttonStyle(.plain)
                 }
             }
             .padding(.top)
@@ -72,8 +73,10 @@ struct ConnectView: View {
             .getDocuments { snapshot, error in
                 if let error = error {
                     print("Error checking friend request: \(error)")
+                    completion(false)
                 } else if let documents = snapshot?.documents, !documents.isEmpty {
                     errorMessage = "Friend request already sent to \(friendEmail)"
+                    completion(false)
                 } else {
                     friendRequestsCollection
                         .whereField("sender.id", isEqualTo: friendID)
@@ -81,8 +84,10 @@ struct ConnectView: View {
                         .getDocuments { snapshot, error in
                             if let error = error {
                                 print("Error checking friend request: \(error)")
+                                completion(false)
                             } else if let documents = snapshot?.documents, !documents.isEmpty {
                                 errorMessage = "\(friendEmail) has already sent a friend request to you"
+                                completion(false)
                             } else {
                                 allowReq = true
                                 completion(allowReq)

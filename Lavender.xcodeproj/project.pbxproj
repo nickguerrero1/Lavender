@@ -43,6 +43,7 @@
 		D0947F372A2827D500F05CBF /* FriendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendView.swift; sourceTree = "<group>"; };
 		D0947F392A28280E00F05CBF /* IncomingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomingView.swift; sourceTree = "<group>"; };
 		D0947F3B2A28282B00F05CBF /* OutgoingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutgoingView.swift; sourceTree = "<group>"; };
+		D0A143162A2D6A9E00BE95D3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.4.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +110,7 @@
 		D048DEF52A2065EC0042A445 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D0A143162A2D6A9E00BE95D3 /* UIKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
