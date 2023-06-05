@@ -12,50 +12,59 @@ struct ConnectView: View {
     @State private var errorMessage = ""
     
     var body: some View {
-        VStack{
-            Spacer()
-            Text("Connect")
-                .bold()
-                .padding(.bottom)
-            Text(errorMessage)
-                .foregroundColor(.red)
-                .padding(.horizontal)
-            TextField("Search by email", text: $searchEmail)
-                .padding()
-                .background(Color.gray.opacity(0.2))
-                .cornerRadius(30)
-                .padding(.horizontal, 30)
-                .autocapitalization(.none)
-            VStack{
-                ForEach(searchResults.prefix(5), id: \.id) { result in
-                    if result.email != userEmail {
-                        HStack(alignment: .center, spacing: 16){
-                            Spacer()
-                            Text(result.email)
-                            Spacer()
-                            Button {
-                                sendFriendRequest(friendID: result.id, friendEmail: result.email)
-                                errorMessage = ""
-                            } label: {
-                                ZStack{
-                                    RoundedRectangle(cornerRadius: 20)
-                                        .foregroundColor(.blue.opacity(0.50))
-                                        .frame(width: 200, height: 40)
-                                    Text("Send Friend Request")
+        ScrollView{
+            VStack {
+                
+                Spacer().frame(height: UIScreen.main.bounds.height*0.2)
+                Text("Connect")
+                    .font(.title)
+                    .bold()
+                    .padding(.bottom, 20)
+                
+                Text(errorMessage)
+                    .foregroundColor(.red)
+                    .padding(.horizontal)
+                    .padding(.bottom)
+                
+                TextField("Search by email", text: $searchEmail)
+                    .padding()
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(30)
+                    .padding(.horizontal, 30)
+                    .autocapitalization(.none)
+                    .padding(.bottom, 20)
+                
+                VStack(spacing: 16) {
+                    ForEach(searchResults.prefix(5), id: \.id) { result in
+                        if result.email != userEmail {
+                            HStack(alignment: .center, spacing: 16) {
+                                Spacer()
+                                Text(result.email)
+                                Spacer()
+                                Button(action: {
+                                    sendFriendRequest(friendID: result.id, friendEmail: result.email)
+                                }) {
+                                    Text("Request")
+                                        .foregroundColor(.white)
+                                        .frame(maxWidth: .infinity)
+                                        .frame(height: 40)
+                                        .background(Color.blue.opacity(0.8))
+                                        .cornerRadius(20)
                                 }
+                                Spacer()
                             }
-                            .buttonStyle(.plain)
-                            Spacer()
                         }
                     }
                 }
+                .padding(.horizontal, 30)
+                
+                Spacer()
             }
-            .padding(.top)
-            Spacer()
-        }
-        .onChange(of: searchEmail) { newValue in
-            DataFetcher.searchUsers(searchEmail: newValue) { fetchedResults in
-                searchResults = fetchedResults
+            .padding(.top, 80)
+            .onChange(of: searchEmail) { newValue in
+                DataFetcher.searchUsers(searchEmail: newValue) { fetchedResults in
+                    searchResults = fetchedResults
+                }
             }
         }
     }

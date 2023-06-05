@@ -160,4 +160,39 @@ class DataFetcher {
             completion(incoming)
         }
     }
+    
+    static func existingRequest(friendID: String, friendEmail: String, completion: @escaping (Bool) -> Void) {
+        var existingReq = true
+        
+        let userID = Auth.auth().currentUser!.uid
+        let db = Firestore.firestore()
+        let friendRequestsCollection = db.collection("friendRequests")
+        
+        friendRequestsCollection
+            .whereField("sender.id", isEqualTo: userID)
+            .whereField("receiver.id", isEqualTo: friendID)
+            .getDocuments { snapshot, error in
+                if let error = error {
+                    print("Error checking friend request: \(error)")
+                    completion(true)
+                } else if let documents = snapshot?.documents, !documents.isEmpty {
+                    completion(true)
+                } else {
+                    friendRequestsCollection
+                        .whereField("sender.id", isEqualTo: friendID)
+                        .whereField("receiver.id", isEqualTo: userID)
+                        .getDocuments { snapshot, error in
+                            if let error = error {
+                                print("Error checking friend request: \(error)")
+                                completion(true)
+                            } else if let documents = snapshot?.documents, !documents.isEmpty {
+                                completion(true)
+                            } else {
+                                existingReq = false
+                                completion(existingReq)
+                            }
+                        }
+                }
+            }
+    }
 }
