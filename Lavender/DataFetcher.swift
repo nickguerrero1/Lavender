@@ -192,4 +192,32 @@ class DataFetcher {
                 }
             }
     }
+    
+    static func loadFriends(completion: @escaping ([User]) -> Void) {
+        var friends: [User] = []
+
+        if let currentUser = Auth.auth().currentUser {
+            let userID = currentUser.uid
+            let db = Firestore.firestore()
+            let userRef = db.collection("users").document(userID)
+            
+            userRef.getDocument { (document, error) in
+                if let document = document, document.exists {
+                    if let friendsData = document.data()?["friends"] as? [[String: Any]] {
+                        for friendData in friendsData {
+                            if let id = friendData["id"] as? String,
+                                let email = friendData["email"] as? String {
+                                friends.append(User(id: id, email: email))
+                            }
+                        }
+                    }
+                } else {
+                    print("Document does not exist")
+                }
+                completion(friends)
+            }
+        }   else {
+            completion(friends)
+        }
+    }
 }
