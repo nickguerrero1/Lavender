@@ -9,10 +9,21 @@ struct FriendListView: View {
             VStack{
                 Spacer().frame(height: UIScreen.main.bounds.height*0.1)
                 
-                Text("Friends")
-                    .font(.title)
-                    .bold()
-                    .padding(.bottom)
+                HStack{
+                    Text("Friends")
+                        .font(.system(size: 25))
+                        .bold()
+                        .padding(.trailing, 5)
+                    ZStack{
+                        RoundedRectangle(cornerRadius: 30)
+                            .foregroundColor(.red.opacity(0.5))
+                            .frame(width: measureTextWidth(text: "\(String(friends.count))", fontSize: 25) + 20, height: 30)
+                        Text("\(friends.count)")
+                            .bold()
+                            .font(.system(size: 25))
+                    }
+                }
+                .padding(.bottom)
         
                 ForEach(friends, id: \.id) { friend in
                     HStack{
@@ -36,8 +47,18 @@ struct FriendListView: View {
         .onAppear {
             DataFetcher.loadFriends { fetchedFriends in
                 friends = fetchedFriends
+                //friends = Array(repeating: DataFetcher.User(id: "1", email: "h"), count: 100)
+                //uncomment to add test friends
             }
         }
+    }
+    
+    func measureTextWidth(text: String, fontSize: CGFloat) -> CGFloat {
+        let font = UIFont.systemFont(ofSize: fontSize)
+        let attributes = [NSAttributedString.Key.font: font]
+        let attributedString = NSAttributedString(string: text, attributes: attributes)
+        let size = attributedString.size()
+        return size.width
     }
 }
 
