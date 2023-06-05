@@ -13,7 +13,7 @@ struct ContentView: View {
     
     var body: some View {
         if userIsLoggedIn {
-            MainView(userEmail: email.lowercased())
+            MainView(userEmail: email)
         } else {
             content
         }
@@ -48,6 +48,9 @@ struct ContentView: View {
                             .stroke(Color.red, lineWidth: CGFloat(wrongEmail))
                     )
                     .autocapitalization(.none)
+                    .onChange(of: email) { newValue in
+                        email = newValue.lowercased()
+                    }
                 SecureField("Password", text: $password)
                     .padding()
                     .frame(width: 300, height: 50)
