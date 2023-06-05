@@ -11,16 +11,16 @@ struct FriendListView: View {
                 
                 HStack{
                     Text("Friends")
-                        .font(.system(size: 25))
+                        .font(.system(size: UIScreen.main.bounds.width * 0.06))
                         .bold()
                         .padding(.trailing, 5)
                     ZStack{
                         RoundedRectangle(cornerRadius: 30)
                             .foregroundColor(.red.opacity(0.5))
-                            .frame(width: measureTextWidth(text: "\(String(friends.count))", fontSize: 25) + 20, height: 30)
+                            .frame(width: measureTextWidth(text: "\(String(friends.count))", fontSize: UIScreen.main.bounds.width * 0.04) + UIScreen.main.bounds.width * 0.04, height: UIScreen.main.bounds.width * 0.06)
                         Text("\(friends.count)")
                             .bold()
-                            .font(.system(size: 25))
+                            .font(.system(size: UIScreen.main.bounds.width * 0.04))
                     }
                 }
                 .padding(.bottom)
