@@ -75,35 +75,49 @@ struct ConnectView: View {
         let userID = Auth.auth().currentUser!.uid
         let db = Firestore.firestore()
         let friendRequestsCollection = db.collection("friendRequests")
+        let usersCollection = db.collection("users")
         
-        friendRequestsCollection
-            .whereField("sender.id", isEqualTo: userID)
-            .whereField("receiver.id", isEqualTo: friendID)
-            .getDocuments { snapshot, error in
-                if let error = error {
-                    print("Error checking friend request: \(error)")
-                    completion(false)
-                } else if let documents = snapshot?.documents, !documents.isEmpty {
-                    errorMessage = "Friend request already sent to \(friendEmail)"
-                    completion(false)
-                } else {
-                    friendRequestsCollection
-                        .whereField("sender.id", isEqualTo: friendID)
-                        .whereField("receiver.id", isEqualTo: userID)
-                        .getDocuments { snapshot, error in
-                            if let error = error {
-                                print("Error checking friend request: \(error)")
-                                completion(false)
-                            } else if let documents = snapshot?.documents, !documents.isEmpty {
-                                errorMessage = "\(friendEmail) has already sent a friend request to you"
-                                completion(false)
-                            } else {
-                                allowReq = true
-                                completion(allowReq)
-                            }
+        usersCollection.document(userID).getDocument { userDocument, error in
+            if let error = error {
+                print("Error checking friendship: \(error)")
+                completion(false)
+            } else if let userData = userDocument?.data(),
+                      let friends = userData["friends"] as? [[String: Any]],
+                      friends.contains(where: { $0["id"] as? String == friendID }) {
+                
+                errorMessage = "You are already friends with \(friendEmail)"
+                completion(false)
+            } else {
+                friendRequestsCollection
+                    .whereField("sender.id", isEqualTo: userID)
+                    .whereField("receiver.id", isEqualTo: friendID)
+                    .getDocuments { snapshot, error in
+                        if let error = error {
+                            print("Error checking friend request: \(error)")
+                            completion(false)
+                        } else if let documents = snapshot?.documents, !documents.isEmpty {
+                            errorMessage = "Friend request already sent to \(friendEmail)"
+                            completion(false)
+                        } else {
+                            friendRequestsCollection
+                                .whereField("sender.id", isEqualTo: friendID)
+                                .whereField("receiver.id", isEqualTo: userID)
+                                .getDocuments { snapshot, error in
+                                    if let error = error {
+                                        print("Error checking friend request: \(error)")
+                                        completion(false)
+                                    } else if let documents = snapshot?.documents, !documents.isEmpty {
+                                        errorMessage = "\(friendEmail) has already sent a friend request to you"
+                                        completion(false)
+                                    } else {
+                                        allowReq = true
+                                        completion(allowReq)
+                                    }
+                                }
                         }
-                }
+                    }
             }
+        }
     }
     
     func sendFriendRequest(friendID: String, friendEmail: String) {
