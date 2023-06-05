@@ -15,6 +15,8 @@ struct ConnectView: View {
         ScrollView{
             VStack {
                 
+                Spacer().frame(height: UIScreen.main.bounds.height*0.1)
+                
                 Text("Connect")
                     .font(.title)
                     .bold()

@@ -8,6 +8,7 @@ struct FriendListView: View {
         ScrollView (showsIndicators: false) {
             VStack{
                 Spacer().frame(height: UIScreen.main.bounds.height*0.1)
+                
                 Text("Friends")
                     .font(.title)
                     .bold()
