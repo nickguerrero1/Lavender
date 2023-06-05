@@ -15,38 +15,6 @@ struct ConnectView: View {
         ScrollView{
             VStack {
                 
-                ZStack{
-                    Rectangle()
-                        .foregroundColor(.purple.opacity(0.20))
-                        .frame(width: UIScreen.main.bounds.width, height: 150)
-                        .edgesIgnoringSafeArea(.all)
-                    VStack{
-                        Text("Friends")
-                            .font(.title)
-                            .bold()
-                            .padding(.top)
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            LazyHStack(spacing: 16){
-                                ForEach(friends, id: \.id) { friend in
-                                    ZStack{
-                                        RoundedRectangle(cornerRadius: 20)
-                                            .foregroundColor(.white.opacity(0.3))
-                                        Text(friend.email)
-                                            .padding(.horizontal)
-                                    }
-                                    .padding(.bottom)
-                                }
-                            }
-                        }
-                        .onAppear {
-                            DataFetcher.loadFriends { fetchedFriends in
-                                friends = fetchedFriends
-                            }
-                        }
-                    }
-                }
-                .padding(.bottom, UIScreen.main.bounds.height*0.04)
-                
                 Text("Connect")
                     .font(.title)
                     .bold()
