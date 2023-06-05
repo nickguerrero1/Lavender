@@ -105,34 +105,6 @@ class DataFetcher {
         }
     }
     
-    static func loadOutgoing(completion: @escaping ([String]) -> Void) {
-        var outgoing: [String] = []
-
-        if let currentUser = Auth.auth().currentUser {
-            let userID = currentUser.uid
-            let db = Firestore.firestore()
-            let friendRequestsRef = db.collection("friendRequests")
-            
-            friendRequestsRef.whereField("sender.id", isEqualTo: userID).getDocuments { (snapshot, error) in
-                if let error = error {
-                    print("Error loading outgoing friend requests: \(error)")
-                }   else {
-                    if let documents = snapshot?.documents {
-                        for document in documents {
-                            if let receiverData = document.data()["receiver"] as? [String: Any],
-                                let receiverEmail = receiverData["name"] as? String {
-                                outgoing.append(receiverEmail)
-                            }
-                        }
-                    }
-                }
-                completion(outgoing)
-            }
-        }   else {
-            completion(outgoing)
-        }
-    }
-    
     static func loadIncoming(completion: @escaping ([QueryDocumentSnapshot]) -> Void) {
         var incoming: [QueryDocumentSnapshot] = []
 

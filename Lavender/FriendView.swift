@@ -8,11 +8,11 @@ struct FriendView: View {
     var body: some View {
         ZStack{
             if currentTab == 0 {
-                ConnectView(userEmail: userEmail)
+                FriendListView()
             } else if currentTab == 1 {
-                IncomingView(userEmail: userEmail)
+                ConnectView(userEmail: userEmail)
             } else if currentTab == 2 {
-                OutgoingView()
+                IncomingView(userEmail: userEmail)
             }
             VStack{
                 ZStack(alignment: .top){
@@ -30,7 +30,7 @@ struct FriendView: View {
 
 struct FriendTabBarView: View {
     @Binding var currentTab: Int
-    var tabBarOptions: [Image] = [Image(systemName: "magnifyingglass"), Image(systemName: "bell.fill"), Image(systemName: "paperplane.fill")]
+    var tabBarOptions: [Image] = [Image(systemName: "heart.fill"), Image(systemName: "magnifyingglass"), Image(systemName: "bell.fill")]
     var body: some View {
         HStack(spacing: 20) {
             ForEach(Array(zip(self.tabBarOptions.indices, self.tabBarOptions)), id: \.0, content: {
