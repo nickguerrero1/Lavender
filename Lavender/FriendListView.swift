@@ -25,7 +25,7 @@ struct FriendListView: View {
                 }
                 .padding(.bottom)
         
-                ForEach(friends, id: \.id) { friend in
+                ForEach(friends.indices, id: \.self) { index in
                     HStack{
                         Spacer()
                         ZStack{
@@ -35,7 +35,7 @@ struct FriendListView: View {
                             RoundedRectangle(cornerRadius: 20)
                                 .foregroundColor(.white.opacity(0.2))
                                 .frame(width: 250, height: 40)
-                            Text(friend.email)
+                            Text(friends[index].email)
                                 .frame(width: 220, height: 40)
                         }
                         Spacer()
@@ -47,7 +47,7 @@ struct FriendListView: View {
         .onAppear {
             DataFetcher.loadFriends { fetchedFriends in
                 friends = fetchedFriends
-                //friends = Array(repeating: DataFetcher.User(id: "1", email: "h"), count: 100)
+                //friends = Array(repeating: DataFetcher.User(id: "1", email: "test@gmail.com"), count: 10)
                 //uncomment to add test friends
             }
         }

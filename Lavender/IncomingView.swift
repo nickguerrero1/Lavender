@@ -76,7 +76,6 @@ struct IncomingView: View {
                                                 print("Error deleting friend request: \(error)")
                                             }
                                         }
-                                        
                                         incomingUsers.remove(at: index)
                                     } label: {
                                         ZStack{
@@ -90,7 +89,15 @@ struct IncomingView: View {
                                     }
                                     .buttonStyle(.plain)
                                     Button {
-                                        //delete
+                                        let db = Firestore.firestore()
+                                        let friendReqCollection = db.collection("friendRequests")
+                                        
+                                        friendReqCollection.document(incomingUsers[index].documentID).delete { error in
+                                            if let error = error {
+                                                print("Error deleting friend request: \(error)")
+                                            }
+                                        }
+                                        incomingUsers.remove(at: index)
                                     } label: {
                                         ZStack{
                                             RoundedRectangle(cornerRadius: 30)
