@@ -8,110 +8,124 @@ struct IncomingView: View {
     @State private var incomingUsers: [QueryDocumentSnapshot] = []
     
     var body: some View {
-        VStack{
-            Spacer()
-            HStack{
-                Text("Friend Requests")
-                    .bold()
-                    .padding(.top, UIScreen.main.bounds.height*0.06)
-                    .padding(.leading)
-                ZStack{
-                    Circle()
-                        .foregroundColor(.red.opacity(0.5))
-                        .frame(width: 30, height: 25)
-                    Text("\(incomingUsers.count)")
+        ScrollView(showsIndicators: false) {
+            VStack{
+                Spacer().frame(height: UIScreen.main.bounds.height*0.1)
+                
+                HStack{
+                    Text("Friend Requests")
+                        .font(.system(size: UIScreen.main.bounds.width * 0.06))
                         .bold()
+                        .padding(.trailing, 4)
+                    ZStack{
+                        RoundedRectangle(cornerRadius: 30)
+                            .foregroundColor(.red.opacity(0.5))
+                            .frame(width: measureTextWidth(text: "\(String(incomingUsers.count))", fontSize: UIScreen.main.bounds.width * 0.04) + UIScreen.main.bounds.width * 0.04, height: UIScreen.main.bounds.width * 0.06)
+                        Text("\(incomingUsers.count)")
+                            .bold()
+                            .font(.system(size: UIScreen.main.bounds.width * 0.04))
+                    }
                 }
-                .padding(.top, UIScreen.main.bounds.height*0.06)
-                Spacer()
-            }
-            ScrollView(showsIndicators: false) {
-                VStack{
-                    ForEach(0..<incomingUsers.count, id: \.self) { index in
-                        
-                        if let senderData = incomingUsers[index].data()["sender"] as? [String: Any],
-                            let friendid = senderData["id"] as? String,
-                            let email = senderData["name"] as? String {
-                            
-                            VStack{
-                                Text(email)
-                                HStack{
-                                    Button {
-                                        let userID = Auth.auth().currentUser!.uid
-                                        let db = Firestore.firestore()
-                                        let usersCollection = db.collection("users")
-                                        
-                                        let friendData: [String: Any] = [
-                                            "id": friendid,
-                                            "email": email
-                                        ]
-                                        
-                                        let userDocument = usersCollection.document(userID)
-                                        userDocument.updateData([
-                                            "friends": FieldValue.arrayUnion([friendData])
-                                        ]) { error in
-                                            if let error = error {
-                                                print("Error updating friends: \(error)")
+                .padding(.bottom)
+                
+                ForEach(0..<incomingUsers.count, id: \.self) { index in
+                    
+                    if let senderData = incomingUsers[index].data()["sender"] as? [String: Any],
+                        let friendid = senderData["id"] as? String,
+                        let email = senderData["name"] as? String {
+                        HStack{
+                            Spacer()
+                            ZStack{
+                                RoundedRectangle(cornerRadius: 20)
+                                    .foregroundColor(.green.opacity(0.4))
+                                    .frame(width: 280, height: 90)
+                                RoundedRectangle(cornerRadius: 20)
+                                    .foregroundColor(.white.opacity(0.2))
+                                    .frame(width: 250, height: 80)
+                                VStack{
+                                    Text(email)
+                                    HStack{
+                                        Button {
+                                            let userID = Auth.auth().currentUser!.uid
+                                            let db = Firestore.firestore()
+                                            let usersCollection = db.collection("users")
+                                            
+                                            let friendData: [String: Any] = [
+                                                "id": friendid,
+                                                "email": email
+                                            ]
+                                            
+                                            let userDocument = usersCollection.document(userID)
+                                            userDocument.updateData([
+                                                "friends": FieldValue.arrayUnion([friendData])
+                                            ]) { error in
+                                                if let error = error {
+                                                    print("Error updating friends: \(error)")
+                                                }
+                                            }
+                                            
+                                            let userData: [String: Any] = [
+                                                "id": userID,
+                                                "email": userEmail
+                                            ]
+                                            
+                                            let friendDocument = usersCollection.document(friendid)
+                                            friendDocument.updateData([
+                                                "friends": FieldValue.arrayUnion([userData])
+                                            ]) { error in
+                                                if let error = error {
+                                                    print("Error updating friends: \(error)")
+                                                }
+                                            }
+                                            
+                                            let friendReqCollection = db.collection("friendRequests")
+                                            
+                                            friendReqCollection.document(incomingUsers[index].documentID).delete { error in
+                                                if let error = error {
+                                                    print("Error deleting friend request: \(error)")
+                                                }
+                                            }
+                                            incomingUsers.remove(at: index)
+                                        } label: {
+                                            ZStack{
+                                                RoundedRectangle(cornerRadius: 30)
+                                                    .foregroundColor(.blue)
+                                                    .frame(width: 100, height: 30)
+                                                Text("Confirm")
+                                                    .foregroundColor(.white)
+                                                    .bold()
                                             }
                                         }
-                                        
-                                        let userData: [String: Any] = [
-                                            "id": userID,
-                                            "email": userEmail
-                                        ]
-                                        
-                                        let friendDocument = usersCollection.document(friendid)
-                                        friendDocument.updateData([
-                                            "friends": FieldValue.arrayUnion([userData])
-                                        ]) { error in
-                                            if let error = error {
-                                                print("Error updating friends: \(error)")
+                                        .buttonStyle(.plain)
+                                        Button {
+                                            let db = Firestore.firestore()
+                                            let friendReqCollection = db.collection("friendRequests")
+                                            
+                                            friendReqCollection.document(incomingUsers[index].documentID).delete { error in
+                                                if let error = error {
+                                                    print("Error deleting friend request: \(error)")
+                                                }
+                                            }
+                                            incomingUsers.remove(at: index)
+                                        } label: {
+                                            ZStack{
+                                                RoundedRectangle(cornerRadius: 30)
+                                                    .foregroundColor(.white)
+                                                    .frame(width: 100, height: 30)
+                                                RoundedRectangle(cornerRadius: 30)
+                                                    .foregroundColor(.gray.opacity(0.20))
+                                                    .frame(width: 100, height: 30)
+                                                Text("Delete")
+                                                    .bold()
                                             }
                                         }
-                                        
-                                        let friendReqCollection = db.collection("friendRequests")
-                                        
-                                        friendReqCollection.document(incomingUsers[index].documentID).delete { error in
-                                            if let error = error {
-                                                print("Error deleting friend request: \(error)")
-                                            }
-                                        }
-                                        incomingUsers.remove(at: index)
-                                    } label: {
-                                        ZStack{
-                                            RoundedRectangle(cornerRadius: 30)
-                                                .foregroundColor(.blue)
-                                                .frame(width: 100, height: 30)
-                                            Text("Confirm")
-                                                .foregroundColor(.white)
-                                                .bold()
-                                        }
+                                        .buttonStyle(.plain)
                                     }
-                                    .buttonStyle(.plain)
-                                    Button {
-                                        let db = Firestore.firestore()
-                                        let friendReqCollection = db.collection("friendRequests")
-                                        
-                                        friendReqCollection.document(incomingUsers[index].documentID).delete { error in
-                                            if let error = error {
-                                                print("Error deleting friend request: \(error)")
-                                            }
-                                        }
-                                        incomingUsers.remove(at: index)
-                                    } label: {
-                                        ZStack{
-                                            RoundedRectangle(cornerRadius: 30)
-                                                .foregroundColor(.gray.opacity(0.20))
-                                                .frame(width: 100, height: 30)
-                                            Text("Delete")
-                                                .bold()
-                                        }
-                                    }
-                                    .buttonStyle(.plain)
                                 }
                             }
-                            .padding(15)
+                            Spacer()
                         }
+                        .padding(.top)
                     }
                 }
             }
@@ -121,6 +135,14 @@ struct IncomingView: View {
                 incomingUsers = fetchedIncoming
             }
         }
+    }
+    
+    func measureTextWidth(text: String, fontSize: CGFloat) -> CGFloat {
+        let font = UIFont.systemFont(ofSize: fontSize)
+        let attributes = [NSAttributedString.Key.font: font]
+        let attributedString = NSAttributedString(string: text, attributes: attributes)
+        let size = attributedString.size()
+        return size.width
     }
 }
 
