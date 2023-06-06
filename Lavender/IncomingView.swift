@@ -112,9 +112,6 @@ struct IncomingView: View {
                                                 RoundedRectangle(cornerRadius: 30)
                                                     .foregroundColor(.white)
                                                     .frame(width: 100, height: 30)
-                                                RoundedRectangle(cornerRadius: 30)
-                                                    .foregroundColor(.gray.opacity(0.20))
-                                                    .frame(width: 100, height: 30)
                                                 Text("Delete")
                                                     .bold()
                                             }
