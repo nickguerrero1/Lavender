@@ -56,10 +56,7 @@ struct ConnectView: View {
                         }
                     }
                 }
-                
-                Spacer()
             }
-            .padding(.top, 80)
             .onChange(of: searchEmail) { newValue in
                 DataFetcher.searchUsers(searchEmail: newValue) { fetchedResults in
                     searchResults = fetchedResults
