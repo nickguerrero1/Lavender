@@ -130,11 +130,11 @@ struct ConnectView: View {
                 friendRequestsCollection.document().setData([
                     "sender": [
                         "id": friendRequest.sender.id,
-                        "name": friendRequest.sender.email
+                        "email": friendRequest.sender.email
                     ],
                     "receiver": [
                         "id": friendRequest.receiver.id,
-                        "name": friendRequest.receiver.email
+                        "email": friendRequest.receiver.email
                     ]
                 ]) { error in
                     if let error = error {

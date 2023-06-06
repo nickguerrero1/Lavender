@@ -24,7 +24,7 @@ struct FriendListView: View {
                     }
                 }
                 .padding(.bottom)
-        
+                
                 ForEach(friends.indices, id: \.self) { index in
                     HStack{
                         Spacer()

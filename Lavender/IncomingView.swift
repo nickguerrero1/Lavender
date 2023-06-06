@@ -32,7 +32,7 @@ struct IncomingView: View {
                     
                     if let senderData = incomingUsers[index].data()["sender"] as? [String: Any],
                         let friendid = senderData["id"] as? String,
-                        let email = senderData["name"] as? String {
+                        let email = senderData["email"] as? String {
                         HStack{
                             Spacer()
                             ZStack{
