@@ -127,8 +127,10 @@ struct Square: View {
             
             tickleCount += 1
             if tickleCount > 5 {
-                tickled = false
-                tickleCount = 0
+                DispatchQueue.main.asyncAfter(deadline: .now()) {
+                    tickled = false
+                    tickleCount = 0
+                }
             }
             
             if !tickled {
