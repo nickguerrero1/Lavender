@@ -14,11 +14,10 @@ struct ConnectView: View {
     var body: some View {
         ScrollView{
             VStack {
-                
                 Spacer().frame(height: UIScreen.main.bounds.height*0.1)
                 
                 Text("Connect")
-                    .font(.title)
+                    .font(.system(size: UIScreen.main.bounds.width * 0.06))
                     .bold()
                     .padding(.bottom, 20)
                 
@@ -35,29 +34,28 @@ struct ConnectView: View {
                     .autocapitalization(.none)
                     .padding(.bottom, 20)
                 
-                VStack(spacing: 16) {
-                    ForEach(searchResults.prefix(5), id: \.id) { result in
-                        if result.email != userEmail {
-                            HStack(alignment: .center, spacing: 16) {
-                                Spacer()
+                ForEach(searchResults.prefix(5), id: \.id) { result in
+                    if result.email != userEmail {
+                        HStack{
+                            Spacer()
+                            ZStack(alignment: .leading){
                                 Text(result.email)
-                                Spacer()
-                                Button(action: {
-                                    sendFriendRequest(friendID: result.id, friendEmail: result.email)
-                                }) {
-                                    Text("Request")
-                                        .foregroundColor(.white)
-                                        .frame(maxWidth: .infinity)
-                                        .frame(height: 40)
-                                        .background(Color.blue.opacity(0.8))
-                                        .cornerRadius(20)
-                                }
-                                Spacer()
                             }
+                            .frame(width: 170)
+                            Spacer()
+                            Button(action: {
+                                sendFriendRequest(friendID: result.id, friendEmail: result.email)
+                            }) {
+                                Text("Request")
+                                    .foregroundColor(.white)
+                                    .frame(width: 150, height: 40)
+                                    .background(Color.blue.opacity(0.8))
+                                    .cornerRadius(20)
+                            }
+                            Spacer()
                         }
                     }
                 }
-                .padding(.horizontal, 30)
                 
                 Spacer()
             }

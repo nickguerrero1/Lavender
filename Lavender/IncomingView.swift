@@ -44,6 +44,8 @@ struct IncomingView: View {
                                     .frame(width: 250, height: 80)
                                 VStack{
                                     Text(email)
+                                        .lineLimit(1)
+                                        .truncationMode(.tail)
                                     HStack{
                                         Button {
                                             let userID = Auth.auth().currentUser!.uid
@@ -89,7 +91,7 @@ struct IncomingView: View {
                                         } label: {
                                             ZStack{
                                                 RoundedRectangle(cornerRadius: 30)
-                                                    .foregroundColor(.blue)
+                                                    .foregroundColor(.blue.opacity(0.8))
                                                     .frame(width: 100, height: 30)
                                                 Text("Confirm")
                                                     .foregroundColor(.white)
@@ -119,6 +121,7 @@ struct IncomingView: View {
                                         .buttonStyle(.plain)
                                     }
                                 }
+                                .frame(width: 215)
                             }
                             Spacer()
                         }
