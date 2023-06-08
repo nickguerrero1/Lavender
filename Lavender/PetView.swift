@@ -37,8 +37,7 @@ struct Square: View {
         self.width = width
         self.height = height
         let initialX = UIScreen.main.bounds.width/2
-        //let initialY = UIScreen.main.bounds.height/2-height*1.5
-        let initialY = UIScreen.main.bounds.height * 0.71
+        let initialY = UIScreen.main.bounds.height/2-height*1.5
         position = CGPoint(x: initialX, y: initialY)
     }
 
@@ -159,7 +158,7 @@ struct Square: View {
         
         timer = Timer.scheduledTimer(withTimeInterval: speed, repeats: true) { _ in
             let newX = CGFloat.random(in: width/2...UIScreen.main.bounds.width-width/2)
-            let newY = CGFloat.random(in: UIScreen.main.bounds.height * 0.05...UIScreen.main.bounds.height * 0.71)
+            let newY = CGFloat.random(in: UIScreen.main.bounds.height * 0.05...UIScreen.main.bounds.height * 0.70)
             
             if petals.count >= 20 {
                 petals.removeFirst()
