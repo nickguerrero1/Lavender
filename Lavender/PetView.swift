@@ -8,6 +8,7 @@ struct Square: View {
     
     let width: CGFloat
     let height: CGFloat
+    let levels: [Int] = [100, 150, 225, 340, 510, 765, 1148, 1722, 2583, 3875]
     
     @State private var hasStartedMoving = false
     @State private var position: CGPoint
@@ -21,12 +22,15 @@ struct Square: View {
     @State private var petImage: Image = Image("Left")
     @State private var petalImage: Image?
     
+    @State private var experience = 0
+    
     struct Petal: Identifiable {
         let id = UUID()
         let position: CGPoint
         let rarity: Int
         let image: Image
         let frameSize: Int
+        let xp: Int
     }
     
     init(width: CGFloat, height: CGFloat) {
@@ -38,9 +42,32 @@ struct Square: View {
     }
 
     var body: some View {
+        let levelData = calculateLevel(experience: experience)
+        let currentLevel = levelData[0]
+        let remainingXP = levelData[1]
+
+        let multiplier: Double = (Double(remainingXP) / Double(levels[currentLevel]))
+        
         ZStack{
             //Add background rectangle here if needed
             VStack{
+                ZStack{
+                    RoundedRectangle(cornerRadius: 30)
+                        .foregroundColor(.green.opacity(0.8))
+                        .frame(width: UIScreen.main.bounds.width*0.7, height: UIScreen.main.bounds.height*0.035)
+                    RoundedRectangle(cornerRadius: 30)
+                        .foregroundColor(.white)
+                        .frame(width: UIScreen.main.bounds.width*0.7, height: UIScreen.main.bounds.height*0.025)
+                    HStack{
+                        RoundedRectangle(cornerRadius: 30)
+                            .foregroundColor(.green.opacity(0.35))
+                            .frame(width: UIScreen.main.bounds.width * 0.7 * multiplier, height: UIScreen.main.bounds.height*0.025)
+                            .padding(.leading, UIScreen.main.bounds.width*0.15)
+                        Spacer()
+                    }
+                    Text("Level " + String(currentLevel))
+                }
+                .padding(.bottom, 5)
                 HStack{
                     ForEach(0..<8) { index in
                         ZStack {
@@ -63,11 +90,8 @@ struct Square: View {
                                 .onEnded { _ in
                                     petals.removeAll { $0.id == petal.id }
                                     
-                                    for index in 0...7 {
-                                        if petal.rarity == index + 1 {
-                                            rarity[index] += 1
-                                        }
-                                    }
+                                    rarity[petal.rarity-1] += 1
+                                    experience += petal.xp
                                     
                                     let db = Firestore.firestore()
                                     let userID = Auth.auth().currentUser?.uid
@@ -86,7 +110,7 @@ struct Square: View {
                     }
                     petImage
                         .resizable()
-                        .frame(width: 200, height: 200)
+                        .frame(width: UIScreen.main.bounds.width*0.5, height: UIScreen.main.bounds.width*0.5)
                         .position(position)
                         .gesture(TapGesture()
                             .onEnded { _ in
@@ -108,6 +132,20 @@ struct Square: View {
                 startMoving()
             }
         }
+    }
+    
+    func calculateLevel(experience: Int) -> [Int] {
+        var experience = experience
+        var lvl = 0
+        for index in 0..<10 {
+            if experience >= levels[index] {
+                lvl += 1
+                experience -= levels[index]
+            }   else {
+                break
+            }
+        }
+        return [lvl, experience]
     }
     
     func startMoving() {
@@ -159,6 +197,7 @@ struct Square: View {
         let frameSizes = [50, 40, 50, 60, 60, 70, 70, 70]
         let images = [Image("Leaf1"), Image("Leaf2"), Image("Leaf3"), Image("Leaf4"), Image("Leaf5"), Image("Leaf6"), Image("Leaf7"), Image("Leaf8")]
         var shedChances = Array(repeating: 256, count: numRarities)
+        let xp = [1, 2, 4, 8, 16, 32, 64, 128]
         
         for x in 1...numRarities-1 {
             for y in x...numRarities-1 {
@@ -175,7 +214,7 @@ struct Square: View {
                     chooseRarity = index
                 }
             }
-            petals.append(Petal(position: position, rarity: chooseRarity!, image: images[chooseRarity!-1], frameSize: frameSizes[chooseRarity!-1]))
+            petals.append(Petal(position: position, rarity: chooseRarity!, image: images[chooseRarity!-1], frameSize: frameSizes[chooseRarity!-1], xp: xp[chooseRarity!-1]))
         }
     }
     
