@@ -97,7 +97,7 @@ struct Square: View {
                                     let userID = Auth.auth().currentUser?.uid
                                     let userRef = db.collection("users").document(userID!)
                                     
-                                    userRef.setData(["rarity": rarity], merge: true) { error in
+                                    userRef.setData(["rarity": rarity, "xp": experience], merge: true) { error in
                                         if let error = error {
                                             print("Error updating PetView: \(error)")
                                         } else {
@@ -124,6 +124,9 @@ struct Square: View {
                             }
                             DataFetcher.loadPetalCount { fetchedRarity in
                                 self.rarity = fetchedRarity
+                            }
+                            DataFetcher.loadExperience { fetchedExperience in
+                                self.experience = fetchedExperience
                             }
                         }
                 }
