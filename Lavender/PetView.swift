@@ -3,18 +3,19 @@ import Firebase
 import FirebaseFirestore
 
 let numRarities = 8
+let levelCount = 20
 
 struct Square: View {
     
     let width: CGFloat
     let height: CGFloat
-    let levels: [Int] = [100, 150, 225, 340, 510, 765, 1148, 1722, 2583, 3875]
     
     @State private var hasStartedMoving = false
     @State private var position: CGPoint
     @State private var petals: [Petal] = []
     
     @State private var rarity: [Int] = Array(repeating: 0, count: numRarities)
+    @State private var levels: [Int]
     
     @State private var tickled = false
     @State private var tickleCount = 0 //removes tickle effect after 5 pet position changes
@@ -39,6 +40,13 @@ struct Square: View {
         let initialX = UIScreen.main.bounds.width/2
         let initialY = UIScreen.main.bounds.height/2-height*1.5
         position = CGPoint(x: initialX, y: initialY)
+        
+        var levels: [Int] = Array(repeating: 100, count: levelCount)
+        for index in 1..<levelCount {
+            levels[index] = Int(round(Double(levels[index-1]) * 1.5))
+        }
+        self.levels = levels
+        print(levels)
     }
 
     var body: some View {
@@ -136,7 +144,7 @@ struct Square: View {
     func calculateLevel(experience: Int) -> [Int] {
         var experience = experience
         var lvl = 0
-        for index in 0..<10 {
+        for index in 0..<levelCount {
             if experience >= levels[index] {
                 lvl += 1
                 experience -= levels[index]

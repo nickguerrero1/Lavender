@@ -36,33 +36,49 @@ struct FriendListView: View {
                             ZStack{
                                 RoundedRectangle(cornerRadius: 20)
                                     .foregroundColor(.green.opacity(0.4))
-                                    .frame(width: 280, height: 50)
+                                    .frame(width: 280, height: displayed[index] ? 160 : 50)
                                 RoundedRectangle(cornerRadius: 20)
                                     .foregroundColor(.white.opacity(0.2))
-                                    .frame(width: 250, height: 40)
-                                Text(friends[index].email)
-                                    .frame(width: 220, height: 40)
+                                    .frame(width: 250, height: displayed[index] ? 150 : 40)
+                                VStack{
+                                    Text(friends[index].email)
+                                        .frame(width: 220, height: 40)
+                                        .bold()
+                                    
+                                    if displayed[index] {
+                                        Group {
+                                            if let level = levels[index] {
+                                                Text("Level: \(level)")
+                                                Button {
+                                                    //delete friend
+                                                } label: {
+                                                    ZStack{
+                                                        RoundedRectangle(cornerRadius: 20)
+                                                            .frame(width: 150, height: 40)
+                                                            .foregroundColor(.red.opacity(0.80))
+                                                        Text("Remove Friend")
+                                                            .bold()
+                                                            .foregroundColor(.white)
+                                                    }
+                                                }
+                                                .padding(.bottom)
+                                            } else {
+                                                Text("Loading...")
+                                                    .onAppear {
+                                                        DataFetcher.loadLevel(user: friends[index]) { fetchedLevel in
+                                                            levels[index] = fetchedLevel
+                                                        }
+                                                    }
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                         .buttonStyle(.plain)
                         Spacer()
                     }
                     .padding(.top)
-                    
-                    if displayed[index] {
-                        Group {
-                            if let level = levels[index] {
-                                Text("Level: \(level)")
-                            } else {
-                                Text("Loading level...")
-                                    .onAppear {
-                                        DataFetcher.loadLevel(user: friends[index]) { fetchedLevel in
-                                            levels[index] = fetchedLevel
-                                        }
-                                    }
-                            }
-                        }
-                    }
                 }
             }
         }
