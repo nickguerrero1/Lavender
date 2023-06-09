@@ -1,4 +1,6 @@
 import SwiftUI
+import Firebase
+import FirebaseFirestore
 
 struct FriendListView: View {
     
@@ -50,7 +52,51 @@ struct FriendListView: View {
                                             if let level = levels[index] {
                                                 Text("Level: \(level)")
                                                 Button {
-                                                    //delete friend
+                                                    let userID = Auth.auth().currentUser!.uid
+                                                    let db = Firestore.firestore()
+                                                    let userRef = db.collection("users").document(userID)
+                                                    let friendRef = db.collection("users").document(friends[index].id)
+                                                    
+                                                    userRef.getDocument { (document, error) in
+                                                        if let document = document, document.exists {
+                                                            if var friendsArray = document.data()?["friends"] as? [[String: Any]] {
+                                                                print(friends)
+                                                                print("Friend ID: \(friends[index].id)")
+                                                                print("Friends Array: \(friendsArray)")
+                                                                if let friendIndex = friendsArray.firstIndex(where: { ($0["id"] as? String) == friends[index].id }) {
+                                                                    friendsArray.remove(at: friendIndex)
+                                                                    
+                                                                    userRef.updateData(["friends": friendsArray]) { error in
+                                                                        if let error = error {
+                                                                            print("Error removing friend on user document: \(error)")
+                                                                        }   else {
+                                                                            friends.remove(at: index)
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        } else {
+                                                            print("User document does not exist")
+                                                        }
+                                                    }
+                                                    
+                                                    friendRef.getDocument { (document, error) in
+                                                        if let document = document, document.exists {
+                                                            if var friendsArray = document.data()?["friends"] as? [[String: Any]] {
+                                                                if let friendIndex = friendsArray.firstIndex(where: { ($0["id"] as? String) == userID }) {
+                                                                    friendsArray.remove(at: friendIndex)
+                                                                    
+                                                                    friendRef.updateData(["friends": friendsArray]) { error in
+                                                                        if let error = error {
+                                                                            print("Error removing friend on friend document: \(error)")
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        } else {
+                                                            print("Friend document does not exist")
+                                                        }
+                                                    }
                                                 } label: {
                                                     ZStack{
                                                         RoundedRectangle(cornerRadius: 20)
