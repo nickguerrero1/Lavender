@@ -25,6 +25,47 @@ class DataFetcher {
         }
     }
     
+    static func loadExperience(completion: @escaping (Int) -> Void) {
+        var experience: Int = 0
+
+        if let currentUser = Auth.auth().currentUser {
+            let userID = currentUser.uid
+            let db = Firestore.firestore()
+            let userRef = db.collection("users").document(userID)
+            
+            userRef.getDocument { (document, error) in
+                if let document = document, document.exists {
+                    if let experienceCount = document.data()?["xp"] as? Int {
+                        experience = experienceCount
+                    }
+                } else {
+                    print("Document does not exist")
+                }
+                completion(experience)
+            }
+        }   else {
+            completion(experience)
+        }
+    }
+
+    static func loadLevel(user: User, completion: @escaping (Int) -> Void) {
+        var level: Int = 0
+        
+        let db = Firestore.firestore()
+        let userRef = db.collection("users").document(user.id)
+        
+        userRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                if let levelCount = document.data()?["level"] as? Int {
+                    level = levelCount
+                }
+            } else {
+                print("Document does not exist")
+            }
+            completion(level)
+        }
+    }
+    
     static func loadFlowerInv(completion: @escaping ([Int]) -> Void) {
         var flowerInv: [Int] = Array(repeating: 0, count: 10)
 

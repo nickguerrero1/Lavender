@@ -3,6 +3,8 @@ import SwiftUI
 struct FriendListView: View {
     
     @State private var friends: [DataFetcher.User] = []
+    @State private var displayed: [Bool] = []
+    @State private var levels: [Int?] = []
     
     var body: some View {
         ScrollView (showsIndicators: false) {
@@ -28,16 +30,52 @@ struct FriendListView: View {
                 ForEach(friends.indices, id: \.self) { index in
                     HStack{
                         Spacer()
-                        ZStack{
-                            RoundedRectangle(cornerRadius: 20)
-                                .foregroundColor(.green.opacity(0.4))
-                                .frame(width: 280, height: 50)
-                            RoundedRectangle(cornerRadius: 20)
-                                .foregroundColor(.white.opacity(0.2))
-                                .frame(width: 250, height: 40)
-                            Text(friends[index].email)
-                                .frame(width: 220, height: 40)
+                        Button {
+                            displayed[index].toggle()
+                        } label: {
+                            ZStack{
+                                RoundedRectangle(cornerRadius: 20)
+                                    .foregroundColor(.green.opacity(0.4))
+                                    .frame(width: 280, height: displayed[index] ? 160 : 50)
+                                RoundedRectangle(cornerRadius: 20)
+                                    .foregroundColor(.white.opacity(0.2))
+                                    .frame(width: 250, height: displayed[index] ? 150 : 40)
+                                VStack{
+                                    Text(friends[index].email)
+                                        .frame(width: 220, height: 40)
+                                        .bold()
+                                    
+                                    if displayed[index] {
+                                        Group {
+                                            if let level = levels[index] {
+                                                Text("Level: \(level)")
+                                                Button {
+                                                    //delete friend
+                                                } label: {
+                                                    ZStack{
+                                                        RoundedRectangle(cornerRadius: 20)
+                                                            .frame(width: 150, height: 40)
+                                                            .foregroundColor(.red.opacity(0.80))
+                                                        Text("Remove Friend")
+                                                            .bold()
+                                                            .foregroundColor(.white)
+                                                    }
+                                                }
+                                                .padding(.bottom)
+                                            } else {
+                                                Text("Loading...")
+                                                    .onAppear {
+                                                        DataFetcher.loadLevel(user: friends[index]) { fetchedLevel in
+                                                            levels[index] = fetchedLevel
+                                                        }
+                                                    }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
+                        .buttonStyle(.plain)
                         Spacer()
                     }
                     .padding(.top)
@@ -47,8 +85,8 @@ struct FriendListView: View {
         .onAppear {
             DataFetcher.loadFriends { fetchedFriends in
                 friends = fetchedFriends
-                //friends = Array(repeating: DataFetcher.User(id: "1", email: "test@gmail.com"), count: 10)
-                //uncomment to add test friends
+                displayed = Array(repeating: false, count: friends.count)
+                levels = Array(repeating: nil, count: friends.count)
             }
         }
     }
