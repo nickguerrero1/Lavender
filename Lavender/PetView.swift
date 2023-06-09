@@ -45,95 +45,91 @@ struct Square: View {
         let levelData = calculateLevel(experience: experience)
         let currentLevel = levelData[0]
         let remainingXP = levelData[1]
-
         let multiplier: Double = (Double(remainingXP) / Double(levels[currentLevel]))
         
-        ZStack{
-            //Add background rectangle here if needed
-            VStack{
-                ZStack{
-                    RoundedRectangle(cornerRadius: 30)
-                        .foregroundColor(.green.opacity(0.8))
-                        .frame(width: UIScreen.main.bounds.width*0.7, height: UIScreen.main.bounds.height*0.035)
-                    RoundedRectangle(cornerRadius: 30)
-                        .foregroundColor(.white)
-                        .frame(width: UIScreen.main.bounds.width*0.7, height: UIScreen.main.bounds.height*0.025)
-                    HStack{
-                        RoundedRectangle(cornerRadius: 30)
-                            .foregroundColor(.green.opacity(0.35))
-                            .frame(width: UIScreen.main.bounds.width * 0.7 * multiplier, height: UIScreen.main.bounds.height*0.025)
-                            .padding(.leading, UIScreen.main.bounds.width*0.15)
-                        Spacer()
-                    }
-                    Text("Level " + String(currentLevel))
-                }
-                .padding(.bottom, 5)
+        VStack{
+            ZStack{
+                RoundedRectangle(cornerRadius: 30)
+                    .foregroundColor(.green.opacity(0.8))
+                    .frame(width: UIScreen.main.bounds.width*0.7, height: UIScreen.main.bounds.height*0.035)
+                RoundedRectangle(cornerRadius: 30)
+                    .foregroundColor(.white)
+                    .frame(width: UIScreen.main.bounds.width*0.7, height: UIScreen.main.bounds.height*0.025)
                 HStack{
-                    ForEach(0..<8) { index in
-                        ZStack {
-                            Rectangle()
-                                .frame(width: measureTextWidth(text: "\(rarity[index])", fontSize: 15) + 12, height: 20)
-                                .foregroundColor(.green.opacity(0.20 + Double(index) * 0.10))
-                                .cornerRadius(30)
-                            Text("\(rarity[index])")
-                                .bold()
-                                .font(.system(size: 15))
-                        }
+                    RoundedRectangle(cornerRadius: 30)
+                        .foregroundColor(.green.opacity(0.35))
+                        .frame(width: UIScreen.main.bounds.width * 0.7 * multiplier, height: UIScreen.main.bounds.height*0.025)
+                        .padding(.leading, UIScreen.main.bounds.width*0.15)
+                    Spacer()
+                }
+                Text("Level " + String(currentLevel))
+            }
+            .padding(.bottom, 5)
+            HStack{
+                ForEach(0..<8) { index in
+                    ZStack {
+                        Rectangle()
+                            .frame(width: measureTextWidth(text: "\(rarity[index])", fontSize: 15) + 12, height: 20)
+                            .foregroundColor(.green.opacity(0.20 + Double(index) * 0.10))
+                            .cornerRadius(30)
+                        Text("\(rarity[index])")
+                            .bold()
+                            .font(.system(size: 15))
                     }
                 }
-                ZStack {
-                    ForEach(petals, id: \.id) { petal in
-                        petal.image
-                            .resizable()
-                            .frame(width: CGFloat(petal.frameSize), height: CGFloat(petal.frameSize))
-                            .gesture(TapGesture()
-                                .onEnded { _ in
-                                    petals.removeAll { $0.id == petal.id }
-                                    
-                                    rarity[petal.rarity-1] += 1
-                                    experience += petal.xp
-                                    
-                                    let db = Firestore.firestore()
-                                    let userID = Auth.auth().currentUser?.uid
-                                    let userRef = db.collection("users").document(userID!)
-                                    
-                                    userRef.setData(["rarity": rarity, "xp": experience], merge: true) { error in
-                                        if let error = error {
-                                            print("Error updating PetView: \(error)")
-                                        } else {
-                                            print("PetView updated in Firestore")
-                                        }
-                                    }
-                                }
-                            )
-                            .position(petal.position)
-                    }
-                    petImage
+            }
+            ZStack {
+                ForEach(petals, id: \.id) { petal in
+                    petal.image
                         .resizable()
-                        .frame(width: UIScreen.main.bounds.width*0.5, height: UIScreen.main.bounds.width*0.5)
-                        .position(position)
+                        .frame(width: CGFloat(petal.frameSize), height: CGFloat(petal.frameSize))
                         .gesture(TapGesture()
                             .onEnded { _ in
-                                tickled = true
+                                petals.removeAll { $0.id == petal.id }
+                                
+                                rarity[petal.rarity-1] += 1
+                                experience += petal.xp
+                                
+                                let db = Firestore.firestore()
+                                let userID = Auth.auth().currentUser?.uid
+                                let userRef = db.collection("users").document(userID!)
+                                
+                                userRef.setData(["rarity": rarity, "xp": experience, "level": currentLevel], merge: true) { error in
+                                    if let error = error {
+                                        print("Error updating PetView: \(error)")
+                                    } else {
+                                        print("PetView updated in Firestore")
+                                    }
+                                }
                             }
                         )
-                        .onAppear {
-                            if !hasStartedMoving {
-                                startMoving()
-                                hasStartedMoving = true
-                            }
-                            DataFetcher.loadPetalCount { fetchedRarity in
-                                self.rarity = fetchedRarity
-                            }
-                            DataFetcher.loadExperience { fetchedExperience in
-                                self.experience = fetchedExperience
-                            }
-                        }
+                        .position(petal.position)
                 }
+                petImage
+                    .resizable()
+                    .frame(width: UIScreen.main.bounds.width*0.5, height: UIScreen.main.bounds.width*0.5)
+                    .position(position)
+                    .gesture(TapGesture()
+                        .onEnded { _ in
+                            tickled = true
+                        }
+                    )
+                    .onAppear {
+                        if !hasStartedMoving {
+                            startMoving()
+                            hasStartedMoving = true
+                        }
+                        DataFetcher.loadPetalCount { fetchedRarity in
+                            self.rarity = fetchedRarity
+                        }
+                        DataFetcher.loadExperience { fetchedExperience in
+                            self.experience = fetchedExperience
+                        }
+                    }
             }
-            .onChange(of: tickled) { _ in
-                startMoving()
-            }
+        }
+        .onChange(of: tickled) { _ in
+            startMoving()
         }
     }
     
@@ -200,7 +196,7 @@ struct Square: View {
         let frameSizes = [50, 40, 50, 60, 60, 70, 70, 70]
         let images = [Image("Leaf1"), Image("Leaf2"), Image("Leaf3"), Image("Leaf4"), Image("Leaf5"), Image("Leaf6"), Image("Leaf7"), Image("Leaf8")]
         var shedChances = Array(repeating: 256, count: numRarities)
-        let xp = [1, 2, 4, 8, 16, 32, 64, 128]
+        let xp = [4, 8, 16, 32, 64, 128, 256, 512]
         
         for x in 1...numRarities-1 {
             for y in x...numRarities-1 {

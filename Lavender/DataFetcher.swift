@@ -48,6 +48,23 @@ class DataFetcher {
         }
     }
 
+    static func loadLevel(user: User, completion: @escaping (Int) -> Void) {
+        var level: Int = 0
+        
+        let db = Firestore.firestore()
+        let userRef = db.collection("users").document(user.id)
+        
+        userRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                if let levelCount = document.data()?["level"] as? Int {
+                    level = levelCount
+                }
+            } else {
+                print("Document does not exist")
+            }
+            completion(level)
+        }
+    }
     
     static func loadFlowerInv(completion: @escaping ([Int]) -> Void) {
         var flowerInv: [Int] = Array(repeating: 0, count: 10)
