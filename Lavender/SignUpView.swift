@@ -9,12 +9,15 @@ struct SignUpView: View {
     @State private var username = ""
     @State private var email = ""
     @State private var password = ""
+    
+    @State private var wrongFirst = 0
+    @State private var wrongLast = 0
+    @State private var wrongUsername = 0
     @State private var wrongEmail = 0
     @State private var wrongPassword = 0
-    @State private var wrongUsername = 0
+    
     @State private var userIsLoggedIn = false
-    @State private var userHasAccount =
-        false
+    @State private var userHasAccount = false
     @State private var errorMessage = ""
     
     var body: some View {
@@ -40,11 +43,8 @@ struct SignUpView: View {
                 .scale(1.8)
                 .foregroundColor(.white)
             VStack{
-                Image("Lavender")
-                    .resizable()
-                    .frame(width: 100, height: 100)
-                Text("Lavender")
-                    .font(.largeTitle)
+                Text("Sign Up")
+                    .font(.title)
                     .padding(.bottom)
                 Text(errorMessage)
                     .foregroundColor(.red)
@@ -55,7 +55,7 @@ struct SignUpView: View {
                     .cornerRadius(20)
                     .overlay(
                         RoundedRectangle(cornerRadius: 20)
-                            .stroke(Color.red, lineWidth: CGFloat(wrongUsername))
+                            .stroke(Color.red, lineWidth: CGFloat(wrongFirst))
                     )
                 TextField("Last Name" , text: $last)
                     .padding()
@@ -64,7 +64,7 @@ struct SignUpView: View {
                     .cornerRadius(20)
                     .overlay(
                         RoundedRectangle(cornerRadius: 20)
-                            .stroke(Color.red, lineWidth: CGFloat(wrongUsername))
+                            .stroke(Color.red, lineWidth: CGFloat(wrongLast))
                     )
                 TextField("Username" , text: $username)
                     .padding()
@@ -76,10 +76,7 @@ struct SignUpView: View {
                             .stroke(Color.red, lineWidth: CGFloat(wrongUsername))
                     )
                     .autocapitalization(.none)
-                    .onChange(of: email) { newValue in
-                        email = newValue.lowercased()
-                    }
-                TextField(" Email" , text: $email)
+                TextField("Email" , text: $email)
                     .padding()
                     .frame(width: 300, height: 50)
                     .background(.black.opacity(0.05))
@@ -110,7 +107,7 @@ struct SignUpView: View {
                         .frame(width: 300, height: 45)
                         .background(Color.blue)
                         .cornerRadius(50)
-                        .padding(.top)
+                        .padding(.top, 40)
                 }
                 
                 Button {
@@ -132,23 +129,26 @@ struct SignUpView: View {
     }
 
     func register() {
-        wrongPassword = 0
+        wrongFirst = 0
+        wrongLast = 0
+        wrongUsername = 0
         wrongEmail = 0
+        wrongPassword = 0
         errorMessage = ""
         
         guard !first.isEmpty else {
             errorMessage = "First name must be provided"
-            wrongEmail = 2
+            wrongFirst = 2
             return
         }
         guard !last.isEmpty else {
             errorMessage = "Last name must be provided"
-            wrongEmail = 2
+            wrongLast = 2
             return
         }
         guard !username.isEmpty else {
             errorMessage = "Username must be provided"
-            wrongEmail = 2
+            wrongUsername = 2
             return
         }
         guard !email.isEmpty else {
@@ -175,7 +175,7 @@ struct SignUpView: View {
                     errorMessage = "Password must be at least 6 characters long"
                     wrongPassword = 2
                 default:
-                    print("Registration error: \(error.localizedDescription)")
+                    print("Registration error: \(error)")
                 }
             } else {
                 if let currentUser = Auth.auth().currentUser {
@@ -198,19 +198,6 @@ struct SignUpView: View {
                         }
                     }
                 }
-//                if let currentUser = Auth.auth().currentUser {
-//                    let userID = currentUser.uid
-//                    let db = Firestore.firestore()
-//                    let userRef = db.collection("users").document(userID)
-//
-//                    userRef.setData(["email": self.email]) { error in
-//                        if let error = error {
-//                            print("Error storing email in Firestore: \(error)")
-//                        }   else {
-//                            print("email updated in Firestore")
-//                        }
-//                    }
-//                }
                 userIsLoggedIn.toggle()
             }
         }
