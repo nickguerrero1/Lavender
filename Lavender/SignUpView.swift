@@ -22,7 +22,7 @@ struct SignUpView: View {
     
     var body: some View {
         if userIsLoggedIn {
-            MainView(userEmail: email)
+            MainView(userPassed: email)
         }
         else if userHasAccount {
             ContentView()

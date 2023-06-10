@@ -4,7 +4,7 @@ import FirebaseFirestore
 
 struct IncomingView: View {
     
-    let userEmail: String
+    let userPassed: String
     @State private var incomingUsers: [QueryDocumentSnapshot] = []
     
     var body: some View {
@@ -68,7 +68,7 @@ struct IncomingView: View {
                                             
                                             let userData: [String: Any] = [
                                                 "id": userID,
-                                                "email": userEmail
+                                                "email": userPassed
                                             ]
                                             
                                             let friendDocument = usersCollection.document(friendid)
@@ -148,6 +148,6 @@ struct IncomingView: View {
 
 struct IncomingView_Previews: PreviewProvider {
     static var previews: some View {
-        IncomingView(userEmail: "example@example.com")
+        IncomingView(userPassed: "example@example.com")
     }
 }

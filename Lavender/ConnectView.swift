@@ -4,7 +4,7 @@ import FirebaseFirestore
 
 struct ConnectView: View {
     
-    let userEmail: String
+    let userPassed: String
     
     @State private var searchEmail = ""
     @State private var searchResults: [DataFetcher.User] = []
@@ -35,7 +35,7 @@ struct ConnectView: View {
                     .padding(.bottom, 20)
                 
                 ForEach(searchResults.prefix(5), id: \.id) { result in
-                    if result.email != userEmail {
+                    if result.email != userPassed {
                         HStack{
                             Spacer()
                             ZStack(alignment: .leading){
@@ -123,7 +123,7 @@ struct ConnectView: View {
         
         allowRequest(friendID: friendID, friendEmail: friendEmail) { allowed in
             if allowed {
-                let sender = DataFetcher.User(id: userID, email: userEmail)
+                let sender = DataFetcher.User(id: userID, email: userPassed)
                 let receiver = DataFetcher.User(id: friendID, email: friendEmail)
                 let friendRequest = FriendRequest(sender: sender, receiver: receiver)
                 
@@ -150,7 +150,7 @@ struct ConnectView: View {
 
 struct ConnectView_Previews: PreviewProvider {
     static var previews: some View {
-        ConnectView(userEmail: "example@example.com")
+        ConnectView(userPassed: "example@example.com")
     }
 }
 

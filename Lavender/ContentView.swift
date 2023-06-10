@@ -4,9 +4,9 @@ import FirebaseFirestore
 
 struct ContentView: View {
     
-    @State private var email = ""
+    @State private var passed = "" //username or email
     @State private var password = ""
-    @State private var wrongEmail = 0
+    @State private var wrongPassed = 0
     @State private var wrongPassword = 0
     @State private var userIsLoggedIn = false
     @State private var userSignUp = false
@@ -14,7 +14,7 @@ struct ContentView: View {
     
     var body: some View {
         if userIsLoggedIn {
-            MainView(userEmail: email)
+            MainView(userPassed: passed)
         }   else if userSignUp {
             SignUpView()
         }   else {
@@ -41,14 +41,14 @@ struct ContentView: View {
                     .padding(.bottom)
                 Text(errorMessage)
                     .foregroundColor(.red)
-                TextField("Username or Email" , text: $email)
+                TextField("Username or Email" , text: $passed)
                     .padding()
                     .frame(width: 300, height: 50)
                     .background(.black.opacity(0.05))
                     .cornerRadius(20)
                     .overlay(
                         RoundedRectangle(cornerRadius: 20)
-                            .stroke(Color.red, lineWidth: CGFloat(wrongEmail))
+                            .stroke(Color.red, lineWidth: CGFloat(wrongPassed))
                     )
                     .autocapitalization(.none)
                 SecureField("Password", text: $password)
@@ -86,13 +86,13 @@ struct ContentView: View {
         }
     }
     func login() {
+        wrongPassed = 0
         wrongPassword = 0
-        wrongEmail = 0
         errorMessage = ""
 
-        guard !email.isEmpty else {
+        guard !passed.isEmpty else {
             errorMessage = "Username or Email address must be provided"
-            wrongEmail = 2
+            wrongPassed = 2
             return
         }
         guard !password.isEmpty else {
@@ -102,7 +102,7 @@ struct ContentView: View {
         }
 
         // Check if the provided identifier is an email or username
-        let isEmail = email.contains("@")
+        let isEmail = passed.contains("@")
         var queryField = "email"
 
         if !isEmail {
@@ -113,7 +113,7 @@ struct ContentView: View {
         let usersRef = db.collection("users")
 
         // Query the users collection to find a user with the provided email/username
-        let query = usersRef.whereField(queryField, isEqualTo: email).limit(to: 1)
+        let query = usersRef.whereField(queryField, isEqualTo: passed).limit(to: 1)
 
         query.getDocuments { (querySnapshot, error) in
             if let error = error {
@@ -141,7 +141,7 @@ struct ContentView: View {
             } else {
                 // No user found with the provided email/username
                 errorMessage = "No user found"
-                wrongEmail = 2
+                wrongPassed = 2
                 wrongPassword = 2
             }
         }
