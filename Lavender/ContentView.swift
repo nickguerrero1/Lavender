@@ -15,11 +15,9 @@ struct ContentView: View {
     var body: some View {
         if userIsLoggedIn {
             MainView(userEmail: email)
-        }
-        else if userSignUp {
+        }   else if userSignUp {
             SignUpView()
-        }
-        else {
+        }   else {
             content
         }
     }
@@ -122,14 +120,13 @@ struct ContentView: View {
 
         query.getDocuments { (querySnapshot, error) in
             if let error = error {
-                print("Login error: \(error.localizedDescription)")
+                print("Login error: \(error)")
                 return
             }
 
             if let documents = querySnapshot?.documents, !documents.isEmpty {
                 // User found, proceed with authentication
                 let document = documents[0]
-                let userId = document.documentID
 
                 Auth.auth().signIn(withEmail: document.data()["email"] as? String ?? "", password: password) { result, error in
                     if let error = error as NSError? {
@@ -138,7 +135,7 @@ struct ContentView: View {
                             errorMessage = "Incorrect password"
                             wrongPassword = 2
                         default:
-                            print("Login error: \(error.localizedDescription)")
+                            print("Login error: \(error)")
                         }
                     } else {
                         userIsLoggedIn.toggle()
@@ -152,96 +149,9 @@ struct ContentView: View {
             }
         }
     }
-
-//    func login() {
-//        wrongPassword = 0
-//        wrongEmail = 0
-//        errorMessage = ""
-//
-//        guard !email.isEmpty else {
-//            errorMessage = "Email address must be provided"
-//            wrongEmail = 2
-//            return
-//        }
-//        guard !password.isEmpty else {
-//            errorMessage = "Password must be provided"
-//            wrongPassword = 2
-//            return
-//        }
-//
-//        Auth.auth().signIn(withEmail: email, password: password) { result, error in
-//            if let error = error as NSError? {
-//                switch error {
-//                case AuthErrorCode.wrongPassword:
-//                    errorMessage = "Incorrect password"
-//                    wrongPassword = 2
-//                case AuthErrorCode.invalidEmail:
-//                    errorMessage = "Invalid email format"
-//                    wrongEmail = 2
-//                case AuthErrorCode.userNotFound:
-//                    errorMessage = "No user found"
-//                    wrongEmail = 2
-//                    wrongPassword = 2
-//                default:
-//                    print("Login error: \(error.localizedDescription)")
-//                }
-//            } else {
-//                userIsLoggedIn.toggle()
-//            }
-//        }
-//    }
     
     func register() {
         userSignUp.toggle()
-        SignUpView()
-//        wrongPassword = 0
-//        wrongEmail = 0
-//        errorMessage = ""
-//
-//        guard !email.isEmpty else {
-//            errorMessage = "Email address must be provided"
-//            wrongEmail = 2
-//            return
-//        }
-//        guard !password.isEmpty else {
-//            errorMessage = "Password must be provided"
-//            wrongPassword = 2
-//            return
-//        }
-//
-//        Auth.auth().createUser(withEmail: email, password: password) { result, error in
-//            if let error = error as NSError? {
-//                switch error {
-//                case AuthErrorCode.invalidEmail:
-//                    errorMessage = "Invalid email format"
-//                    wrongEmail = 2
-//                case AuthErrorCode.emailAlreadyInUse:
-//                    errorMessage = "Email already in use"
-//                    wrongEmail = 2
-//                case AuthErrorCode.weakPassword:
-//                    errorMessage = "Password must be at least 6 characters long"
-//                    wrongPassword = 2
-//                default:
-//                    print("Registration error: \(error.localizedDescription)")
-//                }
-//            } else {
-//
-//                if let currentUser = Auth.auth().currentUser {
-//                    let userID = currentUser.uid
-//                    let db = Firestore.firestore()
-//                    let userRef = db.collection("users").document(userID)
-//
-//                    userRef.setData(["email": self.email]) { error in
-//                        if let error = error {
-//                            print("Error storing email in Firestore: \(error)")
-//                        }   else {
-//                            print("email updated in Firestore")
-//                        }
-//                    }
-//                }
-//                userIsLoggedIn.toggle()
-//            }
-//        }
     }
 }
 
