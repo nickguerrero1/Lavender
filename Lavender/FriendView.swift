@@ -2,7 +2,7 @@ import SwiftUI
 
 struct FriendView: View {
     
-    let userPassed: String
+    let user: DataFetcher.User
     @State var currentTab: Int = 0
     
     var body: some View {
@@ -10,9 +10,9 @@ struct FriendView: View {
             if currentTab == 0 {
                 FriendListView()
             } else if currentTab == 1 {
-                ConnectView(userPassed: userPassed)
+                ConnectView(user: user)
             } else if currentTab == 2 {
-                IncomingView(userPassed: userPassed)
+                IncomingView(user: user)
             }
             VStack{
                 ZStack(alignment: .top){
@@ -78,6 +78,6 @@ struct FriendTabBarItem: View {
 
 struct FriendView_Previews: PreviewProvider {
     static var previews: some View {
-        FriendView(userPassed: "example@example.com")
+        FriendView(user: DataFetcher.User(id: "ID", email: "example@example.com", username: "User", first: "First", last: "Last"))
     }
 }

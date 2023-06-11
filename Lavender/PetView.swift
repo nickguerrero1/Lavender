@@ -46,7 +46,6 @@ struct Square: View {
             levels[index] = Int(round(Double(levels[index-1]) * 1.5))
         }
         self.levels = levels
-        print(levels)
     }
 
     var body: some View {

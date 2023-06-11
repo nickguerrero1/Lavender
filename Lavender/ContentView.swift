@@ -14,7 +14,7 @@ struct ContentView: View {
     
     var body: some View {
         if userIsLoggedIn {
-            MainView(userPassed: passed)
+            MainView()
         }   else if userSignUp {
             SignUpView()
         }   else {

@@ -2,6 +2,15 @@ import FirebaseFirestore
 import FirebaseAuth
 
 class DataFetcher {
+    
+    struct User {
+        let id: String
+        let email: String
+        let username: String
+        let first: String
+        let last: String
+    }
+    
     static func loadPetalCount(completion: @escaping ([Int]) -> Void) {
         var rarity: [Int] = Array(repeating: 0, count: 8)
 
@@ -112,11 +121,6 @@ class DataFetcher {
         }
     }
     
-    struct User {
-        let id: String
-        let email: String
-    }
-    
     static func searchUsers(searchEmail: String, completion: @escaping ([User]) -> Void) {
         let db = Firestore.firestore()
         let usersCollection = db.collection("users")
@@ -130,9 +134,12 @@ class DataFetcher {
                     var searchResults: [User] = []
                     
                     for document in snapshot.documents {
-                        if let email = document.data()["email"] as? String {
+                        if let email = document.data()["email"] as? String,
+                            let username = document.data()["username"] as? String,
+                            let first = document.data()["first"] as? String,
+                            let last = document.data()["last"] as? String {
                             if email.contains(searchEmail.lowercased()) {
-                                let user = User(id: document.documentID, email: email)
+                                let user = User(id: document.documentID, email: email, username: username, first: first, last: last)
                                 searchResults.append(user)
                             }
                         }
@@ -143,6 +150,29 @@ class DataFetcher {
                     completion([])
                 }
             }
+        }
+    }
+    
+    static func loadUser(completion: @escaping (User?) -> Void) {
+        if let currentUser = Auth.auth().currentUser {
+            let userID = currentUser.uid
+            let db = Firestore.firestore()
+            let userRef = db.collection("users").document(userID)
+            
+            userRef.getDocument { (document, error) in
+                if let document = document, document.exists {
+                    if let email = document.data()?["email"] as? String,
+                        let username = document.data()?["username"] as? String,
+                        let first = document.data()?["first"] as? String,
+                        let last = document.data()?["last"] as? String {
+                        completion(User(id: document.documentID, email: email, username: username, first: first, last: last))
+                    }
+                } else {
+                    completion(nil)
+                }
+            }
+        } else {
+            completion(nil)
         }
     }
     
@@ -219,8 +249,11 @@ class DataFetcher {
                     if let friendsData = document.data()?["friends"] as? [[String: Any]] {
                         for friendData in friendsData {
                             if let id = friendData["id"] as? String,
-                                let email = friendData["email"] as? String {
-                                friends.append(User(id: id, email: email))
+                                let email = friendData["email"] as? String,
+                                let username = friendData["username"] as? String,
+                                let first = friendData["first"] as? String,
+                                let last = friendData["last"] as? String {
+                                friends.append(User(id: id, email: email, username: username, first: first, last: last))
                             }
                         }
                     }

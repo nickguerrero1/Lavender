@@ -4,7 +4,7 @@ import FirebaseFirestore
 
 struct IncomingView: View {
     
-    let userPassed: String
+    let user: DataFetcher.User
     @State private var incomingUsers: [QueryDocumentSnapshot] = []
     
     var body: some View {
@@ -31,8 +31,11 @@ struct IncomingView: View {
                 ForEach(0..<incomingUsers.count, id: \.self) { index in
                     
                     if let senderData = incomingUsers[index].data()["sender"] as? [String: Any],
-                        let friendid = senderData["id"] as? String,
-                        let email = senderData["email"] as? String {
+                        let friendId = senderData["id"] as? String,
+                        let friendEmail = senderData["email"] as? String,
+                        let friendUsername = senderData["username"] as? String,
+                        let friendFirst = senderData["first"] as? String,
+                        let friendLast = senderData["last"] as? String {
                         HStack{
                             Spacer()
                             ZStack{
@@ -43,7 +46,7 @@ struct IncomingView: View {
                                     .foregroundColor(.white.opacity(0.2))
                                     .frame(width: 250, height: 80)
                                 VStack{
-                                    Text(email)
+                                    Text(friendUsername)
                                         .lineLimit(1)
                                         .truncationMode(.tail)
                                     HStack{
@@ -53,8 +56,11 @@ struct IncomingView: View {
                                             let usersCollection = db.collection("users")
                                             
                                             let friendData: [String: Any] = [
-                                                "id": friendid,
-                                                "email": email
+                                                "id": friendId,
+                                                "email": friendEmail,
+                                                "username": friendUsername,
+                                                "first": friendFirst,
+                                                "last": friendLast
                                             ]
                                             
                                             let userDocument = usersCollection.document(userID)
@@ -68,10 +74,13 @@ struct IncomingView: View {
                                             
                                             let userData: [String: Any] = [
                                                 "id": userID,
-                                                "email": userPassed
+                                                "email": user.email,
+                                                "username": user.username,
+                                                "first": user.first,
+                                                "last": user.last
                                             ]
                                             
-                                            let friendDocument = usersCollection.document(friendid)
+                                            let friendDocument = usersCollection.document(friendId)
                                             friendDocument.updateData([
                                                 "friends": FieldValue.arrayUnion([userData])
                                             ]) { error in
@@ -148,6 +157,6 @@ struct IncomingView: View {
 
 struct IncomingView_Previews: PreviewProvider {
     static var previews: some View {
-        IncomingView(userPassed: "example@example.com")
+        IncomingView(user: DataFetcher.User(id: "ID", email: "example@example.com", username: "User", first: "First", last: "Last"))
     }
 }

@@ -2,8 +2,7 @@ import SwiftUI
 
 struct MainView: View {
     
-    let userPassed: String
-    
+    @State var user: DataFetcher.User = DataFetcher.User(id: "", email: "", username: "", first: "", last: "")
     @State var currentTab: Int = 0
     
     var body: some View {
@@ -11,7 +10,7 @@ struct MainView: View {
             TabView(selection: self.$currentTab) {
                 PetView().tag(0)
                 FlowerView().tag(1)
-                FriendView(userPassed: userPassed).tag(2)
+                FriendView(user: user).tag(2)
                 CalendarView().tag(3)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
@@ -21,6 +20,13 @@ struct MainView: View {
                     .frame(height: 55)
                 TabBarView(currentTab: self.$currentTab)
                     .padding(.bottom, 10)
+            }
+        }
+        .onAppear {
+            DataFetcher.loadUser { fetchedUser in
+                if let fetchedUser = fetchedUser {
+                    self.user = fetchedUser
+                }
             }
         }
     }
@@ -76,6 +82,6 @@ struct TabBarItem: View {
 
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
-        MainView(userPassed: "example@example.com")
+        MainView()
     }
 }

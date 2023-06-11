@@ -43,7 +43,7 @@ struct FriendListView: View {
                                     .foregroundColor(.white.opacity(0.2))
                                     .frame(width: 250, height: displayed[index] ? 150 : 40)
                                 VStack{
-                                    Text(friends[index].email)
+                                    Text(friends[index].first + " " + friends[index].last)
                                         .frame(width: 220, height: 40)
                                         .bold()
                                     
@@ -60,9 +60,6 @@ struct FriendListView: View {
                                                     userRef.getDocument { (document, error) in
                                                         if let document = document, document.exists {
                                                             if var friendsArray = document.data()?["friends"] as? [[String: Any]] {
-                                                                print(friends)
-                                                                print("Friend ID: \(friends[index].id)")
-                                                                print("Friends Array: \(friendsArray)")
                                                                 if let friendIndex = friendsArray.firstIndex(where: { ($0["id"] as? String) == friends[index].id }) {
                                                                     friendsArray.remove(at: friendIndex)
                                                                     

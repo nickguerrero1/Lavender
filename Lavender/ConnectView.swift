@@ -4,7 +4,7 @@ import FirebaseFirestore
 
 struct ConnectView: View {
     
-    let userPassed: String
+    let user: DataFetcher.User
     
     @State private var searchEmail = ""
     @State private var searchResults: [DataFetcher.User] = []
@@ -35,7 +35,7 @@ struct ConnectView: View {
                     .padding(.bottom, 20)
                 
                 ForEach(searchResults.prefix(5), id: \.id) { result in
-                    if result.email != userPassed {
+                    if result.email != user.email {
                         HStack{
                             Spacer()
                             ZStack(alignment: .leading){
@@ -44,7 +44,7 @@ struct ConnectView: View {
                             .frame(width: 170)
                             Spacer()
                             Button(action: {
-                                sendFriendRequest(friendID: result.id, friendEmail: result.email)
+                                sendFriendRequest(friendID: result.id, friendEmail: result.email, friendUsername: result.username, friendFirst: result.first, friendLast: result.last)
                             }) {
                                 Text("Request")
                                     .foregroundColor(.white)
@@ -65,7 +65,7 @@ struct ConnectView: View {
         }
     }
     
-    func allowRequest(friendID: String, friendEmail: String, completion: @escaping (Bool) -> Void) {
+    func allowRequest(friendID: String, friendUsername: String, completion: @escaping (Bool) -> Void) {
         var allowReq = false
         
         let userID = Auth.auth().currentUser!.uid
@@ -81,7 +81,7 @@ struct ConnectView: View {
                       let friends = userData["friends"] as? [[String: Any]],
                       friends.contains(where: { $0["id"] as? String == friendID }) {
                 
-                errorMessage = "You are already friends with \(friendEmail)"
+                errorMessage = "You are already friends with \(friendUsername)"
                 completion(false)
             } else {
                 friendRequestsCollection
@@ -92,7 +92,7 @@ struct ConnectView: View {
                             print("Error checking friend request: \(error)")
                             completion(false)
                         } else if let documents = snapshot?.documents, !documents.isEmpty {
-                            errorMessage = "Friend request already sent to \(friendEmail)"
+                            errorMessage = "Friend request already sent to \(friendUsername)"
                             completion(false)
                         } else {
                             friendRequestsCollection
@@ -103,7 +103,7 @@ struct ConnectView: View {
                                         print("Error checking friend request: \(error)")
                                         completion(false)
                                     } else if let documents = snapshot?.documents, !documents.isEmpty {
-                                        errorMessage = "\(friendEmail) has already sent a friend request to you"
+                                        errorMessage = "\(friendUsername) has already sent a friend request to you"
                                         completion(false)
                                     } else {
                                         allowReq = true
@@ -116,25 +116,31 @@ struct ConnectView: View {
         }
     }
     
-    func sendFriendRequest(friendID: String, friendEmail: String) {
+    func sendFriendRequest(friendID: String, friendEmail: String, friendUsername: String, friendFirst: String, friendLast: String) {
         let userID = Auth.auth().currentUser!.uid
         let db = Firestore.firestore()
         let friendRequestsCollection = db.collection("friendRequests")
         
-        allowRequest(friendID: friendID, friendEmail: friendEmail) { allowed in
+        allowRequest(friendID: friendID, friendUsername: friendUsername) { allowed in
             if allowed {
-                let sender = DataFetcher.User(id: userID, email: userPassed)
-                let receiver = DataFetcher.User(id: friendID, email: friendEmail)
+                let sender = DataFetcher.User(id: userID, email: user.email, username: user.username, first: user.first, last: user.last)
+                let receiver = DataFetcher.User(id: friendID, email: friendEmail, username: friendUsername, first: friendFirst, last: friendLast)
                 let friendRequest = FriendRequest(sender: sender, receiver: receiver)
                 
                 friendRequestsCollection.document().setData([
                     "sender": [
                         "id": friendRequest.sender.id,
-                        "email": friendRequest.sender.email
+                        "email": friendRequest.sender.email,
+                        "username": friendRequest.sender.username,
+                        "first": friendRequest.sender.first,
+                        "last": friendRequest.sender.last
                     ],
                     "receiver": [
                         "id": friendRequest.receiver.id,
-                        "email": friendRequest.receiver.email
+                        "email": friendRequest.receiver.email,
+                        "username": friendRequest.receiver.username,
+                        "first": friendRequest.receiver.first,
+                        "last": friendRequest.receiver.last
                     ]
                 ]) { error in
                     if let error = error {
@@ -150,7 +156,7 @@ struct ConnectView: View {
 
 struct ConnectView_Previews: PreviewProvider {
     static var previews: some View {
-        ConnectView(userPassed: "example@example.com")
+        ConnectView(user: DataFetcher.User(id: "ID", email: "example@example.com", username: "User", first: "First", last: "Last"))
     }
 }
 
