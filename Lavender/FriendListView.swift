@@ -38,19 +38,21 @@ struct FriendListView: View {
                             ZStack{
                                 RoundedRectangle(cornerRadius: 20)
                                     .foregroundColor(.green.opacity(0.4))
-                                    .frame(width: 280, height: displayed[index] ? 160 : 50)
+                                    .frame(width: 280, height: displayed[index] ? 160 : 60)
                                 RoundedRectangle(cornerRadius: 20)
                                     .foregroundColor(.white.opacity(0.2))
-                                    .frame(width: 250, height: displayed[index] ? 150 : 40)
+                                    .frame(width: 250, height: displayed[index] ? 150 : 50)
                                 VStack{
                                     Text(friends[index].first + " " + friends[index].last)
                                         .frame(width: 220, height: 40)
                                         .bold()
+                                    Text(friends[index].username)
+                                        .frame(width: 220, height: 40)
+                                        .padding(.top, -UIScreen.main.bounds.height * 0.03)
                                     
                                     if displayed[index] {
                                         Group {
-                                            if let level = levels[index] {
-                                                Text("Level: \(level)")
+                                            if let level = levels[index] {                                                Text("Level: \(level)")
                                                 Button {
                                                     let userID = Auth.auth().currentUser!.uid
                                                     let db = Firestore.firestore()
@@ -128,6 +130,8 @@ struct FriendListView: View {
         .onAppear {
             DataFetcher.loadFriends { fetchedFriends in
                 friends = fetchedFriends
+                //friends = [DataFetcher.User(id: "desmondid", email: "example@example.com", username: "jaymond1990", first: "Desmond", last: "Jones"), DataFetcher.User(id: "pattyid", email: "example@example.com", username: "pwalters", first: "Patty", last: "Walters")]
+                //uncomment for testing
                 displayed = Array(repeating: false, count: friends.count)
                 levels = Array(repeating: nil, count: friends.count)
             }
