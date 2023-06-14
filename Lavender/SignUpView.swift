@@ -161,44 +161,51 @@ struct SignUpView: View {
             wrongPassword = 2
             return
         }
-
-        Auth.auth().createUser(withEmail: email, password: password) { result, error in
-            if let error = error as NSError? {
-                switch error {
-                case AuthErrorCode.invalidEmail:
-                    errorMessage = "Invalid email format"
-                    wrongEmail = 2
-                case AuthErrorCode.emailAlreadyInUse:
-                    errorMessage = "Email already in use"
-                    wrongEmail = 2
-                case AuthErrorCode.weakPassword:
-                    errorMessage = "Password must be at least 6 characters long"
-                    wrongPassword = 2
-                default:
-                    print("Registration error: \(error)")
-                }
+        
+        DataFetcher.usernameTaken(username: username) { isTaken in
+            if isTaken {
+                errorMessage = "Username already in use"
+                wrongUsername = 2
             } else {
-                if let currentUser = Auth.auth().currentUser {
-                    let userID = currentUser.uid
-                    let db = Firestore.firestore()
-                    let userRef = db.collection("users").document(userID)
-
-                    let userData = [
-                        "first": self.first,
-                        "last": self.last,
-                        "username": self.username,
-                        "email": self.email
-                    ]
-
-                    userRef.setData(userData) { error in
-                        if let error = error {
-                            print("Error storing user data in Firestore: \(error)")
-                        } else {
-                            print("User data updated in Firestore")
+                Auth.auth().createUser(withEmail: email, password: password) { result, error in
+                    if let error = error as NSError? {
+                        switch error {
+                        case AuthErrorCode.invalidEmail:
+                            errorMessage = "Invalid email format"
+                            wrongEmail = 2
+                        case AuthErrorCode.emailAlreadyInUse:
+                            errorMessage = "Email already in use"
+                            wrongEmail = 2
+                        case AuthErrorCode.weakPassword:
+                            errorMessage = "Password must be at least 6 characters long"
+                            wrongPassword = 2
+                        default:
+                            print("Registration error: \(error)")
                         }
+                    } else {
+                        if let currentUser = Auth.auth().currentUser {
+                            let userID = currentUser.uid
+                            let db = Firestore.firestore()
+                            let userRef = db.collection("users").document(userID)
+                            
+                            let userData = [
+                                "first": self.first,
+                                "last": self.last,
+                                "username": self.username,
+                                "email": self.email
+                            ]
+                            
+                            userRef.setData(userData) { error in
+                                if let error = error {
+                                    print("Error storing user data in Firestore: \(error)")
+                                } else {
+                                    print("User data updated in Firestore")
+                                }
+                            }
+                        }
+                        userIsLoggedIn.toggle()
                     }
                 }
-                userIsLoggedIn.toggle()
             }
         }
     }

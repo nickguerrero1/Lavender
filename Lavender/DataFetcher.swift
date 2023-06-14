@@ -274,4 +274,22 @@ class DataFetcher {
             completion(friends)
         }
     }
+    
+    static func usernameTaken(username: String, completion: @escaping (Bool) -> Void) {
+        let db = Firestore.firestore()
+        let userCollection = db.collection("users")
+        
+        userCollection
+            .whereField("username", isEqualTo: username)
+            .getDocuments { snapshot, error in
+                if let error = error {
+                    print("Error checking users: \(error)")
+                    completion(false)
+                } else if let documents = snapshot?.documents, !documents.isEmpty {
+                    completion(true)
+                } else {
+                    completion(false)
+                }
+            }
+    }
 }
