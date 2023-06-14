@@ -131,7 +131,9 @@ class DataFetcher {
                 completion([])
             }   else{
                 if let snapshot = snapshot {
-                    var searchResults: [User] = []
+                    var nameResults: [User] = []
+                    var usernameResults: [User] = []
+                    var emailResults: [User] = []
                     
                     for document in snapshot.documents {
                         if let email = document.data()["email"] as? String,
@@ -140,17 +142,17 @@ class DataFetcher {
                             let last = document.data()["last"] as? String {
                             if (first + " " + last).lowercased().contains(search.lowercased()) {
                                 let user = User(id: document.documentID, email: email, username: username, first: first, last: last)
-                                searchResults.append(user)
+                                nameResults.append(user)
                             }   else if username.lowercased().contains(search.lowercased()) {
                                 let user = User(id: document.documentID, email: email, username: username, first: first, last: last)
-                                searchResults.append(user)
+                                usernameResults.append(user)
                             }   else if email.contains(search.lowercased()) {
                                 let user = User(id: document.documentID, email: email, username: username, first: first, last: last)
-                                searchResults.append(user)
+                                emailResults.append(user)
                             }
                         }
                     }
-                    completion(searchResults)
+                    completion(nameResults + usernameResults + emailResults)
                 }   else{
                     print("snapshot is nil")
                     completion([])
