@@ -132,6 +132,9 @@ struct Square: View {
                         }
                         DataFetcher.loadExperience { fetchedExperience in
                             self.experience = fetchedExperience
+                            let levelData = calculateLevel(experience: fetchedExperience)
+                            currentLevel = levelData[0]
+                            remainingXP = levelData[1]
                         }
                     }
             }
