@@ -6,7 +6,7 @@ struct ConnectView: View {
     
     let user: DataFetcher.User
     
-    @State private var searchEmail = ""
+    @State private var search = ""
     @State private var searchResults: [DataFetcher.User] = []
     @State private var errorMessage = ""
     @State private var friends: [DataFetcher.User] = []
@@ -26,7 +26,7 @@ struct ConnectView: View {
                     .padding(.horizontal)
                     .padding(.bottom)
                 
-                TextField("Search by email", text: $searchEmail)
+                TextField("Search", text: $search)
                     .padding()
                     .background(Color.gray.opacity(0.2))
                     .cornerRadius(30)
@@ -35,30 +35,42 @@ struct ConnectView: View {
                     .padding(.bottom, 20)
                 
                 ForEach(searchResults.prefix(5), id: \.id) { result in
-                    if result.email != user.email {
-                        HStack{
-                            Spacer()
-                            ZStack(alignment: .leading){
-                                Text(result.email)
+                    if result.username != user.username {
+                        ZStack{
+                            RoundedRectangle(cornerRadius: 30)
+                                .foregroundColor(.green.opacity(0.4))
+                                .frame(width: UIScreen.main.bounds.width - 60, height: UIScreen.main.bounds.height * 0.09)
+                            RoundedRectangle(cornerRadius: 30)
+                                .foregroundColor(.white.opacity(0.2))
+                                .frame(width: UIScreen.main.bounds.width - 70, height: UIScreen.main.bounds.height * 0.09 - 10)
+                            HStack{
+                                Spacer()
+                                ZStack(alignment: .leading){
+                                    VStack{
+                                        Text(result.first + " " + result.last)
+                                            .bold()
+                                            .padding(.bottom, -5)
+                                        Text(result.username)
+                                    }
+                                }
+                                .frame(width: 170)
+                                Button(action: {
+                                    sendFriendRequest(friendID: result.id, friendEmail: result.email, friendUsername: result.username, friendFirst: result.first, friendLast: result.last)
+                                }) {
+                                    Text("Request")
+                                        .foregroundColor(.white)
+                                        .frame(width: 120, height: 40)
+                                        .background(Color.blue.opacity(0.8))
+                                        .cornerRadius(20)
+                                }
+                                Spacer()
                             }
-                            .frame(width: 170)
-                            Spacer()
-                            Button(action: {
-                                sendFriendRequest(friendID: result.id, friendEmail: result.email, friendUsername: result.username, friendFirst: result.first, friendLast: result.last)
-                            }) {
-                                Text("Request")
-                                    .foregroundColor(.white)
-                                    .frame(width: 150, height: 40)
-                                    .background(Color.blue.opacity(0.8))
-                                    .cornerRadius(20)
-                            }
-                            Spacer()
                         }
                     }
                 }
             }
-            .onChange(of: searchEmail) { newValue in
-                DataFetcher.searchUsers(searchEmail: newValue) { fetchedResults in
+            .onChange(of: search) { newValue in
+                DataFetcher.searchUsers(search: newValue) { fetchedResults in
                     searchResults = fetchedResults
                 }
             }
@@ -78,8 +90,8 @@ struct ConnectView: View {
                 print("Error checking friendship: \(error)")
                 completion(false)
             } else if let userData = userDocument?.data(),
-                      let friends = userData["friends"] as? [[String: Any]],
-                      friends.contains(where: { $0["id"] as? String == friendID }) {
+                let friends = userData["friends"] as? [[String: Any]],
+                friends.contains(where: { $0["id"] as? String == friendID }) {
                 
                 errorMessage = "You are already friends with \(friendUsername)"
                 completion(false)
@@ -154,11 +166,13 @@ struct ConnectView: View {
     }
 }
 
-struct ConnectView_Previews: PreviewProvider {
-    static var previews: some View {
-        ConnectView(user: DataFetcher.User(id: "ID", email: "example@example.com", username: "User", first: "First", last: "Last"))
-    }
-}
+//struct ConnectView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ConnectView(user: DataFetcher.User(id: "ID", email: "example@example.com", username: "User", first: "First", last: "Last"))
+//    }
+//}
+
+//preview not working
 
 struct FriendRequest {
     let sender: DataFetcher.User

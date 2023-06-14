@@ -121,7 +121,7 @@ class DataFetcher {
         }
     }
     
-    static func searchUsers(searchEmail: String, completion: @escaping ([User]) -> Void) {
+    static func searchUsers(search: String, completion: @escaping ([User]) -> Void) {
         let db = Firestore.firestore()
         let usersCollection = db.collection("users")
         
@@ -138,7 +138,13 @@ class DataFetcher {
                             let username = document.data()["username"] as? String,
                             let first = document.data()["first"] as? String,
                             let last = document.data()["last"] as? String {
-                            if email.contains(searchEmail.lowercased()) {
+                            if (first + " " + last).lowercased().contains(search.lowercased()) {
+                                let user = User(id: document.documentID, email: email, username: username, first: first, last: last)
+                                searchResults.append(user)
+                            }   else if username.lowercased().contains(search.lowercased()) {
+                                let user = User(id: document.documentID, email: email, username: username, first: first, last: last)
+                                searchResults.append(user)
+                            }   else if email.contains(search.lowercased()) {
                                 let user = User(id: document.documentID, email: email, username: username, first: first, last: last)
                                 searchResults.append(user)
                             }
