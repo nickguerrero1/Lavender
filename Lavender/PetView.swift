@@ -5,6 +5,10 @@ import FirebaseFirestore
 let numRarities = 8
 let levelCount = 20
 
+let frameSizes = [50, 40, 50, 60, 60, 70, 70, 70]
+let images = [Image("Leaf1"), Image("Leaf2"), Image("Leaf3"), Image("Leaf4"), Image("Leaf5"), Image("Leaf6"), Image("Leaf7"), Image("Leaf8")]
+let xp = [4, 8, 16, 32, 64, 128, 256, 512]
+
 struct Square: View {
     
     let width: CGFloat
@@ -202,16 +206,12 @@ struct Square: View {
     }
     
     func shed() {
-        let randomValue = Int.random(in: 1...768) //random value
-        
-        let frameSizes = [50, 40, 50, 60, 60, 70, 70, 70]
-        let images = [Image("Leaf1"), Image("Leaf2"), Image("Leaf3"), Image("Leaf4"), Image("Leaf5"), Image("Leaf6"), Image("Leaf7"), Image("Leaf8")]
-        var shedChances = Array(repeating: 256, count: numRarities)
-        let xp = [4, 8, 16, 32, 64, 128, 256, 512]
+        let randomValue = Double.random(in: 1.0..<768.0) //random value
+        var shedChances = Array(repeating: 256.0 * pow(1.05, Double(currentLevel)), count: numRarities)
         
         for x in 1...numRarities-1 {
             for y in x...numRarities-1 {
-                shedChances[y] = shedChances[y] / 2
+                shedChances[y] = shedChances[y] / 2.0
             }
         }
         
