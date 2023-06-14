@@ -24,6 +24,8 @@ struct Square: View {
     @State private var petalImage: Image?
     
     @State private var experience = 0
+    @State private var currentLevel = 0
+    @State private var remainingXP = 0
     
     struct Petal: Identifiable {
         let id = UUID()
@@ -49,11 +51,6 @@ struct Square: View {
     }
 
     var body: some View {
-        let levelData = calculateLevel(experience: experience)
-        let currentLevel = levelData[0]
-        let remainingXP = levelData[1]
-        let multiplier: Double = (Double(remainingXP) / Double(levels[currentLevel]))
-        
         VStack{
             ZStack{
                 RoundedRectangle(cornerRadius: 30)
@@ -65,7 +62,7 @@ struct Square: View {
                 HStack{
                     RoundedRectangle(cornerRadius: 30)
                         .foregroundColor(.green.opacity(0.35))
-                        .frame(width: UIScreen.main.bounds.width * 0.7 * multiplier, height: UIScreen.main.bounds.height*0.025)
+                        .frame(width: UIScreen.main.bounds.width * 0.7 * (Double(remainingXP) / Double(levels[currentLevel])), height: UIScreen.main.bounds.height*0.025)
                         .padding(.leading, UIScreen.main.bounds.width*0.15)
                     Spacer()
                 }
@@ -96,6 +93,10 @@ struct Square: View {
                                 
                                 rarity[petal.rarity-1] += 1
                                 experience += petal.xp
+                                
+                                let levelData = calculateLevel(experience: experience)
+                                currentLevel = levelData[0]
+                                remainingXP = levelData[1]
                                 
                                 let db = Firestore.firestore()
                                 let userID = Auth.auth().currentUser?.uid

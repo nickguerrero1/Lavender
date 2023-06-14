@@ -52,7 +52,8 @@ struct FriendListView: View {
                                     
                                     if displayed[index] {
                                         Group {
-                                            if let level = levels[index] {                                                Text("Level: \(level)")
+                                            if let level = levels[index] {
+                                                Text("Level: \(level)")
                                                 Button {
                                                     let userID = Auth.auth().currentUser!.uid
                                                     let db = Firestore.firestore()
