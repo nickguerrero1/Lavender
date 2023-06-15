@@ -35,12 +35,12 @@ struct FriendListView: View {
                                 selectedFriend = friends[index]
                             }) {
                                 ZStack {
-                                    RoundedRectangle(cornerRadius: 20)
+                                    RoundedRectangle(cornerRadius: 25)
                                         .foregroundColor(.green.opacity(0.4))
                                         .frame(width: 280, height: 60)
-                                    RoundedRectangle(cornerRadius: 20)
+                                    RoundedRectangle(cornerRadius: 25)
                                         .foregroundColor(.white.opacity(0.2))
-                                        .frame(width: 250, height: 50)
+                                        .frame(width: 270, height: 50)
                                     VStack {
                                         Text(friends[index].first + " " + friends[index].last)
                                             .frame(width: 220, height: 40)
@@ -66,7 +66,7 @@ struct FriendListView: View {
             .onAppear {
                 DataFetcher.loadFriends { fetchedFriends in
                     friends = fetchedFriends
-                    //friends = [DataFetcher.User(id: "desmondid", email: "example@example.com", username: "jaymond1990", first: "Desmond", last: "Jones"), DataFetcher.User(id: "pattyid", email: "example@example.com", username: "pwalters", first: "Patty", last: "Walters")]
+                    friends = [DataFetcher.User(id: "desmondid", email: "example@example.com", username: "jaymond1990", first: "Desmond", last: "Jones"), DataFetcher.User(id: "pattyid", email: "example@example.com", username: "pwalters", first: "Patty", last: "Walters")]
                     //uncomment for testing
                 }
             }
