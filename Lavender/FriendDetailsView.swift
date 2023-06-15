@@ -75,6 +75,7 @@ struct FriendDetailsView: View {
                     })
                 )
             }
+            .padding(UIScreen.main.bounds.width * 0.1)
         }
     }
     
@@ -135,6 +136,7 @@ struct FriendDetailsView: View {
 
 struct FriendDetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        FriendDetailsView(friend: DataFetcher.User(id: "FriendID", email: "friend@gmail.com", username: "FriendName", first: "First", last: "Last"))
+        //FriendDetailsView(friend: DataFetcher.User(id: "FriendID", email: "friend@gmail.com", username: "FriendName", first: "First", last: "Last"))
+        FriendDetailsView(friend: DataFetcher.User(id: "FriendID", email: "LOOOOOOOOOOONNNNNNNNNNNGGGGGGGGG", username: "FriendNameLONGGGGGGGGGGGGGGGGGGGGGGGG", first: "LONGGGGGGGGG", last: "NNAAAAAAAAAAAAAmEEEEEEEE"))
     }
 }
