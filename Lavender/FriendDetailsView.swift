@@ -8,6 +8,7 @@ struct FriendDetailsView: View {
     @State private var level: Int = 0
     @State private var experience: Int = 0
     @Environment(\.presentationMode) var presentationMode
+    var onRemoveFriend: (() -> Void)?
     
     var body: some View {
         NavigationView {
@@ -80,6 +81,8 @@ struct FriendDetailsView: View {
                             print("Friend document does not exist")
                         }
                     }
+                    onRemoveFriend?()
+                    presentationMode.wrappedValue.dismiss()
                 } label: {
                     ZStack{
                         RoundedRectangle(cornerRadius: 20)

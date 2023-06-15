@@ -29,36 +29,38 @@ struct FriendListView: View {
                     .padding(.bottom)
                     
                     ForEach(friends.indices, id: \.self) { index in
-                                        HStack {
-                                            Spacer()
-                                            Button(action: {
-                                                selectedFriend = friends[index]
-                                            }) {
-                                                ZStack {
-                                                    RoundedRectangle(cornerRadius: 20)
-                                                        .foregroundColor(.green.opacity(0.4))
-                                                        .frame(width: 280, height: 60)
-                                                    RoundedRectangle(cornerRadius: 20)
-                                                        .foregroundColor(.white.opacity(0.2))
-                                                        .frame(width: 250, height: 50)
-                                                    VStack {
-                                                        Text(friends[index].first + " " + friends[index].last)
-                                                            .frame(width: 220, height: 40)
-                                                            .bold()
-                                                        Text(friends[index].username)
-                                                            .frame(width: 220, height: 40)
-                                                            .padding(.top, -UIScreen.main.bounds.height * 0.03)
-                                                    }
-                                                }
-                                            }
-                                            .buttonStyle(.plain)
-                                            .fullScreenCover(item: $selectedFriend) { friend in
-                                                FriendDetailsView(friend: friend)
-                                            }
-                                            Spacer()
-                                        }
-                                        .padding(.top)
+                        HStack {
+                            Spacer()
+                            Button(action: {
+                                selectedFriend = friends[index]
+                            }) {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 20)
+                                        .foregroundColor(.green.opacity(0.4))
+                                        .frame(width: 280, height: 60)
+                                    RoundedRectangle(cornerRadius: 20)
+                                        .foregroundColor(.white.opacity(0.2))
+                                        .frame(width: 250, height: 50)
+                                    VStack {
+                                        Text(friends[index].first + " " + friends[index].last)
+                                            .frame(width: 220, height: 40)
+                                            .bold()
+                                        Text(friends[index].username)
+                                            .frame(width: 220, height: 40)
+                                            .padding(.top, -UIScreen.main.bounds.height * 0.03)
                                     }
+                                }
+                            }
+                            .buttonStyle(.plain)
+                            .fullScreenCover(item: $selectedFriend) { friend in
+                                FriendDetailsView(friend: friend, onRemoveFriend: {
+                                    removeFriend(friend: friend)
+                                })
+                            }
+                            Spacer()
+                        }
+                        .padding(.top)
+                    }
                 }
             }
             .onAppear {
@@ -76,6 +78,12 @@ struct FriendListView: View {
         let attributedString = NSAttributedString(string: text, attributes: attributes)
         let size = attributedString.size()
         return size.width
+    }
+    
+    func removeFriend(friend: DataFetcher.User) {
+        if let index = friends.firstIndex(where: { $0.id == friend.id }) {
+            friends.remove(at: index)
+        }
     }
 }
 
