@@ -59,14 +59,14 @@ struct FriendListView: View {
                             }
                             Spacer()
                         }
-                        .padding(.top)
+                        .padding(.top, 5)
                     }
                 }
             }
             .onAppear {
                 DataFetcher.loadFriends { fetchedFriends in
                     friends = fetchedFriends
-                    friends = [DataFetcher.User(id: "desmondid", email: "example@example.com", username: "jaymond1990", first: "Desmond", last: "Jones"), DataFetcher.User(id: "pattyid", email: "example@example.com", username: "pwalters", first: "Patty", last: "Walters")]
+                    //friends = [DataFetcher.User(id: "desmondid", email: "example@example.com", username: "jaymond1990", first: "Desmond", last: "Jones"), DataFetcher.User(id: "pattyid", email: "example@example.com", username: "pwalters", first: "Patty", last: "Walters")]
                     //uncomment for testing
                 }
             }

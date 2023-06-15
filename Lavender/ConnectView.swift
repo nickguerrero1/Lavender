@@ -50,7 +50,9 @@ struct ConnectView: View {
                                         Text(result.first + " " + result.last)
                                             .bold()
                                             .padding(.bottom, -5)
+                                            .lineLimit(1)
                                         Text(result.username)
+                                            .lineLimit(1)
                                     }
                                 }
                                 .frame(width: 170)
