@@ -56,6 +56,24 @@ class DataFetcher {
             completion(experience)
         }
     }
+    
+    static func loadFriendExperience(friend: User, completion: @escaping (Int) -> Void) {
+        var experience: Int = 0
+
+        let db = Firestore.firestore()
+        let userRef = db.collection("users").document(friend.id)
+        
+        userRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                if let experienceCount = document.data()?["xp"] as? Int {
+                    experience = experienceCount
+                }
+            } else {
+                print("Document does not exist")
+            }
+            completion(experience)
+        }
+    }
 
     static func loadLevel(user: User, completion: @escaping (Int) -> Void) {
         var level: Int = 0

@@ -15,6 +15,7 @@
 		D007BDD42A1D4B5E00FE7D50 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D007BDD32A1D4B5E00FE7D50 /* Preview Assets.xcassets */; };
 		D007BDDD2A1DAC4D00FE7D50 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D007BDDC2A1DAC4D00FE7D50 /* MainView.swift */; };
 		D007BDE32A1E80D300FE7D50 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = D007BDE22A1E80D300FE7D50 /* FirebaseAuth */; };
+		D00BEE0C2A3A9FA300F2F5AC /* FriendDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00BEE0B2A3A9FA300F2F5AC /* FriendDetailsView.swift */; };
 		D048DEF02A1FC32A0042A445 /* PetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D048DEEF2A1FC32A0042A445 /* PetView.swift */; };
 		D048DEF22A1FD7FD0042A445 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D048DEF12A1FD7FD0042A445 /* CalendarView.swift */; };
 		D048DEF42A1FFB740042A445 /* FlowerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D048DEF32A1FFB740042A445 /* FlowerView.swift */; };
@@ -37,6 +38,7 @@
 		D007BDD32A1D4B5E00FE7D50 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		D007BDDC2A1DAC4D00FE7D50 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		D007BDE02A1E804B00FE7D50 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		D00BEE0B2A3A9FA300F2F5AC /* FriendDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendDetailsView.swift; sourceTree = "<group>"; };
 		D048DEEF2A1FC32A0042A445 /* PetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetView.swift; sourceTree = "<group>"; };
 		D048DEF12A1FD7FD0042A445 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		D048DEF32A1FFB740042A445 /* FlowerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowerView.swift; sourceTree = "<group>"; };
@@ -90,6 +92,7 @@
 				D048DEF32A1FFB740042A445 /* FlowerView.swift */,
 				D0947F372A2827D500F05CBF /* FriendView.swift */,
 				D0A143182A2E95F800BE95D3 /* FriendListView.swift */,
+				D00BEE0B2A3A9FA300F2F5AC /* FriendDetailsView.swift */,
 				D0947F352A28273400F05CBF /* ConnectView.swift */,
 				D0947F392A28280E00F05CBF /* IncomingView.swift */,
 				D048DEF12A1FD7FD0042A445 /* CalendarView.swift */,
@@ -196,6 +199,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D00BEE0C2A3A9FA300F2F5AC /* FriendDetailsView.swift in Sources */,
 				D048DEF22A1FD7FD0042A445 /* CalendarView.swift in Sources */,
 				D0947F382A2827D500F05CBF /* FriendView.swift in Sources */,
 				D048DEFB2A24171C0042A445 /* DataFetcher.swift in Sources */,
