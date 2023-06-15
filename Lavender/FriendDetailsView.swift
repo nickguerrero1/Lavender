@@ -9,6 +9,7 @@ struct FriendDetailsView: View {
     @State private var experience: Int = 0
     @Environment(\.presentationMode) var presentationMode
     var onRemoveFriend: (() -> Void)?
+    @State private var showAlert = false
     
     var body: some View {
         NavigationView {
@@ -41,48 +42,7 @@ struct FriendDetailsView: View {
                 }
                 Spacer()
                 Button {
-                    let userID = Auth.auth().currentUser!.uid
-                    let db = Firestore.firestore()
-                    let userRef = db.collection("users").document(userID)
-                    let friendRef = db.collection("users").document(friend.id)
-                    
-                    userRef.getDocument { (document, error) in
-                        if let document = document, document.exists {
-                            if var friendsArray = document.data()?["friends"] as? [[String: Any]] {
-                                if let friendIndex = friendsArray.firstIndex(where: { ($0["id"] as? String) == friend.id }) {
-                                    friendsArray.remove(at: friendIndex)
-                                    
-                                    userRef.updateData(["friends": friendsArray]) { error in
-                                        if let error = error {
-                                            print("Error removing friend on user document: \(error)")
-                                        }
-                                    }
-                                }
-                            }
-                        } else {
-                            print("User document does not exist")
-                        }
-                    }
-                    
-                    friendRef.getDocument { (document, error) in
-                        if let document = document, document.exists {
-                            if var friendsArray = document.data()?["friends"] as? [[String: Any]] {
-                                if let friendIndex = friendsArray.firstIndex(where: { ($0["id"] as? String) == userID }) {
-                                    friendsArray.remove(at: friendIndex)
-                                    
-                                    friendRef.updateData(["friends": friendsArray]) { error in
-                                        if let error = error {
-                                            print("Error removing friend on friend document: \(error)")
-                                        }
-                                    }
-                                }
-                            }
-                        } else {
-                            print("Friend document does not exist")
-                        }
-                    }
-                    onRemoveFriend?()
-                    presentationMode.wrappedValue.dismiss()
+                    showAlert = true
                 } label: {
                     ZStack{
                         RoundedRectangle(cornerRadius: 20)
@@ -105,6 +65,16 @@ struct FriendDetailsView: View {
                     experience = fetchedExperience
                 }
             }
+            .alert(isPresented: $showAlert) {
+                Alert(
+                    title: Text("Remove Friend"),
+                    message: Text("Are you sure you want to remove this friend?"),
+                    primaryButton: .cancel(Text("Cancel")),
+                    secondaryButton: .destructive(Text("Remove"), action: {
+                        removeFriend()
+                    })
+                )
+            }
         }
     }
     
@@ -115,6 +85,51 @@ struct FriendDetailsView: View {
             Image(systemName: "chevron.left")
                 .font(.title)
         }
+    }
+    
+    private func removeFriend() {
+        let userID = Auth.auth().currentUser!.uid
+        let db = Firestore.firestore()
+        let userRef = db.collection("users").document(userID)
+        let friendRef = db.collection("users").document(friend.id)
+        
+        userRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                if var friendsArray = document.data()?["friends"] as? [[String: Any]] {
+                    if let friendIndex = friendsArray.firstIndex(where: { ($0["id"] as? String) == friend.id }) {
+                        friendsArray.remove(at: friendIndex)
+                        
+                        userRef.updateData(["friends": friendsArray]) { error in
+                            if let error = error {
+                                print("Error removing friend on user document: \(error)")
+                            }
+                        }
+                    }
+                }
+            } else {
+                print("User document does not exist")
+            }
+        }
+        
+        friendRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                if var friendsArray = document.data()?["friends"] as? [[String: Any]] {
+                    if let friendIndex = friendsArray.firstIndex(where: { ($0["id"] as? String) == userID }) {
+                        friendsArray.remove(at: friendIndex)
+                        
+                        friendRef.updateData(["friends": friendsArray]) { error in
+                            if let error = error {
+                                print("Error removing friend on friend document: \(error)")
+                            }
+                        }
+                    }
+                }
+            } else {
+                print("Friend document does not exist")
+            }
+        }
+        onRemoveFriend?()
+        presentationMode.wrappedValue.dismiss()
     }
 }
 
