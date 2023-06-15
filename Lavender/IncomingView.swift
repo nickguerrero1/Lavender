@@ -39,16 +39,19 @@ struct IncomingView: View {
                         HStack{
                             Spacer()
                             ZStack{
-                                RoundedRectangle(cornerRadius: 20)
+                                RoundedRectangle(cornerRadius: 30)
                                     .foregroundColor(.green.opacity(0.4))
-                                    .frame(width: 280, height: 90)
-                                RoundedRectangle(cornerRadius: 20)
+                                    .frame(width: 280, height: 130)
+                                RoundedRectangle(cornerRadius: 30)
                                     .foregroundColor(.white.opacity(0.2))
-                                    .frame(width: 250, height: 80)
+                                    .frame(width: 280, height: 120)
                                 VStack{
+                                    Text(friendFirst + " " + friendLast)
+                                        .frame(width: 220, height: 40)
+                                        .bold()
                                     Text(friendUsername)
-                                        .lineLimit(1)
-                                        .truncationMode(.tail)
+                                        .frame(width: 220, height: 40)
+                                        .padding(.top, -UIScreen.main.bounds.height * 0.03)
                                     HStack{
                                         Button {
                                             let userID = Auth.auth().currentUser!.uid

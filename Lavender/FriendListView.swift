@@ -40,7 +40,7 @@ struct FriendListView: View {
                                         .frame(width: 280, height: 60)
                                     RoundedRectangle(cornerRadius: 25)
                                         .foregroundColor(.white.opacity(0.2))
-                                        .frame(width: 270, height: 50)
+                                        .frame(width: 280, height: 50)
                                     VStack {
                                         Text(friends[index].first + " " + friends[index].last)
                                             .frame(width: 220, height: 40)
