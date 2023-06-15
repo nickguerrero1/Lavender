@@ -136,6 +136,9 @@ struct SignUpView: View {
         wrongPassword = 0
         errorMessage = ""
         
+        let illegalCharactersUsername = CharacterSet(charactersIn: "!@#$%^&*()+=\\|{}[]\"<>,/?~`';:. -")
+        let illegalCharactersPassword = CharacterSet(charactersIn: "()+=\\|{}[]\"<>,/?~`';:. -")
+        
         guard !first.isEmpty else {
             errorMessage = "First name must be provided"
             wrongFirst = 2
@@ -158,6 +161,21 @@ struct SignUpView: View {
         }
         guard !password.isEmpty else {
             errorMessage = "Password must be provided"
+            wrongPassword = 2
+            return
+        }
+        guard username.count <= 16 else {
+            errorMessage = "Username is too long"
+            wrongUsername = 2
+            return
+        }
+        guard username.rangeOfCharacter(from: illegalCharactersUsername) == nil else {
+            errorMessage = "Username contains illegal characters"
+            wrongUsername = 2
+            return
+        }
+        guard password.rangeOfCharacter(from: illegalCharactersPassword) == nil else {
+            errorMessage = "Password contains illegal characters"
             wrongPassword = 2
             return
         }
